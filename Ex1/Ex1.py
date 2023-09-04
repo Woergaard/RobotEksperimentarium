@@ -15,10 +15,10 @@ the robot around in a square.
 """
 
 rightWheelFactor = 1.0
-leftWheelFactor = 0.91
+leftWheelFactor = 0.95
 
 oneMeterSeconds = 2.5
-ninetyDegreeTurnSeconds = 3.0
+ninetyDegreeTurnSeconds = 1.5
 
 
 # Move forward
@@ -30,7 +30,7 @@ ninetyDegreeTurnSeconds = 3.0
 # NON BLOCKING KØRSEL FIRKANT
 
 def right_turn(start, ninetyDegreeTurnSeconds):
-    arlo.go_diff(leftWheelFactor*50, 0, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 0)
     isTurning = True
     while (isTurning): # or some other form of loop
         if (time.perf_counter() - start > ninetyDegreeTurnSeconds): #stop after 5 seconds
