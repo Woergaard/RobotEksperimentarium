@@ -15,10 +15,10 @@ the robot around in a square.
 """
 
 rightWheelFactor = 1.0
-leftWheelFactor = 0.8
+leftWheelFactor = 0.88
 
-oneMeterSeconds = 5.0 #seconds
-nintyDegreeTurnSeconds = 2.0
+oneMeterSeconds = 5.0
+ninetyDegreeTurnSeconds = 2.0
 
 
 # Move forward
@@ -27,13 +27,13 @@ nintyDegreeTurnSeconds = 2.0
 #arlo.stop()
 
 
-# NON BLOCKING KØRSEL Square
+# NON BLOCKING KØRSEL FIRKANT
 
-def right_turn(start, nintyDegreeTurnSeconds):
+def right_turn(start, ninetyDegreeTurnSeconds):
     arlo.go_diff(leftWheelFactor*50, 0, 1, 1)
     isTurning = True
     while (isTurning): # or some other form of loop
-        if (time.perf_counter() - start > nintyDegreeTurnSeconds): #stop after 5 seconds
+        if (time.perf_counter() - start > ninetyDegreeTurnSeconds): #stop after 5 seconds
             arlo.stop()
             isTurning = False
 
@@ -41,18 +41,21 @@ def drive_forward(start, oneMeterSeconds, meters):
     arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
     isDriving = True
     while (isDriving): # or some other form of loop
-        if (time.perf_counter() - start > oneMeterSeconds*meters): #drive x meters
+        if (time.perf_counter() - start > oneMeterSeconds * meters): #drive x meters
             arlo.stop()
             isDriving = False
-    return time.perf_counter()
 
 def move_in_square_non_blocking(meters):
     start = time.perf_counter()
 
     for _ in range(4):
-        start = drive_forward(start, oneMeterSeconds, meters)
+        drive_forward(start, oneMeterSeconds, meters)
 
-        start = right_turn(start, nintyDegreeTurnSeconds)
+        start = time.perf_counter()
+
+        right_turn(start, ninetyDegreeTurnSeconds)
+
+        start = time.perf_counter()
 
 meters = 1.0
 move_in_square_non_blocking(meters)
