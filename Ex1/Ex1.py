@@ -58,7 +58,12 @@ def move_in_square_non_blocking(meters):
         start = time.perf_counter()
 
 meters = 1.0
-move_in_square_non_blocking(meters)
+
+for _ in range(5):
+    move_in_square_non_blocking(meters)
+
+
+### NONBLOCKING KØRSEL OTTEKANT
 
 """
 def move_in_square():
