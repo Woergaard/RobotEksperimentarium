@@ -18,7 +18,7 @@ rightWheelFactor = 1.0
 leftWheelFactor = 1.01
 
 oneMeterSeconds = 3.0
-ninetyDegreeTurnSeconds = 1.1
+ninetyDegreeTurnSeconds = 1.05 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
 
 
 # Move forward
