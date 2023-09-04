@@ -14,33 +14,44 @@ the robot around in a square.
 3. Motion accuracy estimation: Measure the drift of your robot.
 """
 
+rightWheelFactor = 1.0
+leftWheelFactor = 1.0
+
+OneMeterFactor = 1.0 #seconds
+
+
+# Move forward
+arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
+sleep(2)
+
+"""
 def move_in_square():
     # Move forward
-    arlo.go_diff(50, 50, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
     sleep(2)
     
     # Turn right
-    arlo.go_diff(50, -50, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, -rightWheelFactor*50, 1, 1)
     sleep(1)
     
     # Move forward
-    arlo.go_diff(50, 50, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
     sleep(2)
     
     # Turn right
-    arlo.go_diff(50, -50, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, -rightWheelFactor*50, 1, 1)
     sleep(1)
     
     # Move forward
-    arlo.go_diff(50, 50, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
     sleep(2)
     
     # Turn right
-    arlo.go_diff(50, -50, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, -rightWheelFactor*50, 1, 1)
     sleep(1)
     
     # Move forward
-    arlo.go_diff(50, 50, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
     sleep(2)
     
     # Stop
@@ -50,19 +61,19 @@ def move_in_square():
 def move_in_figure_eight():
     while True:
         # Move forward
-        arlo.go_diff(50, 50, 1, 1)
+        arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
         sleep(2)
         
         # Turn right
-        arlo.go_diff(50, -50, 1, 1)
+        arlo.go_diff(leftWheelFactor*50, -rightWheelFactor*50, 1, 1)
         sleep(1)
         
         # Move forward
-        arlo.go_diff(50, 50, 1, 1)
+        arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
         sleep(2)
         
         # Turn left
-        arlo.go_diff(-50, 50, 1, 1)
+        arlo.go_diff(-leftWheelFactor*50, rightWheelFactor*50, 1, 1)
         sleep(1)
 
 
@@ -72,7 +83,7 @@ def measure_drift():
     initial_right_encoder_counts = arlo.read_right_wheel_encoder()
 
     # Move the robot forward for a certain amount of time
-    arlo.go_diff(50, 50, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
     sleep(2)  # Adjust the sleep time as needed
     arlo.stop()
 
@@ -94,6 +105,6 @@ def measure_drift():
 move_in_square()
 #move_in_figure_eight()
 #measure_drift()
-
+"""
 
 
