@@ -15,10 +15,10 @@ the robot around in a square.
 """
 
 rightWheelFactor = 1.0
-leftWheelFactor = 0.97
+leftWheelFactor = 0.99
 
 oneMeterSeconds = 2.5
-ninetyDegreeTurnSeconds = 1.0
+ninetyDegreeTurnSeconds = 1.2
 
 
 # Move forward
