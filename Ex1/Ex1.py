@@ -15,10 +15,10 @@ the robot around in a square.
 """
 
 rightWheelFactor = 1.0
-leftWheelFactor = 0.9
+leftWheelFactor = 0.8
 
-oneMeterSeconds = 1.0 #seconds
-nintyDegreeTurnSeconds = 1.0
+oneMeterSeconds = 5.0 #seconds
+nintyDegreeTurnSeconds = 2.0
 
 
 # Move forward
@@ -27,7 +27,7 @@ nintyDegreeTurnSeconds = 1.0
 #arlo.stop()
 
 
-# NON BLOCKING KØRSEL
+# NON BLOCKING KØRSEL Square
 
 def right_turn(start, nintyDegreeTurnSeconds):
     arlo.go_diff(leftWheelFactor*50, 0, 1, 1)
@@ -54,7 +54,7 @@ def move_in_square_non_blocking(meters):
 
         start = right_turn(start, nintyDegreeTurnSeconds)
 
-meters = 1
+meters = 1.0
 move_in_square_non_blocking(meters)
 
 """
