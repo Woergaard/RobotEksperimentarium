@@ -15,10 +15,10 @@ the robot around in a square.
 """
 
 rightWheelFactor = 1.0
-leftWheelFactor = 0.899
+leftWheelFactor = 0.91
 
 oneMeterSeconds = 2.5
-ninetyDegreeTurnSeconds = 3.5
+ninetyDegreeTurnSeconds = 3.0
 
 
 # Move forward
@@ -48,7 +48,7 @@ def drive_forward(start, oneMeterSeconds, meters):
 def move_in_square_non_blocking(meters):
     start = time.perf_counter()
 
-    for _ in range(4):
+    for _ in range(3):
         drive_forward(start, oneMeterSeconds, meters)
 
         start = time.perf_counter()
