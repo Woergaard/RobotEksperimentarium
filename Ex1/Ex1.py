@@ -1,6 +1,6 @@
 from time import sleep
-
 import robot
+import time
 
 # Create a robot object and initialize
 arlo = robot.Robot()
@@ -15,14 +15,47 @@ the robot around in a square.
 """
 
 rightWheelFactor = 1.0
-leftWheelFactor = 1.0
+leftWheelFactor = 0.9
 
-OneMeterFactor = 1.0 #seconds
+oneMeterSeconds = 1.0 #seconds
+nintyDegreeTurnSeconds = 1.0
 
 
 # Move forward
-arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
-sleep(2)
+#arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
+#sleep(2)
+#arlo.stop()
+
+
+# NON BLOCKING KØRSEL
+
+def right_turn(start, nintyDegreeTurnSeconds):
+    arlo.go_diff(leftWheelFactor*50, 0, 1, 1)
+    isTurning = True
+    while (isTurning): # or some other form of loop
+        if (time.perf_counter() - start > nintyDegreeTurnSeconds): #stop after 5 seconds
+            arlo.stop()
+            isTurning = False
+
+def drive_forward(start, oneMeterSeconds, meters):
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
+    isDriving = True
+    while (isDriving): # or some other form of loop
+        if (time.perf_counter() - start > oneMeterSeconds*meters): #drive x meters
+            arlo.stop()
+            isDriving = False
+    return time.perf_counter()
+
+def move_in_square_non_blocking(meters):
+    start = time.perf_counter()
+
+    for _ in range(4):
+        start = drive_forward(start, oneMeterSeconds, meters)
+
+        start = right_turn(start, nintyDegreeTurnSeconds)
+
+meters = 1
+move_in_square_non_blocking(meters)
 
 """
 def move_in_square():
