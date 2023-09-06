@@ -7,7 +7,7 @@ arlo = robot.Robot()
 
 rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
-stanardSpeed = 50.0
+standardSpeed = 50.0
 
 ### PARAMETERUDREGNING ###
 
@@ -34,7 +34,7 @@ def metersToSeconds(meters):
 def go(seconds):
     '''
     Funktionen venter i den tid, som robotten skal udføre en bestemt action.
-    
+    Samme tanke som Sleep, men kan måske sørge for den kan holde sig opdateret på sine omgivelser.
     Argumenter:
         start:    starttidspunkts
         seconds:  sekunder, der skal ventes
@@ -102,8 +102,8 @@ def move_in_square(meters):
         sharp_turn('right', 90)
     
 
-def move_around_own_axis(): 
-    for _ in range(1):
+def move_around_own_axis(i): 
+    for _ in range(i):
         sharp_turn('right', 360)
                 
         sharp_turn('left', 360)

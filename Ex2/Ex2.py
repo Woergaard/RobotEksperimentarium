@@ -8,11 +8,9 @@ arlo = robot.Robot()
 
 
 # Move forward
-arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+#arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
 
 def sensorReadings():
-    isDriving = True
-    while (isDriving): # or some other form of loop
         # request to read Front sonar ping sensor
         print("Front sensor = ", arlo.read_front_ping_sensor())
         sleep(0.041)
@@ -29,7 +27,6 @@ def sensorReadings():
         # request to read Left sonar ping sensor
         print("Left sensor = ", arlo.read_left_ping_sensor())
         sleep(0.041)
-        isDriving = False
 
         
 def drive_forward(start, oneMeterSeconds, meters):
@@ -39,6 +36,12 @@ def drive_forward(start, oneMeterSeconds, meters):
         sensorReadings()
         if (time.perf_counter() - start > oneMeterSeconds * meters): #drive x meters
             isDriving = False
+
+start = time.perf_counter()
+oneMeterSeconds = 2.8
+meters = 1.0
+
+drive_forward(start, oneMeterSeconds, meters)
 
 #drive_forward()
 arlo.stop()
