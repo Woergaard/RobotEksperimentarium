@@ -82,8 +82,6 @@ def circle_left_turn(start, circleTurnSeconds, meters):
                 arlo.stop()
                 isTurning = False
 
-
-
 def move_in_figure_eight_non_blocking(meters):
     start = time.perf_counter()
     
