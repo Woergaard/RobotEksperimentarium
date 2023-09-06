@@ -49,7 +49,7 @@ for k in [20, 100, 1000]:
     resamples = sir(k)
 
     # Plot histogram of resamples
-    plt.hist(resamples, bins=50, density=True, alpha=0.5, label=f'k={k}')
+    plt.hist(resamples, bins=k, density=True, alpha=0.5, label=f'k={k}')
 
 # Plot the pose distribution
 x = np.linspace(0, 15, 1000)
