@@ -93,8 +93,8 @@ def move_in_figure_eight_non_blocking_sofie():
 
 meters = 1.0
 
-for _ in range(2):
-    move_in_square_non_blocking(meters)
+
+move_in_square_non_blocking(meters, 1)
 
 #move_in_figure_eight_non_blocking_sofie()
 
