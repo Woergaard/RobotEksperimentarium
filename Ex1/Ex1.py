@@ -17,9 +17,10 @@ the robot around in a square.
 rightWheelFactor = 1.0
 leftWheelFactor = 1.04
 
-oneMeterSeconds = 2.80
+startSeconds = 2.8
+oneMeterSeconds = 2.70 #Den tager måske et sekund fra når den skal starte op
 ninetyDegreeTurnSeconds = 0.95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
-circleTurnSeconds = 4.2 #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
+circleTurnSeconds = ninetyDegreeTurnSeconds*4 #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
 
 
 # Move forward
@@ -50,13 +51,22 @@ def move_in_square_non_blocking(meters):
     start = time.perf_counter()
 
     for _ in range(4):
-        drive_forward(start, oneMeterSeconds, meters)
+        if _ == 0: 
+            drive_forward(start, startSeconds, meters)
 
-        start = time.perf_counter()
+            start = time.perf_counter()
 
-        right_turn(start, ninetyDegreeTurnSeconds)
+            right_turn(start, ninetyDegreeTurnSeconds)
 
-        start = time.perf_counter()
+            start = time.perf_counter()
+        else: 
+            drive_forward(start, oneMeterSeconds, meters)
+
+            start = time.perf_counter()
+
+            right_turn(start, ninetyDegreeTurnSeconds)
+
+            start = time.perf_counter()
 
 meters = 1.0
 
@@ -69,11 +79,19 @@ arlo.stop()
 
 ### SOFIES ARBEJDSOMRÅDE
 
+def left_turn(start, ninetyDegreeTurnSeconds):
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 0)
+    isTurning = True
+    while (isTurning): # or some other form of loop
+        if (time.perf_counter() - start > ninetyDegreeTurnSeconds): #stop after 5 seconds
+            arlo.stop()
+            isTurning = False
+
 def move_in_figure_eight_non_blocking(meters):
     start = time.perf_counter()
     
     for _ in range(1):
-        circle_right_turn(start, circleTurnSeconds, meters)
+        right_turn(start, ninetyDegreeTurnSeconds*4)
         
         start = time.perf_counter()
         
