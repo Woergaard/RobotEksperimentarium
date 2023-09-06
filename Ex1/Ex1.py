@@ -17,10 +17,12 @@ the robot around in a square.
 rightWheelFactor = 1.0
 leftWheelFactor = 1.045
 
+
 oneMeterSeconds = 2.80 #Den tager måske et sekund fra når den skal starte op
 ninetyDegreeTurnSeconds = 0.95#95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
 circleTurnSecond = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes #
-circleTurnSeconds = 5.65  #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
+startCircleTurnSeconds = 5.65  #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
+circleTurnSeconds = 5.55 
 
 # Move forward
 #arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
@@ -109,21 +111,28 @@ def circle_left_turn(start, circleTurnSeconds, meters):
                 arlo.stop()
                 isTurning = False
 
-def move_in_figure_eight_non_blocking(meters):
+def move_in_figure_eight_non_blocking(meters, i):
     start = time.perf_counter()
     
-    for _ in range(1):
-        circle_right_turn(start, circleTurnSeconds, meters)
-        
-        start = time.perf_counter()
-        
-        circle_left_turn(start, circleTurnSeconds, meters)
+    circle_right_turn(start, startCircleTurnSeconds, meters)
+    
+    start = time.perf_counter()
+    
+    circle_left_turn(start, circleTurnSeconds, meters)
 
-        start = time.perf_counter()
+    start = time.perf_counter()
+
+    for _ in range(i):   
+            circle_right_turn(start, circleTurnSeconds, meters)
+            
+            start = time.perf_counter()
+            
+            circle_left_turn(start, circleTurnSeconds, meters)
+
+            start = time.perf_counter()
 
 meters = 1.0
 
-for _ in range(3):
-    move_in_figure_eight_non_blocking(meters)
+move_in_figure_eight_non_blocking(meters, 1)
 
 arlo.stop() 
