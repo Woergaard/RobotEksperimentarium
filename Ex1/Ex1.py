@@ -17,8 +17,8 @@ the robot around in a square.
 rightWheelFactor = 1.0
 leftWheelFactor = 1.04
 
-oneMeterSeconds = 2.85
-ninetyDegreeTurnSeconds = 1.0 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
+oneMeterSeconds = 2.80
+ninetyDegreeTurnSeconds = 0.95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
 circleTurnSeconds = 4.2 #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
 
 
