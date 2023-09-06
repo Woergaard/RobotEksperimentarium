@@ -23,9 +23,9 @@ circleTurnSeconds = 4.2 #Caroline leger, tidnen for at kører 360 grader (starte
 
 
 # Move forward
-arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
-sleep(oneMeterSeconds)
-arlo.stop()
+#arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
+#sleep(oneMeterSeconds)
+#arlo.stop()
 
 
 # NON BLOCKING KØRSEL FIRKANT SubEx1
@@ -60,8 +60,8 @@ def move_in_square_non_blocking(meters):
 
 meters = 1.0
 
-#for _ in range(5):
-#    move_in_square_non_blocking(meters)
+for _ in range(5):
+    move_in_square_non_blocking(meters)
 
 
 ### NONBLOCKING KØRSEL OTTEKANT SubEx2
