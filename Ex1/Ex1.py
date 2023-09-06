@@ -123,7 +123,7 @@ def move_in_figure_eight_non_blocking(meters):
 
 meters = 1.0
 
-for _ in range(1):
+for _ in range(4):
     move_in_figure_eight_non_blocking(meters)
 
 arlo.stop() 
