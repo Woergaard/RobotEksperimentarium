@@ -20,7 +20,7 @@ leftWheelFactor = 1.045
 oneMeterSeconds = 2.80 #Den tager måske et sekund fra når den skal starte op
 ninetyDegreeTurnSeconds = 0.95#95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
 circleTurnSecond = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes #
-circleTurnSeconds = 5.45  #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
+circleTurnSeconds = 5.65  #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
 
 # Move forward
 #arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
@@ -123,7 +123,7 @@ def move_in_figure_eight_non_blocking(meters):
 
 meters = 1.0
 
-for _ in range(2):
+for _ in range(1):
     move_in_figure_eight_non_blocking(meters)
 
 arlo.stop() 
