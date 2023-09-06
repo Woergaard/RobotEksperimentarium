@@ -62,7 +62,7 @@ kør(Wheel)
 
 # SLUT ASGER
 
-
+"""
 def drive_forward(start, oneMeterSeconds, meters):
     #arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     isDriving = True
@@ -80,7 +80,7 @@ drive_forward(start, oneMeterSeconds, meters)
 #drive_forward()
 arlo.stop()
 
-
+"""
 
 
 
