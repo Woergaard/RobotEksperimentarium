@@ -67,6 +67,7 @@ def move_in_square_non_blocking(meters, i):
         start = time.perf_counter()
 
 
+
 ### NONBLOCKING KØRSEL OTTEKANT SubEx2
 
 def left_turn(start, turnSeconds):
