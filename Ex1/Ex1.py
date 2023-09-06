@@ -15,7 +15,7 @@ the robot around in a square.
 """
 
 rightWheelFactor = 1.0
-leftWheelFactor = 1.06235 # mellem 1.2 og 1.625
+leftWheelFactor = 1.062325 # mellem 1.2 og 1.625
 
 startOneMeterSeconds = 2.80
 oneMeterSeconds = 2.75 #Den tager måske et sekund fra når den skal starte op

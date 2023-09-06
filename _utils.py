@@ -62,31 +62,31 @@ def move_around_own_axis():
     start = time.perf_counter()
     
     for _ in range(1):
-        sharp_turn(start, 'right', 90)
+        sharp_turn(start, 'right', 360)
         
         start = time.perf_counter()
         
-        sharp_turn(start, 'left', 90)
+        sharp_turn(start, 'left', 360)
 
         start = time.perf_counter()
 
 def move_in_figure_eight_non_blocking(meters, i):
     start = time.perf_counter()
     
-    circle_right_turn(start, startCircleTurnSeconds, meters)
+    soft_turn(start, 'right', 360)
     
     start = time.perf_counter()
     
-    circle_left_turn(start, circleTurnSeconds, meters)
+    soft_turn(start, 'left', 360)
 
     start = time.perf_counter()
 
     for _ in range(i):   
-            circle_right_turn(start, startCircleTurnSeconds, meters)
+            soft_turn(start, 'right', 360)
             
             start = time.perf_counter()
             
-            circle_left_turn(start, circleTurnSeconds, meters)
+            soft_turn(start, 'left', 360)
 
             start = time.perf_counter()
 
