@@ -60,7 +60,7 @@ def move_in_square_non_blocking(meters):
 
 meters = 1.0
 
-for _ in range(5):
+for _ in range(1):
     move_in_square_non_blocking(meters)
 
 
