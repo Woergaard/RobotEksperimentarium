@@ -54,9 +54,9 @@ def drive(direction, meters):
         meters:   meter, der skal køres
     '''
     if direction == 'forwards':
-        arlo.go_diff(leftWheelFactor*stanardSpeed, rightWheelFactor*stanardSpeed, 1, 1)
+        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
     elif direction == 'backwards':
-        arlo.go_diff(leftWheelFactor*stanardSpeed, rightWheelFactor*stanardSpeed, 0, 0)
+        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 0)
 
     driveSeconds = metersToSeconds(meters)
     go(driveSeconds)
@@ -70,9 +70,9 @@ def sharp_turn(direction, degrees):
         degrees:   grader, der skal køres
     '''
     if direction == "right":
-        arlo.go_diff(leftWheelFactor*stanardSpeed, rightWheelFactor*stanardSpeed, 1, 0)
+        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 0)
     elif direction == "left":
-        arlo.go_diff(leftWheelFactor*stanardSpeed, rightWheelFactor*stanardSpeed, 0, 1)
+        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
     
     turnSeconds = degreeToSeconds(degrees)
     go(turnSeconds)
