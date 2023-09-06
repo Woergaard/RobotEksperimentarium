@@ -56,49 +56,6 @@ kør(Wheel)
 
 
 
-# SOFIE 
-def sensorValues():
-        forwards = arlo.read_front_ping_sensor()
-        backwards = arlo.read_back_ping_sensor()
-        left = arlo.read_left_ping_sensor()
-        right = arlo.read_right_ping_sensor()
-
-        return forwards, backwards, left, right
-
-def go_and_sensor(seconds):
-    '''
-    Funktionen venter i den tid, som robotten skal udføre en bestemt action.
-    Samme tanke som Sleep, men kan måske sørge for den kan holde sig opdateret på sine omgivelser.
-    Argumenter:
-        start:    starttidspunkts
-        seconds:  sekunder, der skal ventes
-    '''
-    start = time.perf_counter()
-    isDriving = True
-    while (isDriving):
-        if (time.perf_counter() - start > seconds):
-            isDriving = False
-        forwards, backwards, left, right = sensorValues()
-        sensorLst = [forwards, backwards, left, right]
-        sleep(0.041)
-        for i in sensorLst < 200:
-            isDriving = False
-            return i, sensorLst 
-
-def drive_forward_and_sense():
-    arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
-    
-    driveSeconds = _utils.metersToSeconds(meters)
-
-    i, sensorLst = go_and_sensor(driveSeconds)
-
-    if sensorLst[i]
-    sensorNames = ['forwards', 'backwards', 'left', 'right']
-
-
-
-# SLUT SOFIE
-
 
 
 # ASGER
