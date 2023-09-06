@@ -51,7 +51,7 @@ def move_in_square_non_blocking(meters, i):
 
     for _ in range(i):
         for _ in range(4):
-            drive_forward(start, startOneMeterSeconds, meters)
+            drive_forward(start, oneMeterSeconds, meters)
 
             start = time.perf_counter()
 
