@@ -44,10 +44,26 @@ def kør(wheel):
     arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     isDriving = True
     while (isDriving): # or some other form of loop
-        ping = arlo.read_front_ping_sensor() 
-        print('ping:', ping)
-        if (ping <= 200): 
+        pingFront = arlo.read_front_ping_sensor() 
+        pingLeft = arlo.read_left_ping_sensor()
+        pingRight = arlo.read_right_ping_sensor()
+        pingBack = arlo.read_back_ping_sensor()
+        
+        if (pingFront <= 200): 
             arlo.stop()
+
+            if (pingRight <= 200):
+                arlo.stop() 
+                # Turn left
+
+                if(pingLeft <= 200): 
+                    arlo.stop()
+                    # Turn back
+                        
+                    if(pingBack <= 200):
+                        arlo.stop()
+                        # STOP STOP STOP 
+                
 
 kør(Wheel)
 

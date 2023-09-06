@@ -50,7 +50,7 @@ def drive(direction, meters):
     Funktionen kører robotten et antal meter.
     Argumenter:
         start:    starttidspunkt
-        direction:  enten 'forwards' eller 'backwards'
+        direction:  enten 'forwards', 'backwards', 'left' eller 'right'
         meters:   meter, der skal køres
     '''
     if direction == 'forwards':
