@@ -37,7 +37,6 @@ def right_turn(start, turnSeconds):
     isTurning = True
     while (isTurning): # or some other form of loop
         if (time.perf_counter() - start > turnSeconds): #stop after 5 seconds
-            arlo.stop()
             isTurning = False
 
 def drive_forward(start, oneMeterSeconds, meters):
@@ -45,7 +44,6 @@ def drive_forward(start, oneMeterSeconds, meters):
     isDriving = True
     while (isDriving): # or some other form of loop
         if (time.perf_counter() - start > oneMeterSeconds * meters): #drive x meters
-            arlo.stop()
             isDriving = False
 
 def move_in_square_non_blocking(meters):
@@ -68,7 +66,6 @@ def left_turn(start, turnSeconds):
     isTurning = True
     while (isTurning):
         if (time.perf_counter() - start > turnSeconds):
-            arlo.stop()
             isTurning = False
 
 def move_in_figure_eight_non_blocking_sofie():
