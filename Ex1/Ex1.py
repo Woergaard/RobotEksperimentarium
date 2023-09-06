@@ -40,7 +40,7 @@ def right_turn(start, turnSeconds):
             isTurning = False
 
 def drive_forward(start, oneMeterSeconds, meters):
-    arlo.go_diff(leftWheelFactor*75, rightWheelFactor*75, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
     isDriving = True
     while (isDriving): # or some other form of loop
         if (time.perf_counter() - start > oneMeterSeconds * meters): #drive x meters
