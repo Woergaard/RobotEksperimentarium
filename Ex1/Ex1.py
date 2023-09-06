@@ -20,7 +20,7 @@ leftWheelFactor = 1.045
 oneMeterSeconds = 2.80 #Den tager måske et sekund fra når den skal starte op
 ninetyDegreeTurnSeconds = 0.95#95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
 circleTurnSecond = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes #
-circleTurnSeconds = 3.80  #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
+circleTurnSeconds = 5.0  #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
 
 # Move forward
 #arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
@@ -94,7 +94,7 @@ meters = 1.0
 
 ## CAROLINES NOTER HERUNDE SLUT
 def circle_right_turn(start, circleTurnSeconds, meters):
-    arlo.go_diff(leftWheelFactor*80, rightWheelFactor*40, 1, 1) #har ændret i wheel faktoren, bare en start værdi (ikke fast)
+    arlo.go_diff(leftWheelFactor*100, rightWheelFactor*40, 1, 1) #har ændret i wheel faktoren, bare en start værdi (ikke fast)
     isTurning = True
     while(isTurning): 
         if(time.perf_counter() - start > circleTurnSeconds * meters): 
@@ -102,7 +102,7 @@ def circle_right_turn(start, circleTurnSeconds, meters):
             isTurning = False
             
 def circle_left_turn(start, circleTurnSeconds, meters):
-    arlo.go_diff(leftWheelFactor*40, rightWheelFactor*80, 1, 1)
+    arlo.go_diff(leftWheelFactor*40, rightWheelFactor*100, 1, 1)
     isTurning = True
     while(isTurning):
             if(time.perf_counter() - start > circleTurnSeconds * meters):
