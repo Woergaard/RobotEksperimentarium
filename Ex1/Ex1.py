@@ -102,7 +102,7 @@ def circle_right_turn(start, circleTurnSeconds, meters):
             isTurning = False
             
 def circle_left_turn(start, circleTurnSeconds, meters):
-    arlo.go_diff(leftWheelFactor*420, rightWheelFactor*50, 1, 1)
+    arlo.go_diff(leftWheelFactor*20, rightWheelFactor*50, 1, 1)
     isTurning = True
     while(isTurning):
             if(time.perf_counter() - start > circleTurnSeconds * meters):
