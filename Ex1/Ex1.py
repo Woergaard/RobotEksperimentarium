@@ -60,7 +60,7 @@ def move_in_square_non_blocking(meters):
 
 meters = 1.0
 
-for _ in range(1):
+for _ in range(4):
     move_in_square_non_blocking(meters)
 
 arlo.stop()
@@ -90,6 +90,7 @@ def move_in_figure_eight_non_blocking():
 
 ## CAROLINES NOTER HERUNDE SLUT
 
+"""
 def circle_right_turn(start, circleTurnSeconds, meters):
     arlo.go_diff(leftWheelFactor*50, rightWheelFactor*40, 1, 1) #har ændret i wheel faktoren, bare en start værdi (ikke fast)
     isTurning = True
@@ -121,7 +122,7 @@ def move_in_figure_eight_non_blocking(meters):
 meters = 1.0
 
 
-"""
+
 def move_in_square():
     # Move forward
     arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
