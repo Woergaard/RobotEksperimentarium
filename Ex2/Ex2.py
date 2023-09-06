@@ -47,7 +47,7 @@ def kør(wheel):
         ping = arlo.read_front_ping_sensor() 
         print('ping:', ping)
         if (ping <= 200): 
-            arlo.stop
+            arlo.stop()
 
 kør(Wheel)
 
