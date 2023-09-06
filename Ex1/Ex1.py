@@ -15,9 +15,9 @@ the robot around in a square.
 """
 
 rightWheelFactor = 1.0
-leftWheelFactor = 1.06232 # mellem 1.2 og 1.625
+leftWheelFactor = 1.0623 # mellem 1.2 og 1.625, alt efter hvor meget den har kørt
 
-startOneMeterSeconds = 2.80
+
 oneMeterSeconds = 2.75 #Den tager måske et sekund fra når den skal starte op
 ninetyDegreeTurnSeconds = 0.95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
 circleTurnSecond = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes #
