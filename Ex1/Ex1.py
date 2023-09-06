@@ -49,25 +49,19 @@ def drive_forward(start, oneMeterSeconds, meters):
 def move_in_square_non_blocking(meters, i):
     start = time.perf_counter()
 
-    drive_forward(start, startOneMeterSeconds, meters)
-
-    start = time.perf_counter()
-
-    right_turn(start, ninetyDegreeTurnSeconds)
-
-    start = time.perf_counter()
-
     for _ in range(i):
-        drive_forward(start, startOneMeterSeconds, meters)
+        for _ in range(4):
+            drive_forward(start, startOneMeterSeconds, meters)
 
-        start = time.perf_counter()
+            start = time.perf_counter()
 
-        right_turn(start, ninetyDegreeTurnSeconds)
+            right_turn(start, ninetyDegreeTurnSeconds)
 
-        start = time.perf_counter()
+            start = time.perf_counter()
 
 meters = 1.0
 move_in_square_non_blocking(meters, 1)
+
 
 ### NONBLOCKING KØRSEL OTTEKANT SubEx2
 
