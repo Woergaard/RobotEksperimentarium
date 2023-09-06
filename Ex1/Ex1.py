@@ -67,6 +67,24 @@ arlo.stop()
 
 ### NONBLOCKING KØRSEL OTTEKANT SubEx2
 
+### SOFIES ARBEJDSOMRÅDE
+
+def move_in_figure_eight_non_blocking(meters):
+    start = time.perf_counter()
+    
+    for _ in range(1):
+        circle_right_turn(start, circleTurnSeconds, meters)
+        
+        start = time.perf_counter()
+        
+        circle_left_turn(start, circleTurnSeconds, meters)
+
+        start = time.perf_counter()
+
+meters = 1.0
+
+## SOFIE SLUT
+
 def circle_right_turn(start, circleTurnSeconds, meters):
     arlo.go_diff(leftWheelFactor*50, rightWheelFactor*40, 1, 1) #har ændret i wheel faktoren, bare en start værdi (ikke fast)
     isTurning = True
