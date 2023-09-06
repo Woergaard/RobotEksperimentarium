@@ -41,10 +41,7 @@ def sensor():
 Wheel = 47.2 
 
 def kør(wheel):
-    leftWheelFactor = 0.3
-    rightWheelFactor = 0.3
-    
-    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
+    arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     isDriving = True
     while (isDriving): # or some other form of loop
         if (arlo.read_front_ping_sensor() <= 200 ): 
