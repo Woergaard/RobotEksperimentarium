@@ -118,5 +118,3 @@ def move_in_figure_eight(i):
             soft_turn('right', 360)
             
             soft_turn('left', 360)
-
-            
