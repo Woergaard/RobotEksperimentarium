@@ -20,7 +20,8 @@ def sensorReadings():
         print("Back sensor = ", arlo.read_back_ping_sensor())
         sleep(0.041)
 
-        # request to read Right sonar ping sensor
+        # request to read Right sonar ping sensorutils
+
         print("Right sensor = ", arlo.read_right_ping_sensor())
         sleep(0.041)
 
