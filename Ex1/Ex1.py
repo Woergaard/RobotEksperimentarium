@@ -18,7 +18,7 @@ rightWheelFactor = 1.0
 leftWheelFactor = 1.04
 
 oneMeterSeconds = 2.85
-ninetyDegreeTurnSeconds = 1.05 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
+ninetyDegreeTurnSeconds = 1.0 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
 circleTurnSeconds = 4.2 #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
 
 
