@@ -31,7 +31,7 @@ def sensorReadings():
 
         
 def drive_forward(start, oneMeterSeconds, meters):
-    arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+    #arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     isDriving = True
     while (isDriving): # or some other form of loop
         sensorReadings()
@@ -39,7 +39,7 @@ def drive_forward(start, oneMeterSeconds, meters):
             isDriving = False
 
 start = time.perf_counter()
-oneMeterSeconds = 2.8
+oneMeterSeconds = 10
 meters = 1.0
 
 drive_forward(start, oneMeterSeconds, meters)
