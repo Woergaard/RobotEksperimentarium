@@ -66,7 +66,8 @@ def move_in_square_non_blocking(meters, i):
 
         start = time.perf_counter()
 
-
+meters = 1.0
+move_in_square_non_blocking(meters, 1)
 
 ### NONBLOCKING KØRSEL OTTEKANT SubEx2
 
@@ -92,9 +93,6 @@ def move_in_figure_eight_non_blocking_sofie():
 # KØRSEL
 
 meters = 1.0
-
-
-move_in_square_non_blocking(meters, 1)
 
 #move_in_figure_eight_non_blocking_sofie()
 
