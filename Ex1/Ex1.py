@@ -17,7 +17,6 @@ the robot around in a square.
 rightWheelFactor = 1.0
 leftWheelFactor = 1.04
 
-startSeconds = 2.8
 oneMeterSeconds = 2.80 #Den tager måske et sekund fra når den skal starte op
 ninetyDegreeTurnSeconds = 0.95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
 circleTurnSeconds = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes # Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
@@ -51,22 +50,13 @@ def move_in_square_non_blocking(meters):
     start = time.perf_counter()
 
     for _ in range(4):
-        if _ == 0: 
-            drive_forward(start, startSeconds, meters)
+        drive_forward(start, oneMeterSeconds, meters)
 
-            start = time.perf_counter()
+        start = time.perf_counter()
 
-            right_turn(start, ninetyDegreeTurnSeconds)
+        right_turn(start, ninetyDegreeTurnSeconds)
 
-            start = time.perf_counter()
-        else: 
-            drive_forward(start, oneMeterSeconds, meters)
-
-            start = time.perf_counter()
-
-            right_turn(start, ninetyDegreeTurnSeconds)
-
-            start = time.perf_counter()
+        start = time.perf_counter()
 
 meters = 1.0
 
@@ -77,17 +67,15 @@ arlo.stop()
 
 ### NONBLOCKING KØRSEL OTTEKANT SubEx2
 
-### SOFIES ARBEJDSOMRÅDE
-
 def left_turn(start, ninetyDegreeTurnSeconds):
     arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 0, 1)
     isTurning = True
-    while (isTurning): # or some other form of loop
-        if (time.perf_counter() - start > ninetyDegreeTurnSeconds): #stop after 5 seconds
+    while (isTurning):
+        if (time.perf_counter() - start > ninetyDegreeTurnSeconds):
             arlo.stop()
             isTurning = False
 
-def move_in_figure_eight_non_blocking(meters):
+def move_in_figure_eight_non_blocking():
     start = time.perf_counter()
     
     for _ in range(1):
@@ -99,9 +87,8 @@ def move_in_figure_eight_non_blocking(meters):
 
         start = time.perf_counter()
 
-meters = 1.0
 
-## SOFIE SLUT
+## CAROLINES NOTER HERUNDE SLUT
 
 def circle_right_turn(start, circleTurnSeconds, meters):
     arlo.go_diff(leftWheelFactor*50, rightWheelFactor*40, 1, 1) #har ændret i wheel faktoren, bare en start værdi (ikke fast)
