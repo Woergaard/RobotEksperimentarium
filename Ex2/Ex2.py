@@ -1,4 +1,4 @@
-import robot
+from .. import robot 
 import _utils
 from time import sleep
 import time 
