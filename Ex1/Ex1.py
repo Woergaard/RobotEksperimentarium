@@ -17,9 +17,9 @@ the robot around in a square.
 rightWheelFactor = 1.0
 leftWheelFactor = 1.045
 
-
-oneMeterSeconds = 2.80 #Den tager måske et sekund fra når den skal starte op
-ninetyDegreeTurnSeconds = 0.95#95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
+startOneMeterSeconds = 2.80
+oneMeterSeconds = 2.70 #Den tager måske et sekund fra når den skal starte op
+ninetyDegreeTurnSeconds = 0.95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
 circleTurnSecond = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes #
 startCircleTurnSeconds = 5.65  #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
 circleTurnSeconds = 5.20 
@@ -46,11 +46,19 @@ def drive_forward(start, oneMeterSeconds, meters):
         if (time.perf_counter() - start > oneMeterSeconds * meters): #drive x meters
             isDriving = False
 
-def move_in_square_non_blocking(meters):
+def move_in_square_non_blocking(meters, i):
     start = time.perf_counter()
 
-    for _ in range(4):
-        drive_forward(start, oneMeterSeconds, meters)
+    drive_forward(start, startOneMeterSeconds, meters)
+
+    start = time.perf_counter()
+
+    right_turn(start, ninetyDegreeTurnSeconds)
+
+    start = time.perf_counter()
+
+    for _ in range(i):
+        drive_forward(start, startOneMeterSeconds, meters)
 
         start = time.perf_counter()
 
@@ -84,8 +92,8 @@ def move_in_figure_eight_non_blocking_sofie():
 
 meters = 1.0
 
-#for _ in range(2):
-#    move_in_square_non_blocking_sofie(meters)
+for _ in range(2):
+    move_in_square_non_blocking(meters)
 
 #move_in_figure_eight_non_blocking_sofie()
 
@@ -128,7 +136,6 @@ def move_in_figure_eight_non_blocking(meters, i):
 
 meters = 1.0
 
-move_in_figure_eight_non_blocking(meters, 1)
+#move_in_figure_eight_non_blocking(meters, 1)
 
-time.sleep(0.01)
 arlo.stop()
