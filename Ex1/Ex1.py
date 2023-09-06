@@ -15,7 +15,7 @@ the robot around in a square.
 """
 
 rightWheelFactor = 1.0
-leftWheelFactor = 1.0245
+leftWheelFactor = 1.025
 
 oneMeterSeconds = 2.85
 ninetyDegreeTurnSeconds = 1.075 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
