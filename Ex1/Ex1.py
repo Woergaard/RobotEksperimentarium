@@ -19,8 +19,8 @@ leftWheelFactor = 1.045
 
 oneMeterSeconds = 2.80 #Den tager måske et sekund fra når den skal starte op
 ninetyDegreeTurnSeconds = 0.95#95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
-circleTurnSeconds = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes # Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
-
+circleTurnSecond = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes #
+circleTurnSeconds = 3.80  #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
 
 # Move forward
 #arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
@@ -69,15 +69,15 @@ def left_turn(start, turnSeconds):
             arlo.stop()
             isTurning = False
 
-def move_in_figure_eight_non_blocking():
+def move_in_figure_eight_non_blocking_sofie():
     start = time.perf_counter()
     
     for _ in range(1):
-        right_turn(start, circleTurnSeconds)
+        right_turn(start, circleTurnSecond)
         
         start = time.perf_counter()
         
-        left_turn(start, circleTurnSeconds)
+        left_turn(start, circleTurnSecond)
 
         start = time.perf_counter()
 
@@ -85,16 +85,14 @@ def move_in_figure_eight_non_blocking():
 
 meters = 1.0
 
-for _ in range(2):
-    move_in_square_non_blocking(meters)
+#for _ in range(2):
+#    move_in_square_non_blocking_sofie(meters)
 
-move_in_figure_eight_non_blocking()
+#move_in_figure_eight_non_blocking_sofie()
 
-arlo.stop()
+#arlo.stop()
 
 ## CAROLINES NOTER HERUNDE SLUT
-
-"""
 def circle_right_turn(start, circleTurnSeconds, meters):
     arlo.go_diff(leftWheelFactor*50, rightWheelFactor*40, 1, 1) #har ændret i wheel faktoren, bare en start værdi (ikke fast)
     isTurning = True
@@ -125,88 +123,7 @@ def move_in_figure_eight_non_blocking(meters):
 
 meters = 1.0
 
+for _ in range(1):
+    move_in_figure_eight_non_blocking(meters)
 
-
-def move_in_square():
-    # Move forward
-    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
-    sleep(2)
-    
-    # Turn right
-    arlo.go_diff(leftWheelFactor*50, -rightWheelFactor*50, 1, 1)
-    sleep(1)
-    
-    # Move forward
-    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
-    sleep(2)
-    
-    # Turn right
-    arlo.go_diff(leftWheelFactor*50, -rightWheelFactor*50, 1, 1)
-    sleep(1)
-    
-    # Move forward
-    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
-    sleep(2)
-    
-    # Turn right
-    arlo.go_diff(leftWheelFactor*50, -rightWheelFactor*50, 1, 1)
-    sleep(1)
-    
-    # Move forward
-    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
-    sleep(2)
-    
-    # Stop
-    arlo.stop()
-
-
-def move_in_figure_eight():
-    while True:
-        # Move forward
-        arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
-        sleep(2)
-        
-        # Turn right
-        arlo.go_diff(leftWheelFactor*50, -rightWheelFactor*50, 1, 1)
-        sleep(1)
-        
-        # Move forward
-        arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
-        sleep(2)
-        
-        # Turn left
-        arlo.go_diff(-leftWheelFactor*50, rightWheelFactor*50, 1, 1)
-        sleep(1)
-
-
-def measure_drift():
-    # Read the initial encoder counts
-    initial_left_encoder_counts = arlo.read_left_wheel_encoder()
-    initial_right_encoder_counts = arlo.read_right_wheel_encoder()
-
-    # Move the robot forward for a certain amount of time
-    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
-    sleep(2)  # Adjust the sleep time as needed
-    arlo.stop()
-
-    # Read the final encoder counts
-    final_left_encoder_counts = arlo.read_left_wheel_encoder()
-    final_right_encoder_counts = arlo.read_right_wheel_encoder()
-
-    # Calculate the distances traveled by each wheel
-    left_distance = final_left_encoder_counts - initial_left_encoder_counts
-    right_distance = final_right_encoder_counts - initial_right_encoder_counts
-
-    # Calculate and return the drift
-    drift = abs(left_distance - right_distance)
-    return drift
-
-
-
-
-move_in_square()
-#move_in_figure_eight()
-#measure_drift()
-"""
-
-
+    arlo.stop() 
