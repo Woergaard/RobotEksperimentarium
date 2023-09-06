@@ -123,7 +123,7 @@ def move_in_figure_eight_non_blocking(meters, i):
     start = time.perf_counter()
 
     for _ in range(i):   
-            circle_right_turn(start, circleTurnSeconds, meters)
+            circle_right_turn(start, startCircleTurnSeconds, meters)
             
             start = time.perf_counter()
             
