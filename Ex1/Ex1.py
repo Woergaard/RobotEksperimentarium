@@ -30,11 +30,11 @@ circleTurnSeconds = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes # Car
 
 # NON BLOCKING KØRSEL FIRKANT SubEx1
 
-def right_turn(start, ninetyDegreeTurnSeconds):
+def right_turn(start, turnSeconds):
     arlo.go_diff(leftWheelFactor*100, rightWheelFactor*100, 1, 0)
     isTurning = True
     while (isTurning): # or some other form of loop
-        if (time.perf_counter() - start > ninetyDegreeTurnSeconds): #stop after 5 seconds
+        if (time.perf_counter() - start > turnSeconds): #stop after 5 seconds
             arlo.stop()
             isTurning = False
 
@@ -61,11 +61,11 @@ def move_in_square_non_blocking(meters):
 
 ### NONBLOCKING KØRSEL OTTEKANT SubEx2
 
-def left_turn(start, ninetyDegreeTurnSeconds):
+def left_turn(start, turnSeconds):
     arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 0, 1)
     isTurning = True
     while (isTurning):
-        if (time.perf_counter() - start > ninetyDegreeTurnSeconds):
+        if (time.perf_counter() - start > turnSeconds):
             arlo.stop()
             isTurning = False
 
