@@ -130,5 +130,5 @@ meters = 1.0
 
 move_in_figure_eight_non_blocking(meters, 1)
 
-time.sleep(2)
+time.sleep(0.01)
 arlo.stop()
