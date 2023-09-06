@@ -19,6 +19,7 @@ leftWheelFactor = 1.01
 
 oneMeterSeconds = 3.0
 ninetyDegreeTurnSeconds = 1.05 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
+circleTurnSeconds = 4.2 #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
 
 
 # Move forward
@@ -27,7 +28,7 @@ ninetyDegreeTurnSeconds = 1.05 #Den drejer for lang tid, vi har ikke testet nuv�
 #arlo.stop()
 
 
-# NON BLOCKING KØRSEL FIRKANT
+# NON BLOCKING KØRSEL FIRKANT SubEx1
 
 def right_turn(start, ninetyDegreeTurnSeconds):
     arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 0)
@@ -63,7 +64,40 @@ for _ in range(5):
     move_in_square_non_blocking(meters)
 
 
-### NONBLOCKING KØRSEL OTTEKANT
+### NONBLOCKING KØRSEL OTTEKANT SubEx2
+
+def circle_right_turn(start, circleTurnSeconds, meters):
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*40, 1, 1) #har ændret i wheel faktoren, bare en start værdi (ikke fast)
+    isTurning = True
+    while(isTurning): 
+        if(time.perf_counter() - start > circleTurnSeconds * meters): 
+            arlo.stop()
+            isTurning = False
+            
+def circle_left_turn(start, circleTurnSeconds, meters):
+    arlo.go_diff(leftWheelFactor*40, rightWheelFactor*50, 1, 1)
+    isTurning = True
+    while(isTurning):
+            if(time.perf_counter() - start > circleTurnSeconds * meters):
+                arlo.stop()
+                isTurning = False
+
+
+
+def move_in_figure_eight_non_blocking(meters):
+    start = time.perf_counter()
+    
+    for _ in range(1):
+        circle_right_turn(start, circleTurnSeconds, meters)
+        
+        start = time.perf_counter()
+        
+        circle_left_turn(start, circleTurnSeconds, meters)
+
+        start = time.perf_counter()
+
+meters = 1.0
+
 
 """
 def move_in_square():

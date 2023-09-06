@@ -1,0 +1,25 @@
+Kode til WIFI: 
+R2-D2andC3PO
+
+Netværk: 
+ssh pi@10.69.252.16
+kode: DIKU4Ever
+
+RsbPi: 
+Brugernavn: pi 
+Password: DIKU4Ever
+
+Sluk RsbPi: sudo poweroff
+Reboot RsbPi: sudo reboot
+
+Hent kode: git clone https://github.com/Woergaard/RobotEksperimentarium.git
+Opdater kode: git pull 
+Kør kode: python3 navn.py 
+
+Mac: 
+Brug VNC for desktop 
+
+Hent ny kode: git pull
+Upload: git commit -a -m "I have made changes to bla bla" -> git pull -> git push
+
+
