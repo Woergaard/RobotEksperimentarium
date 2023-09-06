@@ -38,17 +38,20 @@ def sensor():
     venstre = arlo.read_left_ping_sensor()
     
     return foran, bagved, højre, venstre
+Wheel = 47.2 
 
-def kør(meters):
+def kør(wheel):
     leftWheelFactor = 0.3
     rightWheelFactor = 0.3
-    start = time.perf_counter()
-     
+    
     arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
     isDriving = True
     while (isDriving): # or some other form of loop
-        if (time.perf_counter() - start > oneMeterSeconds * meters): #drive x meters
-            isDriving = False
+        if (arlo.read_front_ping_sensor() <= 200 ): 
+            arlo.stop
+
+kør(Wheel)
+
 #SLUT CAROLINE 
 
 
@@ -80,18 +83,25 @@ def go_and_sensor(seconds):
         sleep(0.041)
         for i in sensorLst < 200:
             isDriving = False
-            return i, sensorLst, 
+            return i, sensorLst 
 
 def drive_forward_and_sense():
+    arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+    
+    driveSeconds = _utils.metersToSeconds(meters)
+
+    i, sensorLst = go_and_sensor(driveSeconds)
+
+    if sensorLst[i]
     sensorNames = ['forwards', 'backwards', 'left', 'right']
 
 
 
 # SLUT SOFIE
 
-# ASGER
 
-def s
+
+# ASGER
 
 # SLUT ASGER
 
