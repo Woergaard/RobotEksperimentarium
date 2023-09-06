@@ -94,7 +94,7 @@ meters = 1.0
 
 ## CAROLINES NOTER HERUNDE SLUT
 def circle_right_turn(start, circleTurnSeconds, meters):
-    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*20, 1, 1) #har ændret i wheel faktoren, bare en start værdi (ikke fast)
+    arlo.go_diff(leftWheelFactor*60, rightWheelFactor*40, 1, 1) #har ændret i wheel faktoren, bare en start værdi (ikke fast)
     isTurning = True
     while(isTurning): 
         if(time.perf_counter() - start > circleTurnSeconds * meters): 
@@ -102,7 +102,7 @@ def circle_right_turn(start, circleTurnSeconds, meters):
             isTurning = False
             
 def circle_left_turn(start, circleTurnSeconds, meters):
-    arlo.go_diff(leftWheelFactor*20, rightWheelFactor*50, 1, 1)
+    arlo.go_diff(leftWheelFactor*40, rightWheelFactor*60, 1, 1)
     isTurning = True
     while(isTurning):
             if(time.perf_counter() - start > circleTurnSeconds * meters):
