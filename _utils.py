@@ -2,90 +2,121 @@ from time import sleep
 import robot
 import time
 
+### DEFINEREDE PARAMETRE ###
+arlo = robot.Robot()
+
+rightWheelFactor = 1.0
+leftWheelFactor = 1.06225
+stanardSpeed = 50.0
+
 ### PARAMETERUDREGNING ###
 
 def degreeToSeconds(degrees):
+    '''
+    Funktionen omregner grader, der skal drejes, til sekunder, der skal ventes.
+    Argumenter:
+        degrees:    grader, der skal drejes
+    '''
     ninetyDegreeTurnSeconds = 0.95
     return (ninetyDegreeTurnSeconds/90) * degrees
 
 def metersToSeconds(meters):
+    '''
+    Funktionen omregner meter, der skal køres, til sekunder, der skal ventes.
+    Argumenter:
+        meters:    meter, der skal køres
+    '''
     oneMeterSeconds = 2.8
     return oneMeterSeconds * meters
 
 ### BEVÆGELSE ###
 
-def go(start, seconds):
+def go(seconds):
+    '''
+    Funktionen venter i den tid, som robotten skal udføre en bestemt action.
+    
+    Argumenter:
+        start:    starttidspunkts
+        seconds:  sekunder, der skal ventes
+    '''
+    start = time.perf_counter()
     isDriving = True
     while (isDriving):
         if (time.perf_counter() - start > seconds):
             isDriving = False
 
-def drive_forward(start, meters):
-    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
+def drive(direction, meters):
+    '''
+    Funktionen kører robotten et antal meter.
+    Argumenter:
+        start:    starttidspunkt
+        direction:  enten 'forwards' eller 'backwards'
+        meters:   meter, der skal køres
+    '''
+    if direction == 'forwards':
+        arlo.go_diff(leftWheelFactor*stanardSpeed, rightWheelFactor*stanardSpeed, 1, 1)
+    elif direction == 'backwards':
+        arlo.go_diff(leftWheelFactor*stanardSpeed, rightWheelFactor*stanardSpeed, 0, 0)
 
     driveSeconds = metersToSeconds(meters)
-    go(start, driveSeconds)
+    go(driveSeconds)
 
-def sharp_turn(start, direction, degrees):
+def sharp_turn(direction, degrees):
+    '''
+    Funktionen kører robotten et antal meter.
+    Argumenter:
+        start:    starttidspunkt
+        direction:  enten 'right' eller 'left'
+        degrees:   grader, der skal køres
+    '''
     if direction == "right":
-        arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 0)
+        arlo.go_diff(leftWheelFactor*stanardSpeed, rightWheelFactor*stanardSpeed, 1, 0)
     elif direction == "left":
-        arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 0, 1)
+        arlo.go_diff(leftWheelFactor*stanardSpeed, rightWheelFactor*stanardSpeed, 0, 1)
     
     turnSeconds = degreeToSeconds(degrees)
-    go(start, turnSeconds)
+    go(turnSeconds)
 
-def soft_turn(start, direction, degrees):
+def soft_turn(direction, degrees):
+    '''
+    Funktionen kører robotten et antal meter.
+    Argumenter:
+        start:    starttidspunkt
+        direction:  enten 'right' eller 'left'
+        degrees:   grader, der skal køres
+    '''
     if direction == "right":
         arlo.go_diff(leftWheelFactor*100, rightWheelFactor*40, 1, 1)
     elif direction == "left":
         arlo.go_diff(leftWheelFactor*40, rightWheelFactor*100, 1, 1)
 
     turnSeconds = degreeToSeconds(degrees)
-    go(start, turnSeconds)
+    go(turnSeconds)
             
 ### SAMMENSAT BEVÆGELSE ###
 
 def move_in_square(meters):
-    start = time.perf_counter()
-
     for _ in range(4):
-        drive_forward(start, 1.0)
+        drive(1.0)
 
-        start = time.perf_counter()
-
-        sharp_turn(start, 'right', 90)
+        sharp_turn('right', 90)
     
-        start = time.perf_counter()
 
-def move_around_own_axis():
-    start = time.perf_counter()
-    
+def move_around_own_axis(): 
     for _ in range(1):
-        sharp_turn(start, 'right', 360)
-        
-        start = time.perf_counter()
-        
-        sharp_turn(start, 'left', 360)
+        sharp_turn('right', 360)
+                
+        sharp_turn('left', 360)
 
-        start = time.perf_counter()
 
 def move_in_figure_eight(i):
-    start = time.perf_counter()
-    
-    soft_turn(start, 'right', 360)
-    
-    start = time.perf_counter()
-    
-    soft_turn(start, 'left', 360)
+    soft_turn('right', 360)
 
-    start = time.perf_counter()
+    soft_turn('left', 360)
 
     for _ in range(i):   
-            soft_turn(start, 'right', 360)
+            soft_turn('right', 360)
             
-            start = time.perf_counter()
-            
-            soft_turn(start, 'left', 360)
+            soft_turn('left', 360)
 
-            start = time.perf_counter()
+            
