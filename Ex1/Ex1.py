@@ -99,8 +99,7 @@ def circle_right_turn(start, circleTurnSeconds, meters):
     arlo.go_diff(leftWheelFactor*100, rightWheelFactor*40, 1, 1) #har ændret i wheel faktoren, bare en start værdi (ikke fast)
     isTurning = True
     while(isTurning): 
-        if(time.perf_counter() - start > circleTurnSeconds * meters): 
-            arlo.stop()
+        if(time.perf_counter() - start > circleTurnSeconds * meters):
             isTurning = False
             
 def circle_left_turn(start, circleTurnSeconds, meters):
@@ -108,7 +107,6 @@ def circle_left_turn(start, circleTurnSeconds, meters):
     isTurning = True
     while(isTurning):
             if(time.perf_counter() - start > circleTurnSeconds * meters):
-                arlo.stop()
                 isTurning = False
 
 def move_in_figure_eight_non_blocking(meters, i):
