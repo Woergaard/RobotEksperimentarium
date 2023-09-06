@@ -46,7 +46,7 @@ def soft_turn(start, direction, degrees):
             
 ### SAMMENSAT BEVÆGELSE ###
 
-def move_in_square_non_blocking(meters):
+def move_in_square(meters):
     start = time.perf_counter()
 
     for _ in range(4):
@@ -70,7 +70,7 @@ def move_around_own_axis():
 
         start = time.perf_counter()
 
-def move_in_figure_eight_non_blocking(meters, i):
+def move_in_figure_eight(i):
     start = time.perf_counter()
     
     soft_turn(start, 'right', 360)
@@ -89,18 +89,3 @@ def move_in_figure_eight_non_blocking(meters, i):
             soft_turn(start, 'left', 360)
 
             start = time.perf_counter()
-
-
-
-# Create a robot object and initialize
-arlo = robot.Robot()
-
-rightWheelFactor = 1.0
-leftWheelFactor = 1.045
-
-
-oneMeterSeconds = 2.80 #Den tager måske et sekund fra når den skal starte op
-ninetyDegreeTurnSeconds = 0.95#95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
-circleTurnSecond = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes #
-startCircleTurnSeconds = 5.65  #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
-circleTurnSeconds = 5.20 
