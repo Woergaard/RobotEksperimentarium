@@ -18,7 +18,7 @@ rightWheelFactor = 1.0
 leftWheelFactor = 1.045
 
 startOneMeterSeconds = 2.80
-oneMeterSeconds = 2.70 #Den tager måske et sekund fra når den skal starte op
+oneMeterSeconds = 2.75 #Den tager måske et sekund fra når den skal starte op
 ninetyDegreeTurnSeconds = 0.95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
 circleTurnSecond = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes #
 startCircleTurnSeconds = 5.65  #Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
