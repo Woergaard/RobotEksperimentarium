@@ -17,8 +17,8 @@ the robot around in a square.
 rightWheelFactor = 1.0
 leftWheelFactor = 1.045
 
-oneMeterSeconds = 1.40 #Den tager måske et sekund fra når den skal starte op
-ninetyDegreeTurnSeconds = 0.475#95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
+oneMeterSeconds = 2.80 #Den tager måske et sekund fra når den skal starte op
+ninetyDegreeTurnSeconds = 0.95#95 #Den drejer for lang tid, vi har ikke testet nuværdende værdi
 circleTurnSeconds = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes # Caroline leger, tidnen for at kører 360 grader (starte og slutte samme sted)
 
 
@@ -31,7 +31,7 @@ circleTurnSeconds = ninetyDegreeTurnSeconds*4 # 4 skal hyperparametertybes # Car
 # NON BLOCKING KØRSEL FIRKANT SubEx1
 
 def right_turn(start, turnSeconds):
-    arlo.go_diff(leftWheelFactor*100, rightWheelFactor*100, 1, 0)
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 0)
     isTurning = True
     while (isTurning): # or some other form of loop
         if (time.perf_counter() - start > turnSeconds): #stop after 5 seconds
@@ -39,7 +39,7 @@ def right_turn(start, turnSeconds):
             isTurning = False
 
 def drive_forward(start, oneMeterSeconds, meters):
-    arlo.go_diff(leftWheelFactor*100, rightWheelFactor*100, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
     isDriving = True
     while (isDriving): # or some other form of loop
         if (time.perf_counter() - start > oneMeterSeconds * meters): #drive x meters
