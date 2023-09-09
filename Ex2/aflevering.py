@@ -35,7 +35,7 @@ def sir(k):
 
     #print(p(samples), p(q(k)), samples, q(k))
     # Compute weights
-    weights = p(samples) 
+    weights = p(samples)
 
     # Normalize weights
     weights /= sum(weights)
@@ -63,6 +63,7 @@ x = np.linspace(0, 15, 1000)
 plt.plot(x, p(x), 'r', label='p(x)')
 
 plt.legend()
+plt.xlim(0,15)
 plt.savefig('Ex2/fig1.png')
 plt.show()
 plt.close()
@@ -99,6 +100,7 @@ x = np.linspace(0, 15, 1000)
 plt.plot(x, p(x), 'r', label='p(x)')
 
 plt.legend()
+plt.xlim(0,15)
 plt.savefig('Ex2/fig2.png')
 plt.show()
 plt.close()
