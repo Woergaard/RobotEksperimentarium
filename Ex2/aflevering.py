@@ -33,8 +33,9 @@ def sir(k):
     # Generate initial samples
     samples = q(k)
 
+    #print(p(samples), p(q(k)), samples, q(k))
     # Compute weights
-    weights = p(samples) / p(q(k))
+    weights = p(samples) #/ p(q(k))
 
     # Normalize weights
     weights /= sum(weights)
@@ -49,7 +50,16 @@ for k in [20, 100, 1000]:
     resamples = sir(k)
 
     # Plot histogram of resamples
-    plt.hist(resamples, bins=k, density=True, alpha=0.5, label=f'k={k}')
+    #plt.hist(resamples, bins=15, density=True, alpha=0.5, label=f'k={k}', histtype='bar', align='mid')
+
+    # Calculate histogram
+    counts, bins = np.histogram(resamples, bins=30)
+
+    # Normalize counts by total number of samples
+    fractions = counts / k
+
+    # Plot histogram of fractions
+    plt.bar(bins[:-1], fractions, width=np.diff(bins), alpha=0.5, label=f'k={k}')
 
 # Plot the pose distribution
 x = np.linspace(0, 15, 1000)
@@ -77,9 +87,14 @@ def q(x):
 # Perform the SIR algorithm for different values of k
 for k in [20, 100, 1000]:
     resamples = sir(k)
+    # Calculate histogram
+    counts, bins = np.histogram(resamples, bins=30)
 
-    # Plot histogram of resamples
-    plt.hist(resamples, bins=50, density=True, alpha=0.5, label=f'k={k}')
+    # Normalize counts by total number of samples
+    fractions = counts / k
+
+    # Plot histogram of fractions
+    plt.bar(bins[:-1], fractions, width=np.diff(bins), alpha=0.5, label=f'k={k}')
 
 # Plot the pose distribution
 x = np.linspace(0, 15, 1000)
