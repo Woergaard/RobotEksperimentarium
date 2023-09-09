@@ -63,6 +63,7 @@ x = np.linspace(0, 15, 1000)
 plt.plot(x, p(x), 'r', label='p(x)')
 
 plt.legend()
+plt.savefig('fig1.png')
 plt.show()
 plt.close()
 
@@ -98,5 +99,6 @@ x = np.linspace(0, 15, 1000)
 plt.plot(x, p(x), 'r', label='p(x)')
 
 plt.legend()
+plt.savefig('fig2.png')
 plt.show()
 plt.close()
