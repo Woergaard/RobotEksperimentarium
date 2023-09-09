@@ -35,7 +35,7 @@ def sir(k):
 
     #print(p(samples), p(q(k)), samples, q(k))
     # Compute weights
-    weights = p(samples) #/ p(q(k))
+    weights = p(samples) 
 
     # Normalize weights
     weights /= sum(weights)
@@ -48,9 +48,6 @@ def sir(k):
 # Perform the SIR algorithm for different values of k
 for k in [20, 100, 1000]:
     resamples = sir(k)
-
-    # Plot histogram of resamples
-    #plt.hist(resamples, bins=15, density=True, alpha=0.5, label=f'k={k}', histtype='bar', align='mid')
 
     # Calculate histogram
     counts, bins = np.histogram(resamples, bins=30)
