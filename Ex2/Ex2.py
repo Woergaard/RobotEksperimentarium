@@ -39,7 +39,8 @@ def left_turn_return_route(pingFront, pingLeft, pingRight, pingBack):
 
 """  
 def turn_right_back_to_route(pingFrong, pingLeft, pingRight, pingBack):
-    _uti
+    _utils.sharp_turn('rigt', 90)
+    arlo.go_diff((_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1))
 """
 
 def drive(): #wheel):
@@ -55,7 +56,8 @@ def drive(): #wheel):
             arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
             sleep(timeDriven)
             _utils.sharp_turn('right', 90.0)
-            arlo.stop()
+            drive()
+            # nu er robotten back on route
     
 drive()        
                 
