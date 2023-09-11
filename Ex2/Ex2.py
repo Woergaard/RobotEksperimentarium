@@ -24,7 +24,7 @@ def sensor():
     return front, back, right, left
 #Wheel = 47.2 
 
-def left_turn_return_route():
+def left_turn_return_route(pingFront, pingLeft, pingRight, pingBack):
     arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     while (pingLeft <= 200 and pingFront > 200):
             pingFront, pingLeft, pingRight, pingBack = sensor()
@@ -44,9 +44,9 @@ def drive(): #wheel):
         if (pingFront <= 200): 
             _utils.sharp_turn('right', 90.0)
             for _ in range(2):
-                left_turn_return_route()
+                left_turn_return_route(pingFront, pingLeft, pingRight, pingBack)
             _utils.sharp_turn('right', 90.0)
-            
+drive()        
                 
             
 # 1. Kør frem indtil pingFront <= 200
@@ -95,7 +95,7 @@ def drive(): #wheel):
                         # STOP STOP STOP 
 """              
 
-drive()
+
 
 #SLUT CAROLINE 
 
