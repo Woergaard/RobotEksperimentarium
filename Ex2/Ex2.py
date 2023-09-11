@@ -24,28 +24,55 @@ def sensor():
     return front, back, right, left
 #Wheel = 47.2 
 
-def drive():#wheel):
+def left_turn_return_route():
+    arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+    while (pingLeft <= 200 and pingFront > 200):
+            pingFront, pingLeft, pingRight, pingBack = sensor()
+    if (pingLeft > 200):    
+        sleep(1.0)
+        _utils.sharp_turn('left', 90.0)
+    else:
+        print('stuck')
+    
+
+def drive(): #wheel):
     arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     isDriving = True
     while (isDriving): # or some other form of loop
-        pingFront = arlo.read_front_ping_sensor() 
-        pingLeft = arlo.read_left_ping_sensor()
-        pingRight = arlo.read_right_ping_sensor()
-        pingBack = arlo.read_back_ping_sensor()
+        pingFront, pingLeft, pingRight, pingBack = sensor()
         
         if (pingFront <= 200): 
             _utils.sharp_turn('right', 90.0)
+            for _ in range(2):
+                left_turn_return_route()
+            _utils.sharp_turn('right', 90.0)
+            
+                
+            
+# 1. Kør frem indtil pingFront <= 200
+# 2. Drej til højre (90 grader)
+# 3. Kør frem indtil pingLeft > 300 + 1 sekund mere 
+# 4. Drej til venstre (90 grader)
+# 5. Kør frem indtil  pingLeft > 300 + 1 sekund mere 
+# 6. Drej til venstre (90 grader)
+# 7. Kør frem indtil  pingLeft > 300 + 1 sekund mere 
+# 8. Drej til højre (90 grader)
+# 9. Kør fremad i et sekund 
+
+
+
+
             #turnSeconds = _utils.degreeToSeconds(90.0) 
             #_utils.go(turnSeconds)
-            arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
-            sleep(_utils.metersToSeconds(2.8))
-            arlo.stop()
-            _utils.sharp_turn('left', 90.0)
+           
+            #sleep(_utils.metersToSeconds(2.8))
+            #arlo.stop()#
+#            _utils.sharp_turn('left', 90.0)
             #turnSeconds = _utils.degreeToSeconds(90.0) 
             #_utils.go(turnSeconds)
-            arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
-            sleep(_utils.metersToSeconds(2.8))
-            arlo.stop()
+#            arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+            #sleep(_utils.metersToSeconds(2.8))
+            #arlo.stop()
 
 """
             if (pingRight and pingFront<= 200):
