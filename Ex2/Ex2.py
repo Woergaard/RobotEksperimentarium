@@ -37,12 +37,13 @@ def left_turn_return_route(pingFront, pingLeft, pingRight, pingBack):
         print('stuck')
     return timeDriven
 
-"""  
-def turn_right_back_to_route(pingFrong, pingLeft, pingRight, pingBack):
-    _utils.sharp_turn('rigt', 90)
-    arlo.go_diff((_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1))
-"""
 
+def turn_right_back_to_route(pingFrong, pingLeft, pingRight, pingBack, timeDriven):
+    arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+    sleep(timeDriven)
+    _utils.sharp_turn('right', 90.0)
+
+"""
 def drive(): #wheel):
     arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     isDriving = True
@@ -51,15 +52,60 @@ def drive(): #wheel):
         
         if (pingFront <= 200): 
             _utils.sharp_turn('right', 90.0)
+            
             timeDriven = left_turn_return_route(pingFront, pingLeft, pingRight, pingBack)
             _ = left_turn_return_route(pingFront, pingLeft, pingRight, pingBack)
-            arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
-            sleep(timeDriven)
-            _utils.sharp_turn('right', 90.0)
-            drive()
-            # nu er robotten back on route
+            
+            turn_right_back_to_route(timeDriven)
+            drive() # nu er robotten back on route
+            
     
 drive()        
+"""
+
+
+def drive():
+    arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+    isDriving = True
+    while (isDriving): # or some other form of loop
+        pingFront = arlo.read_front_ping_sensor() 
+        pingLeft = arlo.read_left_ping_sensor()
+        pingRight = arlo.read_right_ping_sensor()
+        pingBack = arlo.read_back_ping_sensor()
+        
+        if (pingFront <= 200): 
+            _utils.sharp_turn('right', _utils.degreeToSeconds(90.0))
+            turnSeconds = _utils.degreeToSeconds(90.0) 
+            _utils.go(turnSeconds)
+            arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+            _utils.metersToSeconds(2.8)
+            arlo.stop()
+            _utils.sharp_turn('left', _utils.degreeToSeconds(90.0))
+            turnSeconds = _utils.degreeToSeconds(90.0) 
+            _utils.go(turnSeconds)
+            arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+
+            if (pingRight and pingFront<= 200):
+                _utils.sharp_turn('left', _utils.degreeToSeconds(90.0))
+                turnSeconds = _utils.degreeToSeconds(90.0) 
+                _utils.go(turnSeconds)
+                arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+                arlo.stop() 
+                # Turn left 
+                
+
+                if(pingLeft and pingFront and pingRight <= 200): 
+                    _utils.move_around_own_axis('left', 180) 
+                    arlo.stop()
+                    # Turn back
+                        
+                    if(pingBack <= 200):
+                        print("I am stuck")
+                        arlo.stop()
+                        # STOP STOP STOP 
+                
+
+drive()
                 
             
 # 1. Kør frem indtil pingFront <= 200
