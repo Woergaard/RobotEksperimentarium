@@ -33,18 +33,20 @@ def sensorReadings():
         sleep(0.041)
 
 
-
+################################
+#          Exercise 1          #
+################################
 # CAROLINE
 def sensor():
-    foran = arlo.read_front_ping_sensor()
-    bagved = arlo.read_back_ping_sensor()
-    højre = arlo.read_right_ping_sensor()
-    venstre = arlo.read_left_ping_sensor()
+    front = arlo.read_front_ping_sensor()
+    back = arlo.read_back_ping_sensor()
+    right = arlo.read_right_ping_sensor()
+    left = arlo.read_left_ping_sensor()
     
-    return foran, bagved, højre, venstre
+    return front, back, right, left
 Wheel = 47.2 
 
-def kør(wheel):
+def drive(wheel):
     arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     isDriving = True
     while (isDriving): # or some other form of loop
@@ -54,6 +56,10 @@ def kør(wheel):
         pingBack = arlo.read_back_ping_sensor()
         
         if (pingFront <= 200): 
+            _utils.sharp_turn(_utils.right, _utils.degreeToSeconds)
+            turnSeconds = _utils.degreeToSeconds(_utils.degrees)
+            _utils.go(turnSeconds)
+            arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
             arlo.stop()
 
             if (pingRight <= 200):
@@ -69,7 +75,7 @@ def kør(wheel):
                         # STOP STOP STOP 
                 
 
-kør(Wheel)
+drive(Wheel)
 
 #SLUT CAROLINE 
 
