@@ -35,6 +35,7 @@ def q_gauss(x, drawSample : bool):
     else: 
         return norm.pdf(x, 5, 4)
 
+
 # Perform the SIR algorithm
 def sir(k, distibrution):
     # Compute weights
@@ -74,7 +75,7 @@ plt.plot(x, p(x), 'r', label='p(x)')
 
 plt.legend()
 plt.xlim(0,15)
-plt.savefig('Ex2/fig1.png')
+plt.savefig('Ex2/uniform.png')
 plt.show()
 plt.close()
 
@@ -107,6 +108,6 @@ plt.plot(x, p(x), 'r', label='p(x)')
 
 plt.legend()
 plt.xlim(0,15)
-plt.savefig('Ex2/fig2.png')
+plt.savefig('Ex2/gauss.png')
 plt.show()
 plt.close()

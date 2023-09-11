@@ -1,7 +1,8 @@
-import sys
+import sys 
 import robot 
 import _utils
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 #from library import robot, _utils
@@ -22,9 +23,9 @@ def sensor():
     left = arlo.read_left_ping_sensor()
     
     return front, back, right, left
-Wheel = 47.2 
+#Wheel = 47.2 
 
-def drive(wheel):
+def drive():#wheel):
     arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     isDriving = True
     while (isDriving): # or some other form of loop
@@ -35,25 +36,37 @@ def drive(wheel):
         
         if (pingFront <= 200): 
             _utils.sharp_turn('right', _utils.degreeToSeconds(90.0))
-            turnSeconds = _utils.degreeToSeconds(90.0) # kan man bare bruge _utils.nintydegree... som defineret i utils?
+            turnSeconds = _utils.degreeToSeconds(90.0) 
             _utils.go(turnSeconds)
             arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+            _utils.metersToSeconds(2.8)
             arlo.stop()
+            _utils.sharp_turn('left', _utils.degreeToSeconds(90.0))
+            turnSeconds = _utils.degreeToSeconds(90.0) 
+            _utils.go(turnSeconds)
+            arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
 
-            if (pingRight <= 200):
+            if (pingRight and pingFront<= 200):
+                _utils.sharp_turn('left', _utils.degreeToSeconds(90.0))
+                turnSeconds = _utils.degreeToSeconds(90.0) 
+                _utils.go(turnSeconds)
+                arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
                 arlo.stop() 
-                # Turn left
+                # Turn left 
+                
 
-                if(pingLeft <= 200): 
+                if(pingLeft and pingFront and pingRight <= 200): 
+                    _utils.move_around_own_axis('left', 180) 
                     arlo.stop()
                     # Turn back
                         
                     if(pingBack <= 200):
+                        print("I am stuck")
                         arlo.stop()
                         # STOP STOP STOP 
                 
 
-drive(Wheel)
+drive()
 
 #SLUT CAROLINE 
 
@@ -88,15 +101,26 @@ arlo.stop()
 ################################
 
 # ASGER 
+'''
+def sonar_calibration(): 
 
-def sonar_calibration():
-     # arlo.read_front_ping_sensor()
-     # arlo.read_back_ping_sensor()
-     # arlo.read_right_ping_sensor()
-     # arlo.read_left_ping_sensor()
+    # Record the front sensor's measurements
+
+    readings = np.zeros((5,5))
     
-    while(readings))
+    for i in range(5):
+        for j in range(5):
+            readings[i,j] = arlo.read_front_ping_sensor()
 
+        # Gives time to change distance
+
+        sleep(5)
+
+        
+    # Standard deviations of the measurements
+    estimate_dist = np.mean(readings, axis = 0)
+    np.std(estimate_dist)
+        
     return 
-
+'''
 # SLUT ASGER
