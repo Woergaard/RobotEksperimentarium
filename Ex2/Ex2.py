@@ -34,17 +34,20 @@ def drive():#wheel):
         pingBack = arlo.read_back_ping_sensor()
         
         if (pingFront <= 200): 
-            _utils.sharp_turn('right', _utils.degreeToSeconds(90.0))
-            turnSeconds = _utils.degreeToSeconds(90.0) 
-            _utils.go(turnSeconds)
+            _utils.sharp_turn('right', 90.0)
+            #turnSeconds = _utils.degreeToSeconds(90.0) 
+            #_utils.go(turnSeconds)
             arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
-            _utils.metersToSeconds(2.8)
+            sleep(_utils.metersToSeconds(2.8))
             arlo.stop()
-            _utils.sharp_turn('left', _utils.degreeToSeconds(90.0))
-            turnSeconds = _utils.degreeToSeconds(90.0) 
-            _utils.go(turnSeconds)
+            _utils.sharp_turn('left', 90.0)
+            #turnSeconds = _utils.degreeToSeconds(90.0) 
+            #_utils.go(turnSeconds)
             arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+            sleep(_utils.metersToSeconds(2.8))
+            arlo.stop()
 
+"""
             if (pingRight and pingFront<= 200):
                 _utils.sharp_turn('left', _utils.degreeToSeconds(90.0))
                 turnSeconds = _utils.degreeToSeconds(90.0) 
@@ -63,7 +66,7 @@ def drive():#wheel):
                         print("I am stuck")
                         arlo.stop()
                         # STOP STOP STOP 
-                
+"""              
 
 drive()
 
