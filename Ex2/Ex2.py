@@ -31,13 +31,16 @@ def left_turn_return_route(pingFront, pingLeft, pingRight, pingBack):
             pingFront, pingLeft, pingRight, pingBack = sensor()
     if (pingLeft > 200):    
         sleep(1.0)
+        timeDriven = time.perf_counter() - start
         _utils.sharp_turn('left', 90.0)
     else:
         print('stuck')
-    
-def turn_right_back_to_route(pingFrong, pingLeft, pingRight, pingBack)
-    
+    return timeDriven
 
+"""  
+def turn_right_back_to_route(pingFrong, pingLeft, pingRight, pingBack):
+    left_turn_return_route(pingLeft, pingRight, ping)
+"""
 
 def drive(): #wheel):
     arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
