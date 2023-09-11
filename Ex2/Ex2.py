@@ -30,7 +30,7 @@ def left_turn_return_route(pingFront, pingLeft, pingRight, pingBack):
     while (pingLeft <= 300 and pingFront > 200):
             pingFront, pingLeft, pingRight, pingBack = sensor()
     if (pingLeft > 300):    
-        sleep(1.0)
+        sleep(2.0)
         timeDriven = time.perf_counter() - start
         _utils.sharp_turn('left', 90.0)
     else:
