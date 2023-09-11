@@ -1,6 +1,7 @@
 import sys
 import robot 
 import _utils
+import numpy as np
 
 
 #from library import robot, _utils
@@ -9,28 +10,6 @@ import time
 
 # Create a robot object and initialize
 arlo = robot.Robot()
-
-# Move forward
-#arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
-
-def sensorReadings():
-        # request to read Front sonar ping sensor
-        print("Front sensor = ", arlo.read_front_ping_sensor())
-        sleep(0.041)
-
-        # request to read Back sonar ping sensor
-        print("Back sensor = ", arlo.read_back_ping_sensor())
-        sleep(0.041)
-
-        # request to read Right sonar ping sensorutils
-
-        print("Right sensor = ", arlo.read_right_ping_sensor())
-        sleep(0.041)
-
-        # request to read Left sonar ping sensor
-        print("Left sensor = ", arlo.read_left_ping_sensor())
-        sleep(0.041)
-
 
 ################################
 #          Exercise 1          #
@@ -55,8 +34,8 @@ def drive(wheel):
         pingBack = arlo.read_back_ping_sensor()
         
         if (pingFront <= 200): 
-            _utils.sharp_turn(_utils.right, _utils.degreeToSeconds)
-            turnSeconds = _utils.degreeToSeconds(_utils.degrees)
+            _utils.sharp_turn('right', _utils.degreeToSeconds(90.0))
+            turnSeconds = _utils.degreeToSeconds(90.0) # kan man bare bruge _utils.nintydegree... som defineret i utils?
             _utils.go(turnSeconds)
             arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
             arlo.stop()
@@ -79,12 +58,6 @@ drive(Wheel)
 #SLUT CAROLINE 
 
 
-
-
-
-# ASGER
-
-# SLUT ASGER
 
 """
 def drive_forward(start, oneMeterSeconds, meters):
@@ -110,3 +83,20 @@ arlo.stop()
 
 
 
+################################
+#          Exercise 2          #
+################################
+
+# ASGER 
+
+def sonar_calibration():
+     # arlo.read_front_ping_sensor()
+     # arlo.read_back_ping_sensor()
+     # arlo.read_right_ping_sensor()
+     # arlo.read_left_ping_sensor()
+    
+    while(readings))
+
+    return 
+
+# SLUT ASGER

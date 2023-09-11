@@ -25,20 +25,30 @@ def p(x):
     return sum(w * norm.pdf(x, mu, sigma) for w, mu, sigma in gaussians)
 
 # Define the proposal distribution q(x)
-def q(x):
+def q_uniform(x):
     return np.random.uniform(0, 15, size=int(x))
 
-# Perform the SIR algorithm
-def sir(k):
-    # Generate initial samples
-    samples = q(k)
+# Define the new proposal distribution q(x)
+def q_gauss(x, drawSample : bool):
+    if drawSample: 
+        return np.random.normal(5, 4, size=int(x))
+    else: 
+        return norm.pdf(x, 5, 4)
 
-    #print(p(samples), p(q(k)), samples, q(k))
+# Perform the SIR algorithm
+def sir(k, distibrution):
     # Compute weights
-    weights = p(samples)
+    if distibrution == 'uniform':
+        # Generate initial samples
+        samples = q_uniform(k)
+        weights = p(samples) / q_uniform(k)
+    elif distibrution == 'gauss': 
+        # Generate initial samples
+        samples = q_gauss(k, True)
+        weights = p(samples) / q_gauss(samples, False)
 
     # Normalize weights
-    weights /= sum(weights)
+    weights /= sum(weights) 
 
     # Resample according to weights
     resamples = np.random.choice(samples, size=k, p=weights)
@@ -47,7 +57,7 @@ def sir(k):
 
 # Perform the SIR algorithm for different values of k
 for k in [20, 100, 1000]:
-    resamples = sir(k)
+    resamples = sir(k, 'uniform')
 
     # Calculate histogram
     counts, bins = np.histogram(resamples, bins=30)
@@ -79,13 +89,9 @@ For the next question we choose the proposal distribution q(x) to be a normal di
 Write a python program that produces a set of resampled robot poses x using the Sampling-Importance- Resampling algorithm and the above stated pose distribution p(x) and proposal distribution q(x). Show the distribution of samples after the resampling step for k = 20, 100, 1000 samples / particles. Plot a histogram of the samples together with the wanted pose distribution p(x) (Hint: Take care the the histogram should be scaled as a probability density function to be comparable with p(x)). How well does the histogram of samples fit with p(x) for the different choices of k?
 """
 
-# Define the new proposal distribution q(x)
-def q(x):
-    return np.random.normal(5, 4, size=int(x))
-
 # Perform the SIR algorithm for different values of k
 for k in [20, 100, 1000]:
-    resamples = sir(k)
+    resamples = sir(k, 'gauss')
     # Calculate histogram
     counts, bins = np.histogram(resamples, bins=30)
 

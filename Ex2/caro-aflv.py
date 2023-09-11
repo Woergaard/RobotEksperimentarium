@@ -66,4 +66,17 @@ for k in [20, 100, 1000]:
     resample = sir(k)
     
     # histogrammet 
+  # histogrammet, bins =30, så vi får halve intervaller, da vi har fra 0-15. 
+    counts, bins = np.histogram(resample, bins=30)
     
+    # Normalize counts by total number of samples
+    fractions = counts / k
+
+    # Plot histogram of fractions
+    plt.bar(bins[:-1], fractions, width=np.diff(bins), alpha=0.5, label=f'k={k}')
+
+plt.legend() # A legend is a way to identify the different lines or curves in a plot.
+plt.title('Sampling Importance Resampling Histogram')
+plt.savefig("Caro forsøg")
+plt.show()
+plt.close

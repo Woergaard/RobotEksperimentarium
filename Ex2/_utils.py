@@ -17,7 +17,7 @@ def degreeToSeconds(degrees):
     Argumenter:
         degrees:    grader, der skal drejes
     '''
-    ninetyDegreeTurnSeconds = 0.95
+    ninetyDegreeTurnSeconds = 0.95 
     return (ninetyDegreeTurnSeconds/90) * degrees
 
 def metersToSeconds(meters):
