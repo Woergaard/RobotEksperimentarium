@@ -27,9 +27,9 @@ def sensor():
 def left_turn_return_route(pingFront, pingLeft, pingRight, pingBack):
     start = time.perf_counter()
     arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
-    while (pingLeft <= 200 and pingFront > 200):
+    while (pingLeft <= 300 and pingFront > 200):
             pingFront, pingLeft, pingRight, pingBack = sensor()
-    if (pingLeft > 200):    
+    if (pingLeft > 300):    
         sleep(1.0)
         timeDriven = time.perf_counter() - start
         _utils.sharp_turn('left', 90.0)
@@ -39,7 +39,7 @@ def left_turn_return_route(pingFront, pingLeft, pingRight, pingBack):
 
 """  
 def turn_right_back_to_route(pingFrong, pingLeft, pingRight, pingBack):
-    left_turn_return_route(pingLeft, pingRight, ping)
+    left_turn_return_route(pingLeft, pingRight, pingFront, pingBack)
 """
 
 def drive(): #wheel):
@@ -50,11 +50,11 @@ def drive(): #wheel):
         
         if (pingFront <= 200): 
             _utils.sharp_turn('right', 90.0)
-            for _ in range(2):
-                left_turn_return_route(pingFront, pingLeft, pingRight, pingBack)
+            timeDriven = left_turn_return_route(pingFront, pingLeft, pingRight, pingBack)
+            _ = left_turn_return_route(pingFront, pingLeft, pingRight, pingBack)
             _utils.sharp_turn('right', 90.0)
             arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
-            sleep(0.8)
+            sleep(timeDriven)
             arlo.stop()
     
 drive()        
