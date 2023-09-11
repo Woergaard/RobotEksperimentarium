@@ -2,7 +2,6 @@ import sys
 import robot 
 import _utils
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 #from library import robot, _utils
@@ -70,7 +69,8 @@ drive()
 
 #SLUT CAROLINE 
 
-
+### tilføjelse af tilfældighed af h/v for undgå loop
+### tilføj at den kigger til h/v hele tiden for at se, hvornår den er fri
 
 """
 def drive_forward(start, oneMeterSeconds, meters):
