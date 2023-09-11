@@ -37,13 +37,13 @@ def drive( ):
     elif (pingFront < 300 and pingRight < 200):
         _utils.sharp_turn('left', 90.0)
     elif (pingLeft < 200):
-        _utils.sharp_turn('right', 45)
+        _utils.sharp_turn('right', 45.0)
     elif (pingRight < 200):
-        _utils.sharp_turn('left', 45)
+        _utils.sharp_turn('left', 45.0)
     elif (pingLeft < 200 and pingRight < 200):
-        _utils.sharp_turn('left', 180)
+        _utils.sharp_turn('left', 180.0)
     elif (pingFront < 300 and pingLeft < 200 and pingRight < 200):
-        _utils.sharp_turn('left', 180)        
+        _utils.sharp_turn('left', 180.0)        
     drive()
 
 
