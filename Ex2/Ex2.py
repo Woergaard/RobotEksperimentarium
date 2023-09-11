@@ -39,7 +39,7 @@ def left_turn_return_route(pingFront, pingLeft, pingRight, pingBack):
 
 """  
 def turn_right_back_to_route(pingFrong, pingLeft, pingRight, pingBack):
-    left_turn_return_route(pingLeft, pingRight, pingFront, pingBack)
+    _uti
 """
 
 def drive(): #wheel):
@@ -52,9 +52,9 @@ def drive(): #wheel):
             _utils.sharp_turn('right', 90.0)
             timeDriven = left_turn_return_route(pingFront, pingLeft, pingRight, pingBack)
             _ = left_turn_return_route(pingFront, pingLeft, pingRight, pingBack)
-            _utils.sharp_turn('right', 90.0)
             arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
             sleep(timeDriven)
+            _utils.sharp_turn('right', 90.0)
             arlo.stop()
     
 drive()        
