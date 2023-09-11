@@ -28,8 +28,6 @@ def drive():
     arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     while (pingFront > 300 and pingLeft > 200 and pingRight > 200):
         pingFront, pingLeft, pingRight, pingBack = sensor()
-    # nu er der sket noget!!!
-    ## indsæt håndtering
     if(pingFront <= 300):
         randomDirection = np.random('right', 'left')
         _utils.sharp_turn(randomDirection, 90.0)
@@ -37,7 +35,7 @@ def drive():
         _utils.sharp_turn('right', 90.0)
     elif (pingFront < 300 and pingRight < 200):
         _utils.sharp_turn('left', 90.0)
-    elif (pingLeft < 200):
+    elif (pingLeft < 200): 
         _utils.sharp_turn('right', 45.0)
     elif (pingRight < 200):
         _utils.sharp_turn('left', 45.0)
