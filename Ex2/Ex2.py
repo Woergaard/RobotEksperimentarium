@@ -10,7 +10,6 @@ import time
 # Create a robot object and initialize
 arlo = robot.Robot()
 
-
 # Move forward
 #arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
 
