@@ -26,7 +26,7 @@ def sensor():
 
 def drive():
     pingFront, pingLeft, pingRight, pingBack = sensor()
-    arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
+    #arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     dirLst = ['right', 'left']
     while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
         pingFront, pingLeft, pingRight, pingBack = sensor()
