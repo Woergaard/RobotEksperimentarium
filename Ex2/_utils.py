@@ -153,6 +153,8 @@ def turn_and_sense(direction):
     while (pingFront < 350 and pingLeft < 250 and pingRight < 250):
         pingFront, pingLeft, pingRight, pingBack = sensor()
 
+    arlo.sleep(0.3)
+
 def drive_and_sense():
     pingFront, pingLeft, pingRight, pingBack = sensor()
     arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
