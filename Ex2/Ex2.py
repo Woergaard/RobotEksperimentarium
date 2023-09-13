@@ -30,21 +30,23 @@ def drive():
     dirLst = ['right', 'left']
     while (pingFront > 300 and pingLeft > 200 and pingRight > 200):
         pingFront, pingLeft, pingRight, pingBack = sensor()
-    if(pingFront <= 300):
-        randomDirection = random.choice(dirLst)
-        _utils.sharp_turn(randomDirection, 90.0)
+    if (pingFront < 300 and pingLeft < 200 and pingRight < 200):
+        _utils.sharp_turn('left', 180.0)    
     elif (pingFront < 300 and pingLeft < 200):
         _utils.sharp_turn('right', 90.0)
     elif (pingFront < 300 and pingRight < 200):
         _utils.sharp_turn('left', 90.0)
+    elif (pingLeft < 200 and pingRight < 200):
+        _utils.sharp_turn('left', 180.0)
+    elif(pingFront <= 300):
+        randomDirection = random.choice(dirLst)
+        _utils.sharp_turn(randomDirection, 90.0)
     elif (pingLeft < 200): 
         _utils.sharp_turn('right', 45.0)
     elif (pingRight < 200):
         _utils.sharp_turn('left', 45.0)
-    elif (pingLeft < 200 and pingRight < 200):
-        _utils.sharp_turn('left', 180.0)
-    elif (pingFront < 300 and pingLeft < 200 and pingRight < 200):
-        _utils.sharp_turn('left', 180.0)        
+    
+        
     drive()
 
 
