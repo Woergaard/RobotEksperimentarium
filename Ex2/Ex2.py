@@ -28,22 +28,23 @@ def drive():
     pingFront, pingLeft, pingRight, pingBack = sensor()
     arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     dirLst = ['right', 'left']
-    while (pingFront > 300 and pingLeft > 200 and pingRight > 200):
+    while (pingFront > 450 and pingLeft > 350 and pingRight > 350):
         pingFront, pingLeft, pingRight, pingBack = sensor()
-    if (pingFront < 300 and pingLeft < 200 and pingRight < 200):
+        print(pingLeft)
+    if (pingFront < 450 and pingLeft < 350 and pingRight < 350):
         _utils.sharp_turn('left', 180.0)    
-    elif (pingFront < 300 and pingLeft < 200):
+    elif (pingFront < 450 and pingLeft < 350):
         _utils.sharp_turn('right', 90.0)
-    elif (pingFront < 300 and pingRight < 200):
+    elif (pingFront < 450 and pingRight < 350):
         _utils.sharp_turn('left', 90.0)
-    elif (pingLeft < 200 and pingRight < 200):
+    elif (pingLeft < 350 and pingRight < 350):
         _utils.sharp_turn('left', 180.0)
-    elif(pingFront <= 300):
+    elif(pingFront <= 450):
         randomDirection = random.choice(dirLst)
         _utils.sharp_turn(randomDirection, 90.0)
-    elif (pingLeft < 200): 
+    elif (pingLeft < 350): 
         _utils.sharp_turn('right', 45.0)
-    elif (pingRight < 200):
+    elif (pingRight < 350):
         _utils.sharp_turn('left', 45.0)
     
         
