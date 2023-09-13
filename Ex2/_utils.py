@@ -123,6 +123,14 @@ def move_in_figure_eight(i):
             
             soft_turn('left', 360)
 
+
+### MÅLING ###
+
+def sensor_measure(): 
+    while True:
+        pingFront, pingBack, pingRight, pingLeft = sensor_ex()
+        print('front', pingFront, 'left', pingLeft, 'right', pingRight, 'back', pingBack)
+
 ### SENSORERING ###
 
 def sensor():
@@ -156,7 +164,12 @@ def turn_and_sense(direction):
 
 def drive_and_sense():
     pingFront, pingLeft, pingRight, pingBack = sensor()
-    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+
+    if pingFront < 100:
+        sharp_turn('left', 90.0)
+    else:
+        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+    
     dirLst = ['right', 'left']
 
     while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
