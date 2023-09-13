@@ -1,6 +1,7 @@
 from time import sleep
 import robot
 import time
+import random
 
 ### DEFINEREDE PARAMETRE ###
 arlo = robot.Robot()
@@ -123,15 +124,15 @@ def move_in_figure_eight(i):
 
 def sensor():
     front = arlo.read_front_ping_sensor()
-    back = arlo.read_back_ping_sensor()
     right = arlo.read_right_ping_sensor()
     left = arlo.read_left_ping_sensor()
+    back = arlo.read_back_ping_sensor()
     
-    return front, back, right, left
+    return front, left, right, back
 
 def drive():
     pingFront, pingLeft, pingRight, pingBack = sensor()
-    #arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
+    arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
     dirLst = ['right', 'left']
     while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
         pingFront, pingLeft, pingRight, pingBack = sensor()

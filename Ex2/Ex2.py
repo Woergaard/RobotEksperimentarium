@@ -16,7 +16,7 @@ arlo = robot.Robot()
 #          Exercise 1          #
 ################################
 # CAROLINE
-def sensor():
+def sensor_ex():
     front = arlo.read_front_ping_sensor()
     back = arlo.read_back_ping_sensor()
     right = arlo.read_right_ping_sensor()
@@ -24,12 +24,13 @@ def sensor():
     
     return front, back, right, left
 
-def drive():
-    pingFront, pingLeft, pingRight, pingBack = sensor()
+def drive_ex():
+    pingFront, pingBack, pingRight, pingLeft = sensor_ex()
     #arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor*50, 1, 1)
     dirLst = ['right', 'left']
+    # 
     while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
-        pingFront, pingLeft, pingRight, pingBack = sensor()
+        pingFront, pingLeft, pingRight, pingBack = sensor_ex()
         print('front', pingFront, 'left', pingLeft, 'right', pingRight, 'back', pingBack)
         sleep(0.041)
     if (pingFront < 350 and pingLeft < 250 and pingRight < 250):
@@ -49,10 +50,10 @@ def drive():
         _utils.sharp_turn('left', 45.0)
     
         
-    drive()
+    drive_ex()
 
 
-drive()
+drive_ex()
 
 
 
