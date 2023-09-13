@@ -56,7 +56,7 @@ def drive_ex():
 #drive_ex()
 
 def sensor_measure(): 
-    while True
+    while True:
         pingFront, pingBack, pingRight, pingLeft = sensor_ex()
         print('front', pingFront, 'left', pingLeft, 'right', pingRight, 'back', pingBack)
 
