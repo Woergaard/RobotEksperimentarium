@@ -130,7 +130,65 @@ def sensor():
     
     return front, left, right, back
 
-def drive():
+def turn_and_sense(direction):
+    '''
+    Funktionen drejer om egen akse, indtil der er frit.
+    Argumenter:
+        direction:  enten 'right' eller 'left'
+    '''
+    if direction == "right":
+        r, l = 1, 0
+    elif direction == "left":
+        r, l = 1, 0
+    else:
+        print("Indtast enten 'left' eller 'right' som retning")
+        return
+
+    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, r, l)
+    pingFront, pingLeft, pingRight, pingBack = sensor()
+
+    while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
+        pingFront, pingLeft, pingRight, pingBack = sensor()
+        print(pingFront, pingLeft, pingRight, pingBack)
+        sleep(0.021)
+    
+    arlo.stop()
+
+def drive_and_sense():
+    pingFront, pingLeft, pingRight, pingBack = sensor()
+    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+    dirLst = ['right', 'left']
+
+    while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
+        pingFront, pingLeft, pingRight, pingBack = sensor()
+        print(pingFront, pingLeft, pingRight, pingBack)
+        sleep(0.041)
+    
+    # three sensors detected
+    if (pingFront < 350 and pingLeft < 250 and pingRight < 250):
+        turn_and_sense('left')  
+
+    # two sensors detected
+    elif (pingFront < 350 and pingLeft < 250):
+        turn_and_sense('right')
+    elif (pingFront < 350 and pingRight < 250):
+        turn_and_sense('left')
+    elif (pingLeft < 250 and pingRight < 250):
+        turn_and_sense('left')
+
+    # one sensors deteced
+    elif(pingFront <= 350):
+        randomDirection = random.choice(dirLst)
+        turn_and_sense(randomDirection)
+    elif (pingLeft < 250): 
+        turn_and_sense('right')
+    elif (pingRight < 250):
+        turn_and_sense('left')
+    
+        
+    drive_and_sense()
+
+def drive_old():
     pingFront, pingLeft, pingRight, pingBack = sensor()
     arlo.go_diff(leftWheelFactor*50, rightWheelFactor*50, 1, 1)
     dirLst = ['right', 'left']
@@ -143,12 +201,16 @@ def drive():
     # three sensors detected
     if (pingFront < 350 and pingLeft < 250 and pingRight < 250):
         sharp_turn('left', 180.0)  
+
+    # two sensors detected
     elif (pingFront < 350 and pingLeft < 250):
         sharp_turn('right', 90.0)
     elif (pingFront < 350 and pingRight < 250):
         sharp_turn('left', 90.0)
     elif (pingLeft < 250 and pingRight < 250):
         sharp_turn('left', 180.0)
+
+    # one sensors deteced
     elif(pingFront <= 350):
         randomDirection = random.choice(dirLst)
         sharp_turn(randomDirection, 90.0)
@@ -158,4 +220,4 @@ def drive():
         sharp_turn('left', 45.0)
     
         
-    drive()
+    drive_old()

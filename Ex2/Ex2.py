@@ -50,13 +50,17 @@ def drive_ex():
         _utils.sharp_turn('left', 45.0)
     
         
-    drive_ex()
+    #drive_ex()
 
 
-drive_ex()
+#drive_ex()
 
+def sensor_measure(): 
+    while True
+        pingFront, pingBack, pingRight, pingLeft = sensor_ex()
+        print('front', pingFront, 'left', pingLeft, 'right', pingRight, 'back', pingBack)
 
-
+sensor_measure()
 
 ########################
 #      Exercise 2      #
