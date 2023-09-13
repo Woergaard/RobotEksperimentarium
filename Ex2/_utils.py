@@ -152,8 +152,6 @@ def turn_and_sense(direction):
 
     while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
         pingFront, pingLeft, pingRight, pingBack = sensor()
-        print(pingFront, pingLeft, pingRight, pingBack)
-        sleep(0.021)
     
     arlo.stop()
 
