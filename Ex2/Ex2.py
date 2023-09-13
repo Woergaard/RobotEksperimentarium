@@ -60,7 +60,9 @@ def sensor_measure():
         pingFront, pingBack, pingRight, pingLeft = sensor_ex()
         print('front', pingFront, 'left', pingLeft, 'right', pingRight, 'back', pingBack)
 
-sensor_measure()
+#sensor_measure()
+
+_utils.drive_and_sense()
 
 ########################
 #      Exercise 2      #
