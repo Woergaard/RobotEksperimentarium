@@ -1,24 +1,17 @@
 TODO:
 - Lave dictionary med QR koder + dimensioner (specifikt højde) på kasserne 
+
+Exercise 1: 
+- lave forsøg med forskellige Z (distancer) for en kasse med X højde og måle dens
+  x højde i pixels for at finde normalfordelingen af f focallængde
 - 
 
 
+Exercise 2:
+- Vi skal lokalisere et landmark (boksene)
+- 
+- Vi får givet følgende, cv2.aruco.DICT_6X6_250, funktionen som er et dictionary af deres QR coder på boksene 
+- Hvis vi vil lave vores egne kan vi bruge cv2.aruco.detectMarkers funktionen
+- 
 
-RANDOM SNAK:
-- få afleveret afleveringen :)
-- fuck du har jo skrevet en halv roman
-- Jesus kristus! 
-
-
-
-skal vi bare læse igennem og aflevere så eller?
-
-
-meget klogt skrevet
-godkendt fra mig
-Ser fint ud for mig :-)
-Vil du aflevere caro?
-YES!
-
-Afleveret, kunne ikke tilføje jer, så har skrevet en kommentar at det er robot cinque gruppen og alle vores navne
-Men spørg lige kim efter forelæsningen om det går.
+Exercise 3: 
