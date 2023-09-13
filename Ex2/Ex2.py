@@ -30,7 +30,7 @@ def drive_ex():
     dirLst = ['right', 'left']
     # 
     while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
-        pingFront, pingLeft, pingRight, pingBack = sensor_ex()
+        pingFront, pingBack, pingRight, pingLeft = sensor_ex()
         print('front', pingFront, 'left', pingLeft, 'right', pingRight, 'back', pingBack)
         sleep(0.041)
     if (pingFront < 350 and pingLeft < 250 and pingRight < 250):
