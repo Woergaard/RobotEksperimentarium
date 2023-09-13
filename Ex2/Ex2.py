@@ -30,7 +30,7 @@ def drive():
     dirLst = ['right', 'left']
     while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
         pingFront, pingLeft, pingRight, pingBack = sensor()
-        print(pingFront, pingLeft, pingRight)
+        print(pingFront, pingLeft, pingRight, pingBack)
         sleep(0.041)
     if (pingFront < 350 and pingLeft < 250 and pingRight < 250):
         _utils.sharp_turn('left', 180.0)    
