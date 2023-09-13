@@ -60,7 +60,6 @@ def drive(front_threshold=350, back_threshold = 350, side_threshold=250, sharp_t
         for condition, action in conditions:
             if condition(pingFront, pingBack, pingRight, pingLeft):
                 action()
-                #break  # Exit once an action is taken
         drive()
         
 # Start driving
