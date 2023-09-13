@@ -32,7 +32,7 @@ def metersToSeconds(meters):
 
 ### BEVÆGELSE ###
 
-def go(seconds):
+def wait(seconds):
     '''
     Funktionen venter i den tid, som robotten skal udføre en bestemt action.
     Samme tanke som Sleep, men kan måske sørge for den kan holde sig opdateret på sine omgivelser.
@@ -60,7 +60,7 @@ def drive(direction, meters):
         arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 0)
 
     driveSeconds = metersToSeconds(meters)
-    go(driveSeconds)
+    wait(driveSeconds)
 
 def sharp_turn(direction, degrees):
     '''
@@ -76,7 +76,7 @@ def sharp_turn(direction, degrees):
         arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
     
     turnSeconds = degreeToSeconds(degrees)
-    go(turnSeconds)
+    wait(turnSeconds)
 
 def soft_turn(direction, degrees):
     '''
@@ -92,7 +92,7 @@ def soft_turn(direction, degrees):
         arlo.go_diff(leftWheelFactor*40, rightWheelFactor*100, 1, 1)
 
     turnSeconds = degreeToSeconds(degrees)
-    go(turnSeconds)
+    wait(turnSeconds)
             
 ### SAMMENSAT BEVÆGELSE ###
 
