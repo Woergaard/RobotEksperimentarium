@@ -7,6 +7,7 @@ import numpy as np
 #from library import robot, _utils
 from time import sleep
 import time 
+import random
 
 # Create a robot object and initialize
 arlo = robot.Robot()
@@ -30,7 +31,7 @@ def drive():
     while (pingFront > 300 and pingLeft > 200 and pingRight > 200):
         pingFront, pingLeft, pingRight, pingBack = sensor()
     if(pingFront <= 300):
-        randomDirection = np.random(range(1))
+        randomDirection = random.choice(dirLst)
         _utils.sharp_turn(dirLst[randomDirection], 90.0)
     elif (pingFront < 300 and pingLeft < 200):
         _utils.sharp_turn('right', 90.0)
