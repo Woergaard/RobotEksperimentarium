@@ -156,8 +156,10 @@ def turn_and_watch(direction, img):
             print('Landmark detected')
             print(top_left, top_right, bottom_right, bottom_left)
 
-            while top_left[0] > 550 and top_left[0] < 350 and bottom_left[0] < y and bottom_left > z: # hvis landmark er ligeud
-                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1) 
+            if top_left[0] < 550 and top_left[0] > 350 and bottom_left[0] > 350 and bottom_left[0] < 550: # hvis landmark er ligeud
+                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+            if top_left[0] > 550 and bottom_left[0] > 550:
+                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1s)
 
 
 def drive_to_landmark():
