@@ -42,12 +42,12 @@ def sir(k, distibrution):
     if distibrution == 'uniform':
         # Generate initial samples
         samples = q_uniform(k)
-        weights = p(samples) / q_uniform(k)
+        weights = p(samples) / q_uniform(k) #This is wrong: You should divide by the probability density of the sample. For this uniform distribution it is 1/15.
     elif distibrution == 'gauss': 
         # Generate initial samples
         samples = q_gauss(k, True)
-        weights = p(samples) / q_gauss(samples, False)
-
+        weights = p(samples) / q_gauss(samples, False) #This is again wrong: Here you should divide by the probability density of the samples 
+                                                       #evaluated in the density function for the  Gaussian a.k.a Normal distribution.
     # Normalize weights
     weights /= sum(weights) 
 
