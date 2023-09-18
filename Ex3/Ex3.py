@@ -43,3 +43,11 @@ def camera_setup():
         cv2.imshow(WIN_RF, image)
     
 camera_setup()
+
+
+
+
+### EX 1 ###
+
+def height_of_box():
+    #måler 
