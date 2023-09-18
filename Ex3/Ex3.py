@@ -1,5 +1,5 @@
-import pkg_resources
-pkg_resources.require("opencv-python==4.6.0.66")
+#import pkg_resources
+#pkg_resources.require("opencv-python==4.6.0.66")
 import cv2 # Import the OpenCV library
 import time
 from pprint import *
