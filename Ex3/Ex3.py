@@ -82,3 +82,67 @@ camera_setup()
 
 ### EX 3.2 ###
 
+### DEFINEREDE PARAMETRE ###
+import _utils
+
+arlo = robot.Robot()
+
+rightWheelFactor = 1.0
+leftWheelFactor = 1.06225
+standardSpeed = 50.0
+
+
+def height_of_QR_in_image(img):
+    '''
+    Funktionen returnerer højden af en box på et billede i pixels.n
+    Argumenter:
+        image:  det givne billede
+    '''
+    arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
+    
+    aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict) 
+    print(aruco_corners)
+
+
+    # If at least one marker is detected
+    if len(aruco_corners) > 0:
+        for corner in aruco_corners:
+            # The corners are ordered as top-left, top-right, bottom-right, bottom-left
+            top_left = corner[0][0]
+            bottom_left = corner[0][3]
+            
+            # Compute the height in pixels
+            height = bottom_left[1] - top_left[1]
+            print("Height of the ArUco marker:", height, "pixels")
+
+def turn_and_watch(direction, arucoDict):
+    '''
+    Funktionen drejer om egen akse, indtil den har fundet et landmark OG der er frit.
+    Argumenter:
+        direction:  enten 'right' eller 'left'
+    '''
+    if direction == "right":
+        r, l = 1, 0
+    elif direction == "left":
+        r, l = 0, 1
+    else:
+        print("Indtast enten 'left' eller 'right' som retning")
+        return
+
+    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, r, l)
+    #pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+
+    aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict) 
+    #while (pingFront < 500 and pingLeft < 400 and pingRight < 400):
+        #pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+
+
+def drive_to_landmark():
+    landmarkFound = False
+
+    arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
+    
+    while landmarkFound:
+        turn_and_watch('left', arucoDict)
+
+

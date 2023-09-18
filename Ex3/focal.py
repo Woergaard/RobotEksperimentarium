@@ -1,4 +1,5 @@
 import numpy as np
+import cv2 # Import the OpenCV library
 
 def height_of_QR_in_image(img):
     '''
