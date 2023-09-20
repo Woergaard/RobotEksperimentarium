@@ -5,6 +5,11 @@ Netværk:
 ssh pi@10.69.252.16
 kode: DIKU4Ever
 
+static ip_address=192.168.40.164/24
+static routers=192.168.40.1
+ssh pi@192.168.40.164
+
+
 Med video: 
 ssh -o "Compression yes" -o "TCPKeepAlive yes" -Y pi@10.69.252.16
 

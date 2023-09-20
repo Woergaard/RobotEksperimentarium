@@ -95,8 +95,18 @@ def pose_estimation(img, arucoDict):
     arucoMarkerLength = 145.0
 
     # Draw the detectet markers, if there is at least 1 marker
-    if (len(ids)> 0) :
-        cv2.aruco.drawDetectedMarkers(img, aruco_corners)
+    
+    tvecs = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix)
+    
+    length_of_axis = 0.01
+    
+    imaxis = cv2.aruco.drawDetectedMarkers(img, aruco_corners, ids)
+    for i in range(len(tvecs)):
+        imaxis = cv2.aruco.drawAxis(imaxis, camera_matrix, tvecs[i], length_of_axis)
+
+
+    #if (len(ids)> 0) :
+    #    cv2.aruco.drawDetectedMarkers(img, ids, aruco_corners)
     
   
     # if there is at least 1 marker
