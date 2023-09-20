@@ -173,6 +173,10 @@ def pose_estimation_sofie(img, arucoDict):
     arucoMarkerLength = 145.0
     distortion = 0
      
-    _, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
-    np.norm(tvec)
+    _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
+    
+    for tvec in tvecs:
+        np.norm(tvec)
+    
+    
    
