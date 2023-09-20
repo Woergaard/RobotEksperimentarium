@@ -68,6 +68,7 @@ def turn_and_watch(direction, img):
 def drive_to_landmarks(landmarks_lst):
     
     for landmark in landmarks_lst:
+        id = 
         arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 1)
 
     return
@@ -94,6 +95,7 @@ def pose_estimation(img, arucoDict):
     
     rmat, jacobian = cv2.Rodrigues(rvecs)
     world_angle = np.arccos(rmat[0][0])
+    print(world_angle)
 
     lst = []
     for i in range(len(ids)):
