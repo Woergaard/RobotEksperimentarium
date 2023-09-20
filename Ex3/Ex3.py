@@ -96,7 +96,7 @@ def pose_estimation(img, arucoDict):
 
     # Draw the detectet markers, if there is at least 1 marker
     if (len(ids)> 0) :
-        cv2.aruco.drawDetectedMarkers(img, ids, aruco_corners)
+        cv2.aruco.drawDetectedMarkers(img, aruco_corners)
     
   
     # if there is at least 1 marker
