@@ -73,7 +73,7 @@ def drive_to_landmarks(landmarks_lst):
     direction = landmark[2]
     id = landmark[3]
 
-    print('driving towards landmark ' + str(id))
+    print('Driving towards landmark ' + str(id))
     _utils.sharp_turn(direction, angle)
     driveSeconds = _utils.metersToSeconds(dist/1000)
     arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 1)
