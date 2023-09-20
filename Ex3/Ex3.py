@@ -64,9 +64,6 @@ def turn_and_watch(direction, img):
 
         return False
     
-    #return False
-
-
 '''
 Pose estimation is the task of determining the
 camera's position and orientation in relation to
@@ -144,7 +141,7 @@ def camera():
         #landmark_drive('left', image, arucoDict)
         if turn_and_watch('left', image) == True: 
             arlo.stop()
-            time.sleep(2)      
+            time.sleep(3)      
 
 camera()
 
