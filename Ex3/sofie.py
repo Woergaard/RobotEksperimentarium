@@ -19,9 +19,9 @@ import robot
 
 arlo = robot.Robot()
 
-rightWheelFactor = 1.0*0.1
-leftWheelFactor = 1.06225*0.1
-standardSpeed = 50.0
+rightWheelFactor = 1.0
+leftWheelFactor = 1.06225
+standardSpeed = 31.0
 
 
 def find_and_drive_to_landmark(img):
