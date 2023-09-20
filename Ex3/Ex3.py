@@ -66,11 +66,14 @@ def turn_and_watch(direction, img):
         return False
 
 def drive_to_landmarks(landmarks_lst):
-    first_landmark = landmarks_lst[0]
+    landmark = landmarks_lst[0]
 
-    
     dist = landmark[0]
-    id = landmark[1]
+    angle = landmark[1]
+    direction = landmark[2]
+    id = landmark[3]
+
+    _utils.sharp_turn(direction, angle)
     driveSeconds = _utils.metersToSeconds(dist/1000)
     arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 1)
     _utils.wait(driveSeconds)
@@ -108,6 +111,7 @@ def pose_estimation(img, arucoDict):
     lst = []
     for i in range(len(ids)):
         world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
+        print(world_angle)
         if np.dot(world_angle, np.array([1, 0, 0])) < 0:
             direction = 'right'
         else:
