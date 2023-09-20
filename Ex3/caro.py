@@ -1,9 +1,15 @@
 #import pkg_resources
 #pkg_resources.require("opencv-python==4.6.0.66")
-import cv2 # Import the OpenCV library
+import cv2 #Import the OpenCV library
 import time
 from pprint import *
 import numpy as np
+
+
+###############################################
+#           Givet kode fra underviser         #
+###############################################
+
 
 try:
     import picamera2
@@ -79,30 +85,52 @@ def camera_setup():
     
 camera_setup()
 
+
+
+################################
+#        Exercise 2            #
+################################
+
 import _utils
+import robot
+
+arlo = robot.Robot() 
+
+rightWheelFactor = 1.0
+leftWheelFactor = 1.06225
+standardSpeed = 50.0
+
+
+
 def check_suroundings(img, directions):
     ''' 
     Funktionen tjekker om der er en Landmark i nærheden 
-    aruvo_corners - Hjørner på 
-    directions - 
+    aruco_corners - Hjørner på 
+    directions - enten 'right' eller 'left' 
     '''
     if directions == 'right': 
         r, l = 1, 0
     
     if directions == 'left': 
         l, r = 0, 1 
-        
-    arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
+    else :
+        print('Der sker ikke noget')
+        return 
     
-    aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict) 
-    print(aruco_corners)
+    arlo.go_diff(_utils.leftWheelFactor*50, _utils.rightWheelFactor, l, r) #Let the bay drive!!!
+    
+    
+    arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250) # Dictionary that has all the QR codes stored. 
+    aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict)  # The camera detects if a QR code is in view. 
+
+    print(aruco_corners) #Corners = The QR codes corners. 
 
 
     # If at least one marker is detected
     if len(aruco_corners) > 0:
         for corner in aruco_corners:
-            # The corners are ordered as top-left, top-right, bottom-right, bottom-left
-            top_left = corner[0][0]
+            # The corners are ordered as top-left, top-right, bottom-right, bottom-left, it detects the corners in a clockwise manner. 
+            top_left = corner[0][0] 
             top_right = corner[0][1]
             bottom_right = corner[0][2]
             bottom_left = corner[0][3]
@@ -113,7 +141,10 @@ def check_suroundings(img, directions):
             print('Landmark detected')
             print(top_left, top_right, bottom_right, bottom_left)
 
-            while top_left > x and top_left < y and bottom_left < y and bottom_left > z: # hvis landmark er ligeud
-                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1) 
+            #while top_left > x and top_left < y and bottom_left < y and bottom_left > z: # If the landmark is straight ahead
+            #    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1) 
+            #if() : 
+            
+
 
 
