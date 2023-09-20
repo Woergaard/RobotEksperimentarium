@@ -79,8 +79,6 @@ pose_estimation
     - rejectedImgPoints, the marker candidates that have been rejected during the identification step
 '''         
 
-# VI SKAL BENYTTE VORES FOCAL LENGTH HER!
-
 def pose_estimation(img, arucoDict): 
     """Denne funktion skal finde positionen af et landmark i forhold til robotten og udregne vinklen og afstanden til landmarket."""
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict, ids, rejectedImgPoints)
@@ -93,6 +91,7 @@ def pose_estimation(img, arucoDict):
 #    if (ids.size() > 0) :
 #        cv2.aruco.drawDetectedMarkers(img, ids, aruco_corners)
     
+    ''''
     # if there is at least 1 marker
     if len(aruco_corners) > 0 :
         cv2.aruco.drawDetectedMarkers(img, ids, aruco_corners)
@@ -104,7 +103,22 @@ def pose_estimation(img, arucoDict):
 
         # Draw Axis
         cv2.aruco.drawAxis(img, camera_matrix, rvecs, tvecs, 0.01)  
-
+'''
+    aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict)
+    if len(aruco_corners) > 0:
+        for corner in aruco_corners:
+            # The corners are ordered as top-left, top-right, bottom-right, bottom-left
+            top_left = corner[0][0]
+            top_right = corner[0][1]
+            bottom_right = corner[0][2]
+            bottom_left = corner[0][3]
+            
+            if top_left[0] < 550 and top_left[0] > 350 and bottom_left[0] > 350 and bottom_left[0] < 550: # hvis landmark er ligeud
+                arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 1)
+            elif top_left[0] > 550 and bottom_left[0] > 550:
+                arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 0, 1) # drejer til venstre
+            elif top_left[0] < 350 and bottom_left[0] < 350:
+                arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 0) # drejer til højre
 
     return img 
 
