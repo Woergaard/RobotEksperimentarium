@@ -31,9 +31,9 @@ def find_and_drive_to_landmark(img):
         img:  billedet fra kameraet
     '''
 
+    _utils.wait(0.2)
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
     aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict)
-
     print(aruco_corners)
     
     if len(aruco_corners) > 0:
