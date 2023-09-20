@@ -57,6 +57,7 @@ def find_and_drive_to_landmark(img):
         arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
         turnSeconds = _utils.degreeToSeconds(20)
         _utils.wait(turnSeconds)
+        arlo.stop()
 
 def camera():
     # Open a camera device for capturing
