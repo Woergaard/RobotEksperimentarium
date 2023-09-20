@@ -94,6 +94,7 @@ def pose_estimation(img, arucoDict):
     camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
     arucoMarkerLength = 145.0
 
+    print(ids)
     # Draw the detectet markers, if there is at least 1 marker
     if (ids.size() > 0) :
         cv2.aruco.drawDetectedMarkers(img, ids, aruco_corners)
