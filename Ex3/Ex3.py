@@ -91,10 +91,10 @@ def pose_estimation(img, arucoDict):
     focal_length = 1744.36 
     camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
     arucoMarkerLength = 145.0
-    distortion = 0.0 
+    distortion = 0
     # Draw the detectet markers, if there is at least 1 marker
     
-    tvecs = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, distortion,  camera_matrix)
+    tvecs = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, distortion, camera_matrix)
     
     length_of_axis = 0.01
     
