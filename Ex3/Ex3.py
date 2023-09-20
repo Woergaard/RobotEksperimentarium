@@ -6,6 +6,7 @@ from pprint import *
 import numpy as np
 import _utils
 import robot
+from numpy import linalg
 
 arlo = robot.Robot()
 
@@ -79,25 +80,25 @@ pose_estimation
     - rejectedImgPoints, the marker candidates that have been rejected during the identification step
 '''         
 
-def pose_estimation(img, arucoDict): 
-    """Denne funktion skal finde positionen af et landmark i forhold til robotten og udregne vinklen og afstanden til landmarket."""
+#def pose_estimation(img, arucoDict): 
+   #Denne funktion skal finde positionen af et landmark i forhold til robotten og udregne vinklen og afstanden til landmarket."""
+
     # 1. Lave boks rundt om QR code 
     # 2. Udregne vinklen og afstanden til QR code
     # 3. Dreje robotten, så den er vinkelret på QR code
     # 4. Køre fremad, indtil robotten er tæt nok på QR code
     
-    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
-    w, h = 1280, 720
-    focal_length = 1744.36 
-    camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
-    arucoMarkerLength = 145.0
-    distortion = 0
+#    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
+#    w, h = 1280, 720
+#    focal_length = 1744.36 
+#    camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
+#    arucoMarkerLength = 145.0
+#    distortion = 0
     # Draw the detectet markers, if there is at least 1 marker
     
-    rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion )
-    print(tvec)
-    norm_tvec = np.norm(tvec)
-    print(norm_tvec)
+#    rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion )
+#    print(tvec)
+ 
     #cv2.aruco.solvePnP(img, camera_matrix, distortion)
     
     #cv.aruco.estimatePoseSingleMarkers(	corners, markerLength, cameraMatrix, distCoeffs[, rvecs[, tvecs[, objPoints[, estimateParameters]]]
@@ -135,7 +136,7 @@ def pose_estimation_sofie(img, arucoDict):
     
     lst = []
     for i in range(len(ids)):
-        lst.append((np.norm(tvecs[i]), ids[i]))
+        lst.append((linalg.norm(tvecs[i]), ids[i]))
 
     print(lst)
 
