@@ -122,7 +122,7 @@ def pose_estimation(img, arucoDict):
 
         lst.append((linalg.norm(tvecs[i]), world_angle, direction, ids[i][0]))
     
-    sorted(lst) 
+    sorted(lst)
     print(lst)
     return lst
 
@@ -158,7 +158,8 @@ def camera():
         if turn_and_watch('left', image) == True: 
             arlo.stop()
             landmarks_lst = pose_estimation(image, arucoDict)
-            #drive_to_landmarks(landmarks_lst)
-            time.sleep(15)      
+            drive_to_landmarks(landmarks_lst)
+            arlo.stop()
+            time.sleep(15)
 
 camera()
