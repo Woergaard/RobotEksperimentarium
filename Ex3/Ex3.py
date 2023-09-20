@@ -70,6 +70,7 @@ def drive_to_landmarks(landmarks_lst):
     for landmark in landmarks_lst:
         arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 1)
 
+    return
     
 
 def pose_estimation(img, arucoDict): 
@@ -136,7 +137,7 @@ def camera():
         if turn_and_watch('left', image) == True: 
             arlo.stop()
             landmarks_lst = pose_estimation(image, arucoDict)
-            drive_to_landmarks(landmarks_lst)
+            #drive_to_landmarks(landmarks_lst)
             time.sleep(15)      
 
 camera()
