@@ -68,7 +68,8 @@ def turn_and_watch(direction, img):
 def drive_to_landmarks(landmarks_lst):
     
     for landmark in landmarks_lst:
-        id = 
+        dist = landmark[0]
+        id = landmark[1]
         arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 1)
 
     return
