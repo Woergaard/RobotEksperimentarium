@@ -30,38 +30,31 @@ def find_and_drive_to_landmark(img):
     Argumenter:
         img:  billedet fra kameraet
     '''
-    landmarkNotFound = True
-    while landmarkNotFound:
-        arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
-        aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict)
-        
-        
-        if len(aruco_corners) <= 0:
-            arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
-        else:
-            landmarkNotFound = False
+
+    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
     
-    driving = True
-    while driving:
-        arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
-        aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict)
-        if len(aruco_corners) > 0:
-            for corner in aruco_corners:
-                # The corners are ordered as top-left, top-right, bottom-right, bottom-left
-                top_left = corner[0][0]
-                top_right = corner[0][1]
-                bottom_right = corner[0][2]
-                bottom_left = corner[0][3]
+    arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
+    aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict)
 
-                print('Landmark detected')
-                print(top_left, top_right, bottom_right, bottom_left)
+    print(aruco_corners)
+    
+    if len(aruco_corners) > 0:
+        for corner in aruco_corners:
+            # The corners are ordered as top-left, top-right, bottom-right, bottom-left
+            top_left = corner[0][0]
+            top_right = corner[0][1]
+            bottom_right = corner[0][2]
+            bottom_left = corner[0][3]
 
-                if top_left[0] < 550 and top_left[0] > 350 and bottom_left[0] > 350 and bottom_left[0] < 550: # hvis landmark er ligeud
-                    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
-                elif top_left[0] > 550 and bottom_left[0] > 550:
-                    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1) # drejer til venstre
-                elif top_left[0] < 350 and bottom_left[0] < 350:
-                    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 0) # drejer til højre
+            print('Landmark detected')
+            print(top_left, top_right, bottom_right, bottom_left)
+
+            if top_left[0] < 550 and top_left[0] > 350 and bottom_left[0] > 350 and bottom_left[0] < 550: # hvis landmark er ligeud
+                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+            elif top_left[0] > 550 and bottom_left[0] > 550:
+                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1) # drejer til venstre
+            elif top_left[0] < 350 and bottom_left[0] < 350:
+                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 0) # drejer til højre
 
 
 def camera():
