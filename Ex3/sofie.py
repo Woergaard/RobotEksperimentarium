@@ -31,8 +31,6 @@ def find_and_drive_to_landmark(img):
         img:  billedet fra kameraet
     '''
 
-    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
-    
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
     aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict)
 
@@ -55,7 +53,10 @@ def find_and_drive_to_landmark(img):
                 arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1) # drejer til venstre
             elif top_left[0] < 350 and bottom_left[0] < 350:
                 arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 0) # drejer til højre
-
+    else:
+        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
+        turnSeconds = _utils.degreeToSeconds(20)
+        _utils.wait(turnSeconds)
 
 def camera():
     # Open a camera device for capturing
