@@ -94,22 +94,16 @@ def pose_estimation(img, arucoDict):
     distortion = 0
     # Draw the detectet markers, if there is at least 1 marker
     
-    tvecs = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, distortion, camera_matrix)
+    rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
+    print(tvec)
+    #length_of_axis = 0.01
     
-    length_of_axis = 0.01
-    
-    imaxis = cv2.aruco.drawDetectedMarkers(img, aruco_corners, ids)
-    for i in range(len(tvecs)):
-        imaxis = cv2.aruco.drawAxis(imaxis, camera_matrix, distortion, tvecs[i], length_of_axis)
+    #imaxis = cv2.aruco.drawDetectedMarkers(img, aruco_corners, ids)
+    #for i in range(len(tvecs)):
+    #    imaxis = cv2.aruco.drawAxis(imaxis, camera_matrix, distortion, tvecs[i], length_of_axis)
 
 
-    #if (len(ids)> 0) :
-    #    cv2.aruco.drawDetectedMarkers(img, ids, aruco_corners)
-    
-  
-    # if there is at least 1 marker
- #   if len(aruco_corners) > 0 :
- #       cv2.aruco.drawDetectedMarkers(img, ids, aruco_corners)
+
     
         
 #        rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix)#, distortion_coeffs) 
