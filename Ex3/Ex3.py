@@ -98,7 +98,7 @@ def pose_estimation(img, arucoDict):
     print(tvec)
     norm_tvec = np.norm(tvec)
     print(norm_tvec)
-    cv2.aruco.solvePnP (img, camera_matrix, distortion)
+    cv2.aruco.solvePnP(img, camera_matrix, distortion)
     
     #cv.aruco.estimatePoseSingleMarkers(	corners, markerLength, cameraMatrix, distCoeffs[, rvecs[, tvecs[, objPoints[, estimateParameters]]]
     #length_of_axis = 0.01
