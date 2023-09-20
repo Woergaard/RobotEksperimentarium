@@ -70,7 +70,9 @@ def drive_to_landmarks(landmarks_lst):
     for landmark in landmarks_lst:
         dist = landmark[0]
         id = landmark[1]
+        driveSeconds = _utils.metersToSeconds(dist/1000)
         arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 1)
+        utils.wait()
 
     return
     
@@ -95,7 +97,7 @@ def pose_estimation(img, arucoDict):
     rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
     
     rmat, jacobian = cv2.Rodrigues(rvecs)
-    world_angle = np.arccos(rmat[0][0])
+    world_angle = np.arccos(rmat[0][0][0])
     print(world_angle)
 
     lst = []
