@@ -54,6 +54,8 @@ def turn_and_watch(direction, img):
             print('Landmark detected')
             print(top_left, top_right, bottom_right, bottom_left)
 
+            arlo.stop()
+
             return True
         
 
@@ -115,7 +117,7 @@ def landmark_drive(direction, img, arucoDict):
 def camera():
     # Open a camera device for capturing
     imageSize = (1280, 720)
-    FPS = 60
+    FPS = 30
     cam = picamera2.Picamera2()
     frame_duration_limit = int(1/FPS * 1000000) # Microseconds
     # Change configuration to set resolution, framerate
