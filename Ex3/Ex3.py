@@ -56,8 +56,8 @@ def turn_and_watch(direction, img):
 
             return True
 
-    arlo.stop()
-    time.sleep(2)        
+        arlo.stop()
+        time.sleep(2)        
 
 
 ''' 
