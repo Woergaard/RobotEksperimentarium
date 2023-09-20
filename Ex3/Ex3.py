@@ -235,7 +235,7 @@ def camera():
     cv2.moveWindow(WIN_RF, 100, 100)
     
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
-    aruco_corners,ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
+    #aruco_corners,ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
 
     while cv2.waitKey(4) == -1: # Wait for a key pressed event
         image = cam.capture_array("main")
