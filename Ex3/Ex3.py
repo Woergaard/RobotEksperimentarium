@@ -98,7 +98,7 @@ def pose_estimation(img, arucoDict):
     print(tvec)
     norm_tvec = np.norm(tvec)
     print(norm_tvec)
-    cv2.aruco.solvePnP(img, camera_matrix, distortion)
+    #cv2.aruco.solvePnP(img, camera_matrix, distortion)
     
     #cv.aruco.estimatePoseSingleMarkers(	corners, markerLength, cameraMatrix, distCoeffs[, rvecs[, tvecs[, objPoints[, estimateParameters]]]
     #length_of_axis = 0.01
@@ -118,9 +118,26 @@ def pose_estimation(img, arucoDict):
         # Draw Axis
 #        cv2.aruco.drawAxis(img, camera_matrix, rvecs, tvecs, 0.01)  
 
- #   return tvecs
+#   return tvecs
 
 
+def pose_estimation_sofie(img, arucoDict): 
+    """Funktionen returnerer en liste af placeringer i kameraets koordinatsystem samt id på de givne QR-koder"""
+    
+    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
+    w, h = 1280, 720
+    focal_length = 1744.36 
+    camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
+    arucoMarkerLength = 145.0
+    distortion = 0
+     
+    _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
+    
+    lst = []
+    for i in range(len(ids)):
+        lst.append((np.norm(tvecs[i]), ids[i]))
+
+    print(lst)
 
 
 def camera():
@@ -154,7 +171,7 @@ def camera():
         #landmark_drive('left', image, arucoDict)
         if turn_and_watch('left', image) == True: 
             arlo.stop()
-            pose_estimation(image, arucoDict)
+            pose_estimation_sofie(image, arucoDict)
             time.sleep(15)      
 
 camera()
