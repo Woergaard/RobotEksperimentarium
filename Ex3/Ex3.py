@@ -72,7 +72,7 @@ def drive_to_landmarks(landmarks_lst):
         id = landmark[1]
         driveSeconds = _utils.metersToSeconds(dist/1000)
         arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 1)
-        utils.wait()
+        _utils.wait(driveSeconds)
 
     return
     
