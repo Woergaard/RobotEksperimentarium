@@ -88,7 +88,7 @@ def pose_estimation(img, arucoDict):
     
     
     
-    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict, ids, rejectedImgPoints)
+    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
     w, h = 1280, 720
     focal_length = 1744.36 
     camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
