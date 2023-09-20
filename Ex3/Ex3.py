@@ -75,10 +75,10 @@ def drive_to_landmarks(landmarks_lst):
 
     print('Driving towards landmark ' + str(id))
     _utils.sharp_turn(direction, angle)
-    driveSeconds = _utils.metersToSeconds(dist/1000)
-    arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 1)
-    _utils.wait(driveSeconds)
 
+    _utils.drive('forwards', (dist/1000)-300)
+
+    print('Arrived at landmark!')
     return
     
 
@@ -110,6 +110,7 @@ def pose_estimation(img, arucoDict):
     #    _utils.wait(2.0)
 
     lst = []
+    
     for i in range(len(ids)):
         world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
         print(world_angle)
@@ -117,7 +118,8 @@ def pose_estimation(img, arucoDict):
             direction = 'right'
         else:
             direction = 'left'
-    
+        print(direction)
+
         lst.append((linalg.norm(tvecs[i]), world_angle, direction, ids[i][0]))
     
     lst = lst.sort()
