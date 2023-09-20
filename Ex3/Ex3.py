@@ -54,10 +54,10 @@ def turn_and_watch(direction, img):
             print('Landmark detected')
             print(top_left, top_right, bottom_right, bottom_left)
 
-            arlo.stop()
-
             return True
-        
+
+    arlo.stop()
+    time.sleep(2)        
 
 
 ''' 
