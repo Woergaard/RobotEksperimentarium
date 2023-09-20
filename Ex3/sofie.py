@@ -58,6 +58,7 @@ def find_and_drive_to_landmark(img):
         turnSeconds = _utils.degreeToSeconds(20)
         _utils.wait(turnSeconds)
         arlo.stop()
+        _utils.wait(2.0)
 
 def camera():
     # Open a camera device for capturing
