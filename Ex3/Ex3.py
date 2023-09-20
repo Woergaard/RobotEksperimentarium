@@ -121,12 +121,11 @@ def pose_estimation(img, arucoDict):
         print(direction)
 
         lst.append((linalg.norm(tvecs[i]), world_angle, direction, ids[i][0]))
+        print(lst)
     
-    lst = lst.sort()
+    sorted(lst) 
     print(lst)
     return lst
-
-
 
 def camera():
     # Open a camera device for capturing
