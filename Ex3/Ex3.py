@@ -66,13 +66,14 @@ def turn_and_watch(direction, img):
         return False
 
 def drive_to_landmarks(landmarks_lst):
+    first_landmark = landmarks_lst[0]
+
     
-    for landmark in landmarks_lst:
-        dist = landmark[0]
-        id = landmark[1]
-        driveSeconds = _utils.metersToSeconds(dist/1000)
-        arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 1)
-        _utils.wait(driveSeconds)
+    dist = landmark[0]
+    id = landmark[1]
+    driveSeconds = _utils.metersToSeconds(dist/1000)
+    arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 1)
+    _utils.wait(driveSeconds)
 
     return
     
@@ -94,10 +95,8 @@ def pose_estimation(img, arucoDict):
     distortion = 0
     
     # Giver distancen til boxen
-    rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
+    _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
     
-    world_angle = np.arccos(np.dot(tvecs/np.linalg.norm(tvecs), np.array([0, 0, 1])))
-    print(world_angle)
 
     #if np.dot(world_angle, np.array([1, 0, 0])) < 0:   # Hvis vinklen er negativ, så skal robotten dreje til højre
     #    arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 0)
@@ -108,7 +107,13 @@ def pose_estimation(img, arucoDict):
 
     lst = []
     for i in range(len(ids)):
-        lst.append((linalg.norm(tvecs[i]), world_angle, ids[i][0]))
+        world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
+        if np.dot(world_angle, np.array([1, 0, 0])) < 0:
+            direction = 'right'
+        else:
+            direction = 'left'
+    
+        lst.append((linalg.norm(tvecs[i]), world_angle, direction, ids[i][0]))
     
     lst = lst.sort()
     print(lst)
