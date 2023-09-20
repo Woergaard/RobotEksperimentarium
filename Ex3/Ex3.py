@@ -128,6 +128,7 @@ def camera():
 
     time.sleep(1)  # wait for camera to setup
 
+    arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
     # Open a window
     WIN_RF = "Example 1"
     cv2.namedWindow(WIN_RF)
@@ -141,6 +142,7 @@ def camera():
         #landmark_drive('left', image, arucoDict)
         if turn_and_watch('left', image) == True: 
             arlo.stop()
+            pose_estimation(image, arucoDict)
             time.sleep(3)      
 
 camera()
