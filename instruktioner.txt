@@ -5,6 +5,9 @@ Netværk:
 ssh pi@10.69.252.16
 kode: DIKU4Ever
 
+Med video: 
+ssh -o "Compression yes" -o "TCPKeepAlive yes" -Y pi@10.69.252.16
+
 RsbPi: 
 Brugernavn: pi 
 Password: DIKU4Ever

@@ -56,9 +56,62 @@ def turn_and_watch(direction, img):
 
         return True
     else: 
+        arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 0, 1)
+        turnSeconds = _utils.degreeToSeconds(20)
+        _utils.wait(turnSeconds)
+        arlo.stop()
+        _utils.wait(2.0)
+
         return False
     
     #return False
+
+
+'''
+Pose estimation is the task of determining the
+camera's position and orientation in relation to
+one or more landmarks. There are many
+methods of positioning
+- frame, img
+'''
+             
+''' 
+pose_estimation
+    - ids, boxese id (1, 2, 3...,N)
+    - corners, the corners of the box 
+    - rejectedImgPoints, the marker candidates that have been rejected during the identification step
+'''         
+
+# VI SKAL BENYTTE VORES FOCAL LENGTH HER!
+
+def pose_estimation(img, arucoDict): 
+    """Denne funktion skal finde positionen af et landmark i forhold til robotten og udregne vinklen og afstanden til landmarket."""
+    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict, ids, rejectedImgPoints)
+    w, h = 1280, 720
+    focal_length = 1744.36 
+    camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
+    arucoMarkerLength = 145.0
+
+    # Draw the detectet markers, if there is at least 1 marker
+#    if (ids.size() > 0) :
+#        cv2.aruco.drawDetectedMarkers(img, ids, aruco_corners)
+    
+    # if there is at least 1 marker
+    if len(aruco_corners) > 0 :
+        cv2.aruco.drawDetectedMarkers(img, ids, aruco_corners)
+    
+        
+        rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix)#, distortion_coeffs) 
+        # Draw a square around the markers
+        cv2.aruco.drawDetectedMarkers(img, aruco_corners, ids) 
+
+        # Draw Axis
+        cv2.aruco.drawAxis(img, camera_matrix, rvecs, tvecs, 0.01)  
+
+
+    return img 
+
+
 
 
 def camera():
@@ -94,12 +147,14 @@ def camera():
         cv2.imshow(WIN_RF, image)
         #landmark_drive('left', image, arucoDict)
         if turn_and_watch('left', image) == True: 
-            print('stop')
             arlo.stop()
             time.sleep(2)      
+            
 
 
         #if command == 'turn and watch':
         #    turn_and_watch('left', image)
 
 camera()
+
+
