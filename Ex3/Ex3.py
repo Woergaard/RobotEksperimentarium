@@ -94,8 +94,13 @@ def pose_estimation(img, arucoDict):
     distortion = 0
     # Draw the detectet markers, if there is at least 1 marker
     
-    rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
+    rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion )
     print(tvec)
+    norm_tvec = np.norm(tvec)
+    print(norm_tvec)
+    cv2.aruco.solvePnP (img, camera_matrix, distortion)
+    
+    #cv.aruco.estimatePoseSingleMarkers(	corners, markerLength, cameraMatrix, distCoeffs[, rvecs[, tvecs[, objPoints[, estimateParameters]]]
     #length_of_axis = 0.01
     
     #imaxis = cv2.aruco.drawDetectedMarkers(img, aruco_corners, ids)
@@ -155,3 +160,19 @@ def camera():
 camera()
 
 
+
+#### SOFIE OMRÅDE ###
+
+def pose_estimation_sofie(img, arucoDict): 
+    """Funktionen returnerer en liste af placeringer i kameraets koordinatsystem samt id på de givne QR-koder"""
+    
+    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
+    w, h = 1280, 720
+    focal_length = 1744.36 
+    camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
+    arucoMarkerLength = 145.0
+    distortion = 0
+     
+    _, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
+    np.norm(tvec)
+   
