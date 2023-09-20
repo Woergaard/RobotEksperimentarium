@@ -56,8 +56,7 @@ def turn_and_watch(direction, img):
 
             return True
 
-        arlo.stop()
-        time.sleep(2)        
+  
 
 
 ''' 
@@ -146,7 +145,9 @@ def camera():
         # Show frames
         cv2.imshow(WIN_RF, image)
         #landmark_drive('left', image, arucoDict)
-        turn_and_watch('left', image)
+        if turn_and_watch('left', image) == True: 
+            arlo.stop()
+            time.sleep(2)      
 
 
         #if command == 'turn and watch':
