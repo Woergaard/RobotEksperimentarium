@@ -115,13 +115,12 @@ def pose_estimation(img, arucoDict):
         world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
         print(world_angle)
         if np.dot(tvecs[i], np.array([1, 0, 0])) < 0:
-            direction = 'right'
-        else:
             direction = 'left'
+        else:
+            direction = 'right'
         print(direction)
 
         lst.append((linalg.norm(tvecs[i]), world_angle, direction, ids[i][0]))
-        print(lst)
     
     sorted(lst) 
     print(lst)
