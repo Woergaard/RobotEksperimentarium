@@ -55,6 +55,8 @@ def turn_and_watch(direction, img):
             print(top_left, top_right, bottom_right, bottom_left)
 
             return True
+    
+    return False
 
   
 
