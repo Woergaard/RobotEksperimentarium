@@ -55,7 +55,7 @@ def find_and_drive_to_landmark(img):
                 arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 0) # drejer til højre
 
 
-def camera(command):
+def camera():
     # Open a camera device for capturing
     imageSize = (1280, 720)
     FPS = 30
@@ -85,3 +85,5 @@ def camera(command):
         cv2.imshow(WIN_RF, image)
 
         find_and_drive_to_landmark(image)
+
+camera()
