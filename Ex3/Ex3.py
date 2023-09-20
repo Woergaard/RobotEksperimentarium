@@ -81,11 +81,11 @@ pose_estimation
 
 def pose_estimation(img, arucoDict): 
     """Denne funktion skal finde positionen af et landmark i forhold til robotten og udregne vinklen og afstanden til landmarket."""
-    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict, ids, rejectedImgPoints)
-    w, h = 1280, 720
-    focal_length = 1744.36 
-    camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
-    arucoMarkerLength = 145.0
+    #aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict, ids, rejectedImgPoints)
+    #w, h = 1280, 720
+    #focal_length = 1744.36 
+    #camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
+    #arucoMarkerLength = 145.0
 
     # Draw the detectet markers, if there is at least 1 marker
 #    if (ids.size() > 0) :
