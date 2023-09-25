@@ -42,38 +42,9 @@ def build_map(img, arucoDict):
     plt.xlabel('x')
     plt.ylabel('z')
     plt.show()
+    
 
-
-def populate(self, n_obs=6):
-    """
-    generate a grid map with some circle shaped obstacles
-    """
-    _utils.pose_estimation()  
-         
-        #low=self.map_area[0] + self.map_size[0]*0.2, 
-        #high=self.map_area[0] + self.map_size[0]*0.8, 
-        #size=(n_obs, 2))
-
-    origins = np.random.uniform(
-            low=self.map_area[0] + self.map_size[0]*0.2, 
-            high=self.map_area[0] + self.map_size[0]*0.8, 
-            size=(n_obs, 2))
-
-
-    radius_arlo = 22.5
-    radius_QR = 17.5 
-
-    #fill the grids by checking if the grid centroid is in any of the circle
-    for i in range(self.n_grids[0]):
-        for j in range(self.n_grids[1]):
-            centroid = np.array([self.map_area[0][0] + self.resolution * (i+0.5), 
-                                    self.map_area[0][1] + self.resolution * (j+0.5)])
-            for o, r in zip(origins, radius_arlo, radius_QR):
-                if np.linalg.norm(centroid - o) <= r:
-                    self.grid[i, j] = 1
-                    break
-
-def camera(command):
+def camera2(command):
     # Open a camera device for capturing
     imageSize = (1280, 720)
     FPS = 60
@@ -106,4 +77,32 @@ def camera(command):
         if command == 'build_map':
             build_map(image, arucoDict)
 
-camera()
+camera2('build_map')
+
+'''
+def populate(self, n_obs=6):
+    """
+    generate a grid map with some circle shaped obstacles
+    """
+
+
+    origins = np.random.uniform(
+            low=self.map_area[0] + self.map_size[0]*0.2, 
+            high=self.map_area[0] + self.map_size[0]*0.8, 
+            size=(_utils.pose_estimation(img, arucoDict), 2))
+
+
+    radius_arlo = 22.5
+    radius_QR = 17.5 
+
+    #fill the grids by checking if the grid centroid is in any of the circle
+    for i in range(self.n_grids[0]):
+        for j in range(self.n_grids[1]):
+            centroid = np.array([self.map_area[0][0] + self.resolution * (i+0.5), 
+                                    self.map_area[0][1] + self.resolution * (j+0.5)])
+            for o, r in zip(origins, radius_arlo, radius_QR):
+                if np.linalg.norm(centroid - o) <= r:
+                    self.grid[i, j] = 1
+                    break
+''' 
+
