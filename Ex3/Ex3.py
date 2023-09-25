@@ -125,15 +125,18 @@ def pose_estimation(img, arucoDict):
             direction = 'right'
         print(direction)
 
-        lst.append((linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i]))
+        lst.append([linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i]])
     
-    sorted(lst)
+    lst.sort()
     
     namelst = ['distance', 'vinkel', 'retning', 'id', 'tvec']
 
+
+    
+
     for element in lst:
         for i in range(element):
-            print(namelst[i] + str(element[i]))
+            print(namelst[i] + '=' str(element[i])) 
 
     return lst
 
