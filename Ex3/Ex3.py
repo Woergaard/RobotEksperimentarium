@@ -72,6 +72,7 @@ def drive_to_landmarks(landmarks_lst):
     angle = landmark[1]
     direction = landmark[2]
     id = landmark[3]
+    tvec = landmark[4]
 
     print('Driving towards landmark ' + str(id) + ', distance = ' + str(dist))
     _utils.sharp_turn(direction, angle)
@@ -121,7 +122,7 @@ def pose_estimation(img, arucoDict):
             direction = 'right'
         print(direction)
 
-        lst.append((linalg.norm(tvecs[i]), world_angle, direction, ids[i][0]))
+        lst.append((linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i]))
     
     sorted(lst)
     print(lst)
