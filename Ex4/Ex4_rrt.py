@@ -50,3 +50,58 @@ class RRT:
         self.max_iter = max_iter
 
         self.node_list = []
+
+
+
+
+
+
+
+
+
+
+
+    def draw_graph(self, rnd=None):
+        # plt.clf()
+        # # for stopping simulation with the esc key.
+        # plt.gcf().canvas.mpl_connect(
+        #     'key_release_event',
+        #     lambda event: [exit(0) if event.key == 'escape' else None])
+        plt.clf()
+        if rnd is not None:
+            plt.plot(rnd.pos[0], rnd.pos[1], "^k")
+
+        # draw the map
+        self.map.draw_map()
+
+        for node in self.node_list:
+            if node.parent:
+                path = np.array(node.path)
+                plt.plot(path[:, 0], path[:, 1], "-g")
+
+        plt.plot(self.start.pos[0], self.start.pos[1], "xr")
+        plt.plot(self.end.pos[0], self.end.pos[1], "xr")
+        plt.axis(self.map.extent)
+        plt.grid(True)
+        plt.pause(0.01)
+
+
+    @staticmethod
+    def get_nearest_node_index(node_list, rnd_node):
+        dlist = [ node.calc_distance_to(rnd_node)
+                 for node in node_list]
+        minind = dlist.index(min(dlist))
+
+        return minind
+
+
+    def check_collision_free(self, node):
+        if node is None:
+            return False
+        for p in node.path:
+            if self.map.in_collision(np.array(p)):
+                return False
+        return True
+
+
+import Ex4_grid, robot_models

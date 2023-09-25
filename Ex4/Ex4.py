@@ -23,103 +23,8 @@ print("OpenCV version = " + cv2.__version__)
 import numpy as np
 import matplotlib.pyplot as plt
 
-class GridOccupancyMap(object):
-    """
-
-    """
-    def __init__(self, low=(0, 0), high=(5, 5), res=0.005) -> None:
-        self.map_area = [low, high]    #a rectangular area    
-        self.map_size = np.array([high[0]-low[0], high[1]-low[1]])
-        self.resolution = res
-
-        self.n_grids = [ int(s//res) for s in self.map_size]
-
-        self.grid = np.zeros((self.n_grids[0], self.n_grids[1]), dtype=np.uint8)
-
-        self.extent = [self.map_area[0][0], self.map_area[1][0], self.map_area[0][1], self.map_area[1][1]]
-
-        self.arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
-        self.landmarks = _utils.pose_estimation(img, self.arucoDict)
-
-    def in_collision(self, pos):
-        """
-        find if the position is occupied or not. return if the queried pos is outside the map
-        """
-        indices = [int((pos[i] - self.map_area[0][i]) // self.resolution) for i in range(2)]
-        for i, ind in enumerate(indices):
-            if ind < 0 or ind >= self.n_grids[i]:
-                return 1
-        
-        return self.grid[indices[0], indices[1]] 
-
-    def populate(self, n_obs=6):
-        """
-        generate a grid map with some circle shaped obstacles
-        """
-        #origins = np.random.uniform(
-        #    low=self.map_area[0] + self.map_size[0]*0.2, 
-        #    high=self.map_area[0] + self.map_size[0]*0.8, 
-        #    size=(n_obs, 2))
-        #radius = np.random.uniform(low=0.1, high=0.3, size=n_obs)
-        
-        landmarks_lst = self.landmarks
-
-        radius_arlo = 0.225
-        radius_QR = 0.175
-
-        radius = [radius_arlo]
-        origins = [[2.5, 0.0]]
-        for i in range(len(landmarks_lst)):
-            angle = landmarks_lst[i][1] 
-            distance = landmarks_lst[i][2] 
-
-            x = distance * np.cos(angle)
-            y = distance * np.sin(angle)
-
-            radius.append(radius_QR)
-            origins.append([x, y])
-
-        #fill the grids by checking if the grid centroid is in any of the circle
-        for i in range(self.n_grids[0]):
-            for j in range(self.n_grids[1]):
-                centroid = np.array([self.map_area[0][0] + self.resolution * (i+0.5), 
-                                     self.map_area[0][1] + self.resolution * (j+0.5)])
-                for o, r in zip(origins, radius):
-                    if np.linalg.norm(centroid - o) <= r:
-                        self.grid[i, j] = 1
-                        break
-
-    
-    def draw_map(self):
-        #note the x-y axes difference between imshow and plot
-        plt.imshow(self.grid.T, cmap="Greys", origin='lower', vmin=0, vmax=1, extent=self.extent, interpolation='none')
-
-
-
-# Arlo radius: 22.5 cm
-# Boks radius (længeste side): 17.5 cm
-
-##### SOFIE
-    #radius_arlo = 22.5
-    #radius_QR = 17.5 
-
-def build_map(img, arucoDict):
-    landmarks_lst = _utils.pose_estimation(img, arucoDict)
-
-    plt.plot(0,0, 'bo')
-    plt.annotate('ArloCinque', xy=(0, 0))
-    
-    for landmark in landmarks_lst:
-        x = landmark[4][0]
-        z = landmark[4][2]
-        id = landmark[3]
-        plt.Circle((x, z), 175)
-        plt.annotate(str(id), xy=(x,z))
-    
-    plt.xlabel('x')
-    plt.ylabel('z')
-    plt.show()
-
+#radius_arlo = 22.5
+#radius_QR = 17.5 
 
 class Landmark:
     def __init__(self, distance, vinkel, retning, id, tvec):
@@ -156,29 +61,35 @@ def landmark_detection(img, arucoDict):
 
         lst.append(Landmark(linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i]))
     
-    lst.sort()
-    
-    namelst = ['distance', 'vinkel', 'retning', 'id', 'tvec']    
-
-    for element in lst:
-        for i in range(len(element)):
-            print(namelst[i] + '=' + str(element[i]) + '\n') 
+    lst.sort(key=lambda x: x.distance, reverse=False)
 
     return lst
 
+def build_map(landmarks_lst):
+    plt.plot(0,0, 'bo')
+    plt.annotate('ArloCinque', xy=(0, 0))
+    
+    for landmark in landmarks_lst:
+        x = landmark.tvec[0]
+        z = landmark.tvec[2]
+        plt.Circle((x, z), 175)
+        plt.annotate(str(landmark.id), xy=(x,z))
+    
+    plt.xlabel('x')
+    plt.ylabel('z')
+    plt.show()
 
-def is_spot_free(spotx, spotz, landmarks_lst)
+def is_spot_free(spotx, spotz, landmarks_lst):
     box_radius = 175.0
 
     for landmark in landmarks_lst:
-        x = landmark[4][0]
-        z = landmark[4][2]
-        id = landmark[3]
+        x = landmark.tvec[0]
+        z = landmark.tvec[2]
         
         if np.sqrt((spotx-x)+(spotz-z)) < box_radius:
-            print('Occupied by ' + str(id))
+            print('Occupied by ' + str(landmark.id))
             return False
-        
+
     return True
 
 
@@ -215,15 +126,8 @@ def camera2(command):
         #landmark_drive('left', image, arucoDict)
 
         if command == 'build_map':
-            build_map(image, arucoDict)
+            landmarks_lst = _utils.landmark_detection(image, arucoDict)
+            build_map(landmarks_lst)
+            is_spot_free(574, 846, landmarks_lst)
 
-        elif command == 'thomas':
-            map = GridOccupancyMap()
-            map.populate()
-
-            plt.clf()
-            map.draw_map()
-            plt.show()
-
-
-camera2('thomas')
+camera2('build_map')

@@ -5,7 +5,6 @@ from pprint import *
 import numpy as np
 import robot
 from numpy import linalg
-
 import matplotlib.pyplot as plt
 
 arlo = robot.Robot()
@@ -18,10 +17,6 @@ except ImportError:
     exit(-1)
 
 print("OpenCV version = " + cv2.__version__)
-
-
-import numpy as np
-import matplotlib.pyplot as plt
 
 class GridOccupancyMap(object):
     """
@@ -37,9 +32,10 @@ class GridOccupancyMap(object):
         self.grid = np.zeros((self.n_grids[0], self.n_grids[1]), dtype=np.uint8)
 
         self.extent = [self.map_area[0][0], self.map_area[1][0], self.map_area[0][1], self.map_area[1][1]]
+        self.landmarks_lst 
 
 
-    def populate(self,landmarks_lst, n_obs=6):
+    def populate(self,landmarks_lst):
         """
         generate a grid map with some circle shaped obstacles
         """
@@ -85,7 +81,6 @@ def pose_estimation(img, arucoDict):
     # 4. Køre fremad, indtil robotten er tæt nok på QR code
 
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
-    print(aruco_corners)
     w, h = 1280, 720
     focal_length = 1744.36 
     camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
