@@ -9,7 +9,7 @@ class GridOccupancyMap(object):
     """
 
     """
-    def __init__(self, low=(0, 0), high=(2, 2), res=0.05) -> None:
+    def __init__(self, low=(0, 0), high=(3, 4), res=0.005) -> None:
         self.map_area = [low, high]    #a rectangular area    
         self.map_size = np.array([high[0]-low[0], high[1]-low[1]])
         self.resolution = res
@@ -35,11 +35,15 @@ class GridOccupancyMap(object):
         """
         generate a grid map with some circle shaped obstacles
         """
-        origins = np.random.uniform(
-            low=self.map_area[0] + self.map_size[0]*0.2, 
-            high=self.map_area[0] + self.map_size[0]*0.8, 
-            size=(n_obs, 2))
-        radius = np.random.uniform(low=0.1, high=0.3, size=n_obs)
+        #origins = np.random.uniform(
+        #    low=self.map_area[0] + self.map_size[0]*0.2, 
+        #    high=self.map_area[0] + self.map_size[0]*0.8, 
+        #    size=(n_obs, 2))
+        #radius = np.random.uniform(low=0.1, high=0.3, size=n_obs)
+        
+        origins = [[0.5, 0.5], [1.5, 1.5]]
+        radius = [0.225, 0.175]
+
         #fill the grids by checking if the grid centroid is in any of the circle
         for i in range(self.n_grids[0]):
             for j in range(self.n_grids[1]):
