@@ -38,16 +38,6 @@ class GridOccupancyMap(object):
 
         self.extent = [self.map_area[0][0], self.map_area[1][0], self.map_area[0][1], self.map_area[1][1]]
 
-    def in_collision(self, pos):
-        """
-        find if the position is occupied or not. return if the queried pos is outside the map
-        """
-        indices = [int((pos[i] - self.map_area[0][i]) // self.resolution) for i in range(2)]
-        for i, ind in enumerate(indices):
-            if ind < 0 or ind >= self.n_grids[i]:
-                return 1
-        
-        return self.grid[indices[0], indices[1]] 
 
     def populate(self,landmarks_lst, n_obs=6):
         """
@@ -84,6 +74,49 @@ class GridOccupancyMap(object):
         #note the x-y axes difference between imshow and plot
         plt.imshow(self.grid.T, cmap="Greys", origin='lower', vmin=0, vmax=1, extent=self.extent, interpolation='none')
 
+
+def pose_estimation(img, arucoDict): 
+    """Funktionen returnerer en liste af placeringer i kameraets koordinatsystem samt id på de givne QR-koder"""
+    """Denne funktion skal finde positionen af et landmark i forhold til robotten og udregne vinklen og afstanden til landmarket."""
+
+    # 1. Udregne afstanden til QR code - DONE 
+    # 2. Udregn vinkel til QR code 
+    # 3. Dreje robotten, så den er vinkelret på QR code
+    # 4. Køre fremad, indtil robotten er tæt nok på QR code
+
+    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
+    w, h = 1280, 720
+    focal_length = 1744.36 
+    camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
+    arucoMarkerLength = 145.0
+    distortion = 0
+    
+    # Giver distancen til boxen
+    _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
+    
+    lst = []
+    
+    for i in range(len(ids)):
+        world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
+        print(world_angle)
+        if np.dot(tvecs[i], np.array([1, 0, 0])) < 0:
+            direction = 'left'
+        else:
+            direction = 'right'
+        print(direction)
+
+        lst.append([linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i]])
+    
+    lst.sort()
+    
+    namelst = ['distance', 'vinkel', 'retning', 'id', 'tvec']    
+
+    for element in lst:
+        for i in range(len(element)):
+            print(namelst[i] + '=' + str(element[i]) + '\n') 
+
+    return lst
+
 ##### KØRSEL ####
 
 def camera2(command):
@@ -116,7 +149,7 @@ def camera2(command):
         cv2.imshow(WIN_RF, image)
         #landmark_drive('left', image, arucoDict)
         if command == 'thomas':
-            landmarks_lst = _utils.pose_estimation(image, arucoDict)
+            landmarks_lst = pose_estimation(image, arucoDict)
             map = GridOccupancyMap()
             map.populate(landmarks_lst)
 
