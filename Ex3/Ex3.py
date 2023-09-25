@@ -132,7 +132,7 @@ def pose_estimation(img, arucoDict):
     namelst = ['distance', 'vinkel', 'retning', 'id', 'tvec']    
 
     for element in lst:
-        for i in range(element):
+        for i in range(len(element)):
             print(namelst[i] + '=' + str(element[i])) 
 
     return lst
