@@ -73,7 +73,7 @@ def drive_to_landmarks(landmarks_lst):
     direction = landmark[2]
     id = landmark[3]
 
-    print('Driving towards landmark ' + str(id))
+    print('Driving towards landmark ' + str(id) + ', distance = ' + str(dist))
     _utils.sharp_turn(direction, angle)
 
     _utils.drive('forwards', (dist/1000)-300)
@@ -159,7 +159,7 @@ def camera():
             arlo.stop()
             landmarks_lst = pose_estimation(image, arucoDict)
             drive_to_landmarks(landmarks_lst)
-            arlo.stop()
+            #arlo.stop()
             time.sleep(15)
 
 camera()
