@@ -85,6 +85,7 @@ def pose_estimation(img, arucoDict):
     # 4. Køre fremad, indtil robotten er tæt nok på QR code
 
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
+    print(aruco_corners)
     w, h = 1280, 720
     focal_length = 1744.36 
     camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
