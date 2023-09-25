@@ -79,6 +79,7 @@ def drive_to_landmarks(landmarks_lst):
     _utils.drive('forwards', (dist/1000)-300)
 
     print('Arrived at landmark!')
+    arlo.stop()
     return
     
 
