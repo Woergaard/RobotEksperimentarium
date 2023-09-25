@@ -76,7 +76,7 @@ def drive_to_landmarks(landmarks_lst):
     print('Driving towards landmark ' + str(id) + ', distance = ' + str(dist))
     _utils.sharp_turn(direction, angle)
 
-    _utils.drive('forwards', (dist/1000)-300)
+    _utils.drive('forwards', (dist-300)/1000)
 
     print('Arrived at landmark!')
     arlo.stop()

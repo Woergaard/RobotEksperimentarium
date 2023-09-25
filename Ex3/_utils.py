@@ -45,6 +45,7 @@ def wait(seconds):
     while (isDriving):
         if (time.perf_counter() - start > seconds):
             isDriving = False
+    arlo.stop()
 
 def drive(direction, meters):
     '''
