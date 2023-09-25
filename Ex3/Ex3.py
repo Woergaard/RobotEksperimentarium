@@ -75,6 +75,9 @@ def drive_to_landmarks(landmarks_lst):
     tvec = landmark[4]
 
     print('Driving towards landmark ' + str(id) + ', distance = ' + str(dist))
+
+    print('tvec = ' + str(tvec))
+
     _utils.sharp_turn(direction, angle)
 
     _utils.drive('forwards', (dist-150)/1000)
@@ -125,7 +128,13 @@ def pose_estimation(img, arucoDict):
         lst.append((linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i]))
     
     sorted(lst)
-    print(lst)
+    
+    namelst = ['distance', 'vinkel', 'retning', 'id', 'tvec']
+
+    for element in lst:
+        for i in range(element):
+            print(namelst[i] + str(element[i]))
+
     return lst
 
 def camera():
