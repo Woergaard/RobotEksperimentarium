@@ -38,13 +38,6 @@ class GridOccupancyMap(object):
 
         self.extent = [self.map_area[0][0], self.map_area[1][0], self.map_area[0][1], self.map_area[1][1]]
 
-        self.arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
-        
-    def landmarks(self, img):
-        self.landmarks = _utils.pose_estimation(img, self.arucoDict)
-
-        return self.landmarks
-
     def in_collision(self, pos):
         """
         find if the position is occupied or not. return if the queried pos is outside the map
@@ -56,17 +49,10 @@ class GridOccupancyMap(object):
         
         return self.grid[indices[0], indices[1]] 
 
-    def populate(self, n_obs=6):
+    def populate(self,landmarks_lst, n_obs=6):
         """
         generate a grid map with some circle shaped obstacles
         """
-        #origins = np.random.uniform(
-        #    low=self.map_area[0] + self.map_size[0]*0.2, 
-        #    high=self.map_area[0] + self.map_size[0]*0.8, 
-        #    size=(n_obs, 2))
-        #radius = np.random.uniform(low=0.1, high=0.3, size=n_obs)
-        
-        landmarks_lst = self.landmarks
 
         radius_arlo = 0.225
         radius_QR = 0.175
@@ -130,9 +116,9 @@ def camera2(command):
         cv2.imshow(WIN_RF, image)
         #landmark_drive('left', image, arucoDict)
         if command == 'thomas':
+            landmarks_lst = _utils.pose_estimation(image, arucoDict)
             map = GridOccupancyMap()
-            map.landmarks(image)
-            map.populate()
+            map.populate(landmarks_lst)
 
             plt.clf()
             map.draw_map()
