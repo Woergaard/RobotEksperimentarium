@@ -39,7 +39,11 @@ class GridOccupancyMap(object):
         self.extent = [self.map_area[0][0], self.map_area[1][0], self.map_area[0][1], self.map_area[1][1]]
 
         self.arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
+        
+    def landmarks(self, img):
         self.landmarks = _utils.pose_estimation(img, self.arucoDict)
+
+        return self.landmarks
 
     def in_collision(self, pos):
         """
@@ -129,59 +133,6 @@ class Landmark:
         self.id = id
         self.tvec = tvec
 
-def landmark_detection(img, arucoDict): 
-    """Funktionen returnerer en liste af placeringer i kameraets koordinatsystem samt id på de givne QR-koder"""
-    """Denne funktion skal finde positionen af et landmark i forhold til robotten og udregne vinklen og afstanden til landmarket."""
-
-    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
-    w, h = 1280, 720
-    focal_length = 1744.36 
-    camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
-    arucoMarkerLength = 145.0
-    distortion = 0
-    
-    # Giver distancen til boxen
-    _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
-    
-    lst = []
-    
-    for i in range(len(ids)):
-        world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
-        print(world_angle)
-        if np.dot(tvecs[i], np.array([1, 0, 0])) < 0:
-            direction = 'left'
-        else:
-            direction = 'right'
-        print(direction)
-
-        lst.append(Landmark(linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i]))
-    
-    lst.sort()
-    
-    namelst = ['distance', 'vinkel', 'retning', 'id', 'tvec']    
-
-    for element in lst:
-        for i in range(len(element)):
-            print(namelst[i] + '=' + str(element[i]) + '\n') 
-
-    return lst
-
-
-def is_spot_free(spotx, spotz, landmarks_lst)
-    box_radius = 175.0
-
-    for landmark in landmarks_lst:
-        x = landmark[4][0]
-        z = landmark[4][2]
-        id = landmark[3]
-        
-        if np.sqrt((spotx-x)+(spotz-z)) < box_radius:
-            print('Occupied by ' + str(id))
-            return False
-        
-    return True
-
-
 ##### KØRSEL ####
 
 def camera2(command):
@@ -213,12 +164,9 @@ def camera2(command):
         # Show frames
         cv2.imshow(WIN_RF, image)
         #landmark_drive('left', image, arucoDict)
-
-        if command == 'build_map':
-            build_map(image, arucoDict)
-
-        elif command == 'thomas':
+        if command == 'thomas':
             map = GridOccupancyMap()
+            map.landmarks(image)
             map.populate()
 
             plt.clf()

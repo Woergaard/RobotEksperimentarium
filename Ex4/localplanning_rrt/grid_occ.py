@@ -41,8 +41,22 @@ class GridOccupancyMap(object):
         #    size=(n_obs, 2))
         #radius = np.random.uniform(low=0.1, high=0.3, size=n_obs)
         
-        origins = [[2.5, 0.0], [1.5, 1.5], [2.5, 2.5]]
-        radius = [0.225, 0.175, 0.175]
+        landmarks_lst = _utils.pose_estimation(img, arucoDict)
+
+        radius_arlo = 0.225
+        radius_QR = 0.175
+
+        radius = [0.225]
+        origins = [[2.5, 0.0]]
+        for i in range(len(landmarks_lst)):
+            angle = landmarks_lst[i][1] 
+            distance = landmarks_lst[i][2] 
+
+            x = distance * np.cos(angle)
+            y = distance * np.sin(angle)
+
+            radius.append(0.175)
+            origins.append([x, y])
 
         #fill the grids by checking if the grid centroid is in any of the circle
         for i in range(self.n_grids[0]):
