@@ -98,41 +98,6 @@ class GridOccupancyMap(object):
         #note the x-y axes difference between imshow and plot
         plt.imshow(self.grid.T, cmap="Greys", origin='lower', vmin=0, vmax=1, extent=self.extent, interpolation='none')
 
-
-
-# Arlo radius: 22.5 cm
-# Boks radius (længeste side): 17.5 cm
-
-##### SOFIE
-    #radius_arlo = 22.5
-    #radius_QR = 17.5 
-
-def build_map(img, arucoDict):
-    landmarks_lst = _utils.pose_estimation(img, arucoDict)
-
-    plt.plot(0,0, 'bo')
-    plt.annotate('ArloCinque', xy=(0, 0))
-    
-    for landmark in landmarks_lst:
-        x = landmark[4][0]
-        z = landmark[4][2]
-        id = landmark[3]
-        plt.Circle((x, z), 175)
-        plt.annotate(str(id), xy=(x,z))
-    
-    plt.xlabel('x')
-    plt.ylabel('z')
-    plt.show()
-
-
-class Landmark:
-    def __init__(self, distance, vinkel, retning, id, tvec):
-        self.distance = distance
-        self.vinkel = vinkel
-        self.retning = retning
-        self.id = id
-        self.tvec = tvec
-
 ##### KØRSEL ####
 
 def camera2(command):
