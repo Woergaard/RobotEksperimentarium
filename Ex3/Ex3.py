@@ -106,14 +106,6 @@ def pose_estimation(img, arucoDict):
     # Giver distancen til boxen
     _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
     
-
-    #if np.dot(world_angle, np.array([1, 0, 0])) < 0:   # Hvis vinklen er negativ, så skal robotten dreje til højre
-    #    arlo.go_diff(_utils.leftWheelFactor*_utils.standardSpeed, _utils.rightWheelFactor*_utils.standardSpeed, 1, 0)
-    #    turnSeconds = _utils.degreeToSeconds(20)
-    #    _utils.wait(turnSeconds)
-    #    arlo.stop()
-    #    _utils.wait(2.0)
-
     lst = []
     
     for i in range(len(ids)):
@@ -133,7 +125,7 @@ def pose_estimation(img, arucoDict):
 
     for element in lst:
         for i in range(len(element)):
-            print(namelst[i] + '=' + str(element[i])) 
+            print(namelst[i] + '=' + str(element[i]) + '\n') 
 
     return lst
 
