@@ -128,7 +128,7 @@ def camera2(command):
 
         if command == 'build_map':
             landmarks_lst = landmark_detection(image, arucoDict)
-            #build_map(landmarks_lst)
+            build_map(landmarks_lst)
             is_spot_free(574, 846, landmarks_lst)
             sleep(2)
 
