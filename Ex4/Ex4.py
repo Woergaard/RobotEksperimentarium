@@ -4,6 +4,9 @@ from pprint import *
 import numpy as np
 import robot
 from numpy import linalg
+from time import sleep
+import time
+import random
 
 arlo = robot.Robot()
 
@@ -127,6 +130,6 @@ def camera2(command):
             landmarks_lst = landmark_detection(image, arucoDict)
             #build_map(landmarks_lst)
             is_spot_free(574, 846, landmarks_lst)
-            arlo.sleep(2)
+            sleep(2)
 
 camera2('build_map')
