@@ -66,7 +66,7 @@ def build_map(landmarks_lst):
     for landmark in landmarks_lst:
         x = landmark.tvec[0]
         z = landmark.tvec[2]
-        plt.plot(x,z, 'ro', markersize = 2)
+        plt.plot(x,z, 'ro')
         #plt.Circle((x, z), 175)
         plt.annotate(str(landmark.id), xy=(x,z))
     
@@ -87,6 +87,7 @@ def is_spot_free(spotx, spotz, landmarks_lst):
             print('Occupied by ' + str(landmark.id))
             return False
 
+    print('Spot free!')
     return True
 
 
@@ -119,7 +120,7 @@ def camera2(command):
         image = cam.capture_array("main")
         
         # Show frames
-        #cv2.imshow(WIN_RF, image)
+        cv2.imshow(WIN_RF, image)
         #landmark_drive('left', image, arucoDict)
 
         if command == 'build_map':
