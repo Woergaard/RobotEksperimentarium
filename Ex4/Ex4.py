@@ -1,12 +1,10 @@
 import cv2 # Import the OpenCV library
 import time
-from pprint import *
+#from pprint import *
 import numpy as np
 import robot
 from numpy import linalg
 from time import sleep
-import time
-#import random
 
 arlo = robot.Robot()
 
