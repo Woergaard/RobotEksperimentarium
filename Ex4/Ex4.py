@@ -6,7 +6,7 @@ import robot
 from numpy import linalg
 from time import sleep
 import time
-import random
+#import random
 
 arlo = robot.Robot()
 
