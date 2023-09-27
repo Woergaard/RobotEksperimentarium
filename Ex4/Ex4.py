@@ -56,7 +56,7 @@ def landmark_detection(img, arucoDict):
             direction = 'right'
         print(direction)
 
-        lst.append(Landmark(linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i]))
+        lst.append(Landmark(linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i][0]))
     
     lst.sort(key=lambda x: x.distance, reverse=False)
 
@@ -68,7 +68,7 @@ def build_map(landmarks_lst):
 
     print('landmarklst:')
     print(landmarks_lst)
-    
+
     for landmark in landmarks_lst:
         print('tvec:')
         print(landmark.tvec)
