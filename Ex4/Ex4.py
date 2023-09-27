@@ -65,8 +65,13 @@ def landmark_detection(img, arucoDict):
 def build_map(landmarks_lst):
     plt.plot(0,0, 'bo')
     plt.annotate('ArloCinque', xy=(0, 0))
+
+    print('landmarklst:')
+    print(landmarks_lst)
     
     for landmark in landmarks_lst:
+        print('tvec:')
+        print(landmark.tvec)
         x = landmark.tvec[0]
         z = landmark.tvec[2]
         plt.Circle((x, z), 175)
