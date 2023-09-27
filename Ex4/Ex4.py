@@ -70,6 +70,8 @@ def build_map(landmarks_lst):
         #plt.Circle((x, z), 175)
         plt.annotate(str(landmark.id), xy=(x,z))
     
+    plt.ylim(0, 10000)
+    plt.xlim(0, 10000)
     plt.xlabel('x')
     plt.ylabel('z')
     plt.show()
