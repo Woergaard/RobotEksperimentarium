@@ -126,7 +126,7 @@ def camera2(command):
         #landmark_drive('left', image, arucoDict)
 
         if command == 'build_map':
-            landmarks_lst = _utils.landmark_detection(image, arucoDict)
+            landmarks_lst = landmark_detection(image, arucoDict)
             build_map(landmarks_lst)
             is_spot_free(574, 846, landmarks_lst)
 
