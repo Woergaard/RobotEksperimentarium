@@ -44,21 +44,18 @@ def landmark_detection(img, arucoDict):
     _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
     
     lst = []
-
-    print(ids)
     
     for i in range(len(ids)):
         world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
-        print(world_angle)
         if np.dot(tvecs[i], np.array([1, 0, 0])) < 0:
             direction = 'left'
         else:
             direction = 'right'
-        print(direction)
 
         lst.append(Landmark(linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i][0]))
+        print('dist:' + str(linalg.norm(tvecs[i])) + ', vinkel:' + str(world_angle) + direction + ', id:' + str(ids[i][0]) + ', tvec:' + str(tvecs[i][0]))
     
-    lst.sort(key=lambda x: x.distance, reverse=False)
+    lst.sort(key=lambda x: x.distance, revertvecse=False)
 
     return lst
 
@@ -66,12 +63,7 @@ def build_map(landmarks_lst):
     plt.plot(0,0, 'bo')
     plt.annotate('ArloCinque', xy=(0, 0))
 
-    print('landmarklst:')
-    print(landmarks_lst)
-
     for landmark in landmarks_lst:
-        print('tvec:')
-        print(landmark.tvec)
         x = landmark.tvec[0]
         z = landmark.tvec[2]
         plt.Circle((x, z), 175)
