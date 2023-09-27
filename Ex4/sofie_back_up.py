@@ -190,21 +190,13 @@ class Map:
 def dist(node1, node2):
     return np.sqrt((node1.x-node2.x)**2+(node1.z-node2.z)**2) 
 
-def is_spot_free(spot, landmarks, self, animation=True, writer=None):
+def is_spot_free(spot, landmarks):
     box_radius = 175.0
 
     for landmark in landmarks:        
         if dist(spot, landmark) < box_radius:
             print('Occupied by ' + str(landmark.id))
             return False
-
-###############
-# Caro Leger 
-###############
-        if animation:
-            self.draw_graph(spot)
-            if writer is not None:
-                writer.grab_frame()
 
     print('Spot free!')
     return True
