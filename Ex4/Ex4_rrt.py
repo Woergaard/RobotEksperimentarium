@@ -229,6 +229,7 @@ def main():
                 plt.show()
                 writer.grab_frame()
 
-'''
+
 if __name__ == '__main__':
     main()
+'''
