@@ -66,7 +66,7 @@ def build_map(landmarks_lst):
     for landmark in landmarks_lst:
         x = landmark.tvec[0]
         z = landmark.tvec[2]
-        plt.plot(x,z, 'ro', markersize= 175)
+        plt.plot(x,z, 'ro', markersize = 2)
         #plt.Circle((x, z), 175)
         plt.annotate(str(landmark.id), xy=(x,z))
     
