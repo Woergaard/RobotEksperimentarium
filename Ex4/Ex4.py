@@ -1,12 +1,9 @@
 import cv2 # Import the OpenCV library
 import time
-import _utils
 from pprint import *
 import numpy as np
 import robot
 from numpy import linalg
-
-import matplotlib.pyplot as plt
 
 arlo = robot.Robot()
 
@@ -19,8 +16,6 @@ except ImportError:
 
 print("OpenCV version = " + cv2.__version__)
 
-
-import numpy as np
 import matplotlib.pyplot as plt
 
 #radius_arlo = 22.5
@@ -49,6 +44,8 @@ def landmark_detection(img, arucoDict):
     _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
     
     lst = []
+
+    print(ids)
     
     for i in range(len(ids)):
         world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
