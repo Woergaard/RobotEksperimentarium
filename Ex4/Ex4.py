@@ -5,6 +5,7 @@ import numpy as np
 import robot
 from numpy import linalg
 from time import sleep
+import random
 
 arlo = robot.Robot()
 
@@ -22,6 +23,8 @@ import matplotlib.pyplot as plt
 #radius_arlo = 22.5
 #radius_QR = 17.5 
 
+### EXERCISE 1 ###
+
 class Landmark:
     def __init__(self, distance, vinkel, retning, id, tvec):
         self.distance = distance
@@ -29,6 +32,8 @@ class Landmark:
         self.retning = retning
         self.id = id
         self.tvec = tvec
+        self.x = tvec[0]
+        self.z = tvec[2]
 
 def landmark_detection(img, arucoDict): 
     """Funktionen returnerer en liste af placeringer i kameraets koordinatsystem samt id på de givne QR-koder"""
@@ -80,11 +85,8 @@ def build_map(landmarks_lst):
 def is_spot_free(spotx, spotz, landmarks_lst):
     box_radius = 175.0
 
-    for landmark in landmarks_lst:
-        x = landmark.tvec[0]
-        z = landmark.tvec[2]
-        
-        if np.sqrt((spotx-x)+(spotz-z)) < box_radius:
+    for landmark in landmarks_lst:        
+        if np.sqrt((spotx-landmark.z)+(spotz-landmark.z)) < box_radius:
             print('Occupied by ' + str(landmark.id))
             return False
 
@@ -94,7 +96,7 @@ def is_spot_free(spotx, spotz, landmarks_lst):
 
 ##### KØRSEL ####
 
-def camera2(command):
+def camera(command):
     # Open a camera device for capturing
     imageSize = (1280, 720)
     FPS = 60
@@ -130,4 +132,73 @@ def camera2(command):
             is_spot_free(574, 846, landmarks_lst)
             sleep(2)
 
-camera2('build_map')
+camera('build_map')
+
+
+### EXERCISE 2 ###
+
+
+class Node:
+    def __init__(self, x, z, parent):
+        self.x = x
+        self.z = z
+        self.path = []
+        self.parent = parent
+
+rootNode = Node(0, 0, None) # robottens position i kortet
+
+class Graf:
+    def __init__(self, nodes, edges):
+        self.nodes = nodes
+        self.edges = edges
+
+
+def is_spot_free(spotx, spotz, landmarks_lst):
+    box_radius = 175.0
+
+    for landmark in landmarks_lst:        
+        if np.sqrt((spotx-landmark.z)+(spotz-landmark.z)) < box_radius:
+            print('Occupied by ' + str(landmark.id))
+            return False
+
+    print('Spot free!')
+    return True
+
+def find_nearest_node(x_new, G):
+    dist = []
+    for node in G.nodes:
+        np.sqrt((spotx-node.z)+(spotz-node.z))
+        node.x
+        node.z
+
+# Path planning med Rapidly-exploring random trees
+def RRT(goalLandmark, mapsizex, mapsizez, maxiter, landmarks_lst, rootNode):
+    G = Graf([rootNode], [])
+
+    goalx = goalLandmark.tvec[0]
+    goalz = goalLandmark.tvec[2]
+    iters = 0
+
+    while iters < maxiter:
+        x_new = (random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez))
+        if is_spot_free(x_new[0], x_new[1], landmarks_lst):
+
+
+
+            Xnearest = Nearest(G(V,E),Xnew) //find nearest vertex
+            Link = Chain(Xnew,Xnearest)
+            G.append(Link)
+            if Xnew in Qgoal:
+                Return G
+        
+
+
+        iters += 1
+
+    return rootNode
+
+
+Xnew  = RandomPosition()
+    if IsInObstacle(Xnew) == True:
+        continue
+    

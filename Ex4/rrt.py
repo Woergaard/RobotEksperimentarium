@@ -29,6 +29,9 @@ class RRT:
             # node distance can be nontrivial as some form of cost-to-go function for e.g. underactuated system
             # use euclidean norm for basic holonomic point mass or as heuristics
             d = np.linalg.norm(np.array(to_node.pos) - np.array(self.pos))
+            print(d)
+            print(to_node)
+            print(self.pos)
             return d
         
     def __init__(self,
