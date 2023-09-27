@@ -127,5 +127,6 @@ def camera2(command):
             landmarks_lst = landmark_detection(image, arucoDict)
             #build_map(landmarks_lst)
             is_spot_free(574, 846, landmarks_lst)
+            arlo.sleep(2)
 
 camera2('build_map')
