@@ -10,7 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FFMpegWriter
 
-
 class RRT:
     """
     Class for RRT planning
@@ -38,7 +37,7 @@ class RRT:
     def __init__(self,
                  start,
                  goal,
-                 robot,   #model of the robot
+                 robot_model,   #model of the robot
                  map,           #map should allow the algorithm to query if the path in a node is in collision. note this will ignore the robot geom
                  expand_dis=0.2,
                  path_resolution=0.05,
@@ -48,7 +47,7 @@ class RRT:
 
         self.start = self.Node(start)
         self.end = self.Node(goal)
-        self.robot = robot 
+        self.robot = robot_model
         self.map = map
         
         self.min_rand = map.map_area[0]
@@ -133,7 +132,7 @@ class RRT:
             path.append(node.pos)
             node = node.parent
         path.append(node.pos)
-
+        print(path)                     #For at se ruten af den endelige vej
         return path
 
     def get_random_node(self):
@@ -143,8 +142,8 @@ class RRT:
                 )
         else:  # goal point sampling
             rnd = self.Node(self.end.pos)
+            print(rnd)              #Var nysgerring vad den faktisk gjorde 
         return rnd
-
 
     def draw_graph(self, rnd=None):
         # plt.clf()
@@ -188,7 +187,7 @@ class RRT:
                 return False
         return True
 
-
+'''
 import grid_occ, robot_models
 
 def main():
@@ -226,10 +225,10 @@ def main():
                 rrt.draw_graph()
                 plt.plot([x for (x, y) in path], [y for (x, y) in path], '-r')
                 plt.grid(True)
-                #plt.pause(0.01)  # Need for Mac
+                plt.pause(0.01)  # Need for Mac
                 plt.show()
                 writer.grab_frame()
 
-
+'''
 if __name__ == '__main__':
     main()
