@@ -187,7 +187,7 @@ class RRT:
                 return False
         return True
 
-'''
+
 import grid_occ, robot_models
 
 def main():
@@ -232,4 +232,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-'''
