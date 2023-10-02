@@ -204,8 +204,6 @@ def run_RRT(img, arucoDict, draw):
 
     G, new_node = RRT(goal, ourMap.xlim, ourMagop.zlim, maxiter, landmarks, rootNode, stepLength)
 
-    print('MÅL ER LANDMARK ' + str(goal.id))
-
     if draw:
         ourMap.draw_tree(G)
         ourMap.draw_landmarks(landmarks)
