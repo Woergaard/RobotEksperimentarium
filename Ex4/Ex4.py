@@ -198,7 +198,7 @@ def run_RRT(img, arucoDict, draw):
     for landmark in landmarks:
         print(landmark.id)
 
-    goal = Node(0, 3000, None)  # lav om evt. landmarks[-1]
+    goal = Landmark(None, None, None, 'mål', [0, 0, 3000])  # lav om evt. landmarks[-1]
 
     rootNode = Node(0, 0, None)
     stepLength = 400 # milimeter
