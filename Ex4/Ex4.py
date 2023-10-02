@@ -199,6 +199,7 @@ def run_RRT(img, arucoDict):
     
     ourMap.draw_landmarks(landmarks)
     ourMap.draw_tree(G)
+    print('nået hertil!')
     ourMap.show_map()
     
 
