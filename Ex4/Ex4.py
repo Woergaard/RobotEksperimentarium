@@ -167,9 +167,13 @@ def steer(nearest_node, steering_node, stepLength):
     #nævner = np.sqrt(edge.x**2 + edge.z**2)
     #x = nearest_node.x - (edge.x*stepLength)/nævner
     #z = nearest_node.z - (edge.z*stepLength)/nævner
-    nævner = 1000
+
+    nævner = np.sqrt(x**2 + z**2)
     x = (nearest_node.x - edge.x) * stepLength / nævner + steering_node.x
     z = (nearest_node.z - edge.z) * stepLength / nævner + steering_node.z
+    
+    #x = (nearest_node.x - edge.x) * stepLength / np.sqrt((nearest_node.x - edge.x)**2)
+    #z = (nearest_node.z - edge.z) * stepLength / np.sqrt((nævner + steering_node.z
     
     new_node = Node(x, z, nearest_node)
     return new_node
@@ -192,6 +196,8 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
 
             if not is_spot_free(new_node, [goal]):
                 return G, new_node
+            
+            # INDSÆT TJEK FOR, OM DEN NYE NODE HAR FRI PASSAGE TIL GOAL
     
     return G, new_node
 
