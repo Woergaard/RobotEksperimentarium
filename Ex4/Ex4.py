@@ -202,7 +202,7 @@ def run_RRT(img, arucoDict, draw):
 
     ourMap = Map(4000, 4000)
 
-    G, new_node = RRT(goal, ourMap.xlim, ourMagop.zlim, maxiter, landmarks, rootNode, stepLength)
+    G, new_node = RRT(goal, ourMap.xlim, ourMap.zlim, maxiter, landmarks, rootNode, stepLength)
 
     if draw:
         ourMap.draw_tree(G)
