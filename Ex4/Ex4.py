@@ -120,7 +120,7 @@ def landmark_detection(img, arucoDict):
 
     return lst
 
-def is_spot_free(spot, landmarks, self, animation=True, writer=None):
+def is_spot_free(spot, landmarks):
     box_radius = 175.0
 
     for landmark in landmarks:        
@@ -138,7 +138,7 @@ def is_spot_free(spot, landmarks, self, animation=True, writer=None):
             self.draw_tree(spot)
             if writer is not None:
                 writer.grab_frame()
-
+self, animation=True, writer=None
 #####
 '''
     
