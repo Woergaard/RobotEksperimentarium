@@ -177,7 +177,7 @@ def steer(nearest_node, steering_node, stepLength):
 
 
     
-    new_node = Node(x, z, nearest_node)
+    new_node = Node(steering_node.x + x, steering_node.z + z, nearest_node)
     return new_node
 
 ### RRT ###
