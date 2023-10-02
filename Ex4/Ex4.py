@@ -172,9 +172,6 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
     G = Graf([rootNode], [])
     iters = 0
 
-    print(goal)
-    print(goal.id)
-
     while iters < maxiter:
         steering_node = Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
         if is_spot_free(steering_node, landmarks):
@@ -196,17 +193,18 @@ def run_RRT(img, arucoDict):
     landmarks = landmark_detection(img, arucoDict)
     for landmark in landmarks:
         print(landmark.id)
-        
+
     goal = landmarks[-1] # lav om evt.
 
     rootNode = Node(0, 0, None)
     stepLength = 100 # milimeter
-    maxiter = 500
+    maxiter = 5000
 
     ourMap = Map(4000, 4000)
 
     G, new_node = RRT(goal, ourMap.xlim, ourMap.zlim, maxiter, landmarks, rootNode, stepLength)
 
+    print('MÅL ER LANDMARK ' + str(goal.id))
     ourMap.draw_tree(G)
     ourMap.draw_landmarks(landmarks)
     ourMap.show_map()
