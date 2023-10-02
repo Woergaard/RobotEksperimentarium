@@ -190,6 +190,7 @@ def steer(nearest_node, steering_node, stepLength):
     ### END ###
     
     new_node = Node(new_vec[0], new_vec[1], nearest_node)
+    print(new_vec.x, new_vec.z)
     return new_node
 
 ### RRT ###
