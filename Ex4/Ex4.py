@@ -128,7 +128,7 @@ def is_spot_free(spot, landmarks):
             print('Occupied by ' + str(landmark.id))
             return False
 
-    print('Spot free!')
+    #print('Spot free!')
     return True
 '''
 ###############
@@ -177,7 +177,8 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
     while iters < maxiter:
         steering_node = Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
         if is_spot_free(steering_node, landmarks):
-            iters +=1
+
+            print(iters)
             nearest_node, nearest_i = find_nearest_node(steering_node, G)
             new_node = steer(nearest_node, steering_node, stepLength)
             G.nodes.append(new_node)
@@ -192,13 +193,13 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
 ### MAIN ###
 def run_RRT(img, arucoDict): 
     landmarks = landmark_detection(img, arucoDict)
-    goal = landmarks[0] # lav om evt.
+    goal = landmarks[-1] # lav om evt.
 
     rootNode = Node(0, 0, None)
     stepLength = 100 # milimeter
     maxiter = 500
 
-    ourMap = Map(10000, 10000)
+    ourMap = Map(4000, 4000)
 
     G, new_node = RRT(goal, ourMap.xlim, ourMap.zlim, maxiter, landmarks, rootNode, stepLength)
     
@@ -268,8 +269,7 @@ def camera(command):
         image = cam.capture_array("main")
         
         # Show frames
-        cv2.imshow(WIN_RF, image)
-        #landmark_drive('left', image, arucoDict)
+        #cv2.imshow(WIN_RF, image)
 
         if command == 'build_map':
             landmarks = landmark_detection(image, arucoDict)
