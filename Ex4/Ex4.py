@@ -172,6 +172,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
     G = Graf([rootNode], [])
     iters = 0
 
+    print(goal)
     print(goal.id)
 
     while iters < maxiter:
@@ -193,6 +194,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
 ### MAIN ###
 def run_RRT(img, arucoDict): 
     landmarks = landmark_detection(img, arucoDict)
+    print(landmarks)
     goal = landmarks[-1] # lav om evt.
 
     rootNode = Node(0, 0, None)
@@ -202,10 +204,9 @@ def run_RRT(img, arucoDict):
     ourMap = Map(4000, 4000)
 
     G, new_node = RRT(goal, ourMap.xlim, ourMap.zlim, maxiter, landmarks, rootNode, stepLength)
-    
-    ourMap.draw_landmarks(landmarks)
+
     ourMap.draw_tree(G)
-    print('nået hertil!')
+    ourMap.draw_landmarks(landmarks)
     ourMap.show_map()
     
 
