@@ -189,25 +189,27 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
 
 
 ### MAIN ###
-def run_RRT(img, arucoDict): 
+def run_RRT(img, arucoDict, draw):
     landmarks = landmark_detection(img, arucoDict)
     for landmark in landmarks:
         print(landmark.id)
 
-    goal = landmarks[-1] # lav om evt.
+    goal = (0, 3000)  # lav om evt. landmarks[-1]
 
     rootNode = Node(0, 0, None)
-    stepLength = 200 # milimeter
-    maxiter = 2500
+    stepLength = 400 # milimeter
+    maxiter = 1500
 
     ourMap = Map(4000, 4000)
 
     G, new_node = RRT(goal, ourMap.xlim, ourMap.zlim, maxiter, landmarks, rootNode, stepLength)
 
     print('MÅL ER LANDMARK ' + str(goal.id))
-    ourMap.draw_tree(G)
-    ourMap.draw_landmarks(landmarks)
-    ourMap.show_map()
+
+    if draw:
+        ourMap.draw_tree(G)
+        ourMap.draw_landmarks(landmarks)
+        ourMap.show_map()
     
 
     '''
@@ -282,7 +284,7 @@ def camera(command):
             sleep(2)
 
         if command == 'RRT':
-            run_RRT(image, arucoDict)
+            run_RRT(image, arucoDict, True)
 
 camera('RRT')
 
