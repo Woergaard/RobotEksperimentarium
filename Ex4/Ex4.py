@@ -202,7 +202,7 @@ def run_RRT(img, arucoDict, draw):
 
     rootNode = Node(0, 0, None)
     stepLength = 200 # milimeter
-    maxiter = 15
+    maxiter = 250
 
     ourMap = Map(4000, 4000)
 
