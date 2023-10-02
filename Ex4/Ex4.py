@@ -194,7 +194,9 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
 ### MAIN ###
 def run_RRT(img, arucoDict): 
     landmarks = landmark_detection(img, arucoDict)
-    print(landmarks)
+    for landmark in landmarks:
+        print(landmark.id)
+        
     goal = landmarks[-1] # lav om evt.
 
     rootNode = Node(0, 0, None)
