@@ -194,7 +194,7 @@ def run_RRT(img, arucoDict, draw):
     for landmark in landmarks:
         print(landmark.id)
 
-    goal = (0, 3000)  # lav om evt. landmarks[-1]
+    goal = Node(0, 3000, None)  # lav om evt. landmarks[-1]
 
     rootNode = Node(0, 0, None)
     stepLength = 400 # milimeter
@@ -202,7 +202,7 @@ def run_RRT(img, arucoDict, draw):
 
     ourMap = Map(4000, 4000)
 
-    G, new_node = RRT(goal, ourMap.xlim, ourMap.zlim, maxiter, landmarks, rootNode, stepLength)
+    G, new_node = RRT(goal, ourMap.xlim, ourMagop.zlim, maxiter, landmarks, rootNode, stepLength)
 
     print('MÅL ER LANDMARK ' + str(goal.id))
 
