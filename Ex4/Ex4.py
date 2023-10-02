@@ -169,8 +169,11 @@ def steer(nearest_node, steering_node, stepLength):
     #z = nearest_node.z - (edge.z*stepLength)/nævner
 
     nævner = np.sqrt(steering_node.x**2 + steering_node.z**2)
-    x = (nearest_node.x - edge.x) * stepLength / linalg.norm(nearest_node.x - edge.x)#nævner + steering_node.x
-    z = (nearest_node.z - edge.z) * stepLength / linalg.norm(nearest_node.z - edge.z) #nævner + steering_node.z
+    x = (nearest_node.x - steering_node.x) * stepLength / linalg.norm(nearest_node.x - steering_node.x)#nævner + steering_node.x
+    z = (nearest_node.z - steering_node.z) * stepLength / linalg.norm(nearest_node.z - steering_node.z) #nævner + steering_node.z
+    
+
+
     
     new_node = Node(x, z, nearest_node)
     return new_node
