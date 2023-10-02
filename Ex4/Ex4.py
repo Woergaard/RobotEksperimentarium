@@ -75,6 +75,10 @@ class Map:
         for edge in G.edges:
             plt.plot([edge[0].x, edge[0].z] , [edge[1].x, edge[1].z], 'go-')
     
+    def draw_goal(self, goal):
+        plt.plot(goal.x, goal.z, 'yo')
+        plt.annotate('Mål', xy=(goal.x, goal.z))
+
     def show_map(self):
         plt.plot(0,0, 'bo')
         plt.annotate('ArloCinque', xy=(0, 0))
@@ -207,6 +211,7 @@ def run_RRT(img, arucoDict, draw):
     if draw:
         ourMap.draw_tree(G)
         ourMap.draw_landmarks(landmarks)
+        ourMap.draw_goal(goal)
         ourMap.show_map()
     
 
@@ -262,9 +267,9 @@ def camera(command):
 
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
     # Open a window
-    WIN_RF = "Example 1"
-    cv2.namedWindow(WIN_RF)
-    cv2.moveWindow(WIN_RF, 100, 100)
+    #WIN_RF = "Example 1"
+    #cv2.namedWindow(WIN_RF)
+    #cv2.moveWindow(WIN_RF, 100, 100)
     
     while cv2.waitKey(4) == -1: # Wait for a key pressed event
         image = cam.capture_array("main")
@@ -275,7 +280,7 @@ def camera(command):
         if command == 'build_map':
             landmarks = landmark_detection(image, arucoDict)
 
-            ourMap = Map(10000, 10000)
+            ourMap = Map(4000, 4000)
             ourMap.draw_landmarks(landmarks)
 
             is_spot_free(574, 846, landmarks)
