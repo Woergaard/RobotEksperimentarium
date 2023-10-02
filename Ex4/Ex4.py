@@ -177,7 +177,6 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
     while iters < maxiter:
         steering_node = Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
         if is_spot_free(steering_node, landmarks):
-            print(iters)
             iters +=1
             nearest_node, nearest_i = find_nearest_node(steering_node, G)
             new_node = steer(nearest_node, steering_node, stepLength)
@@ -186,6 +185,8 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
 
             if not is_spot_free(new_node, [goal]):
                 return G, new_node
+    
+    return G, new_node
 
 
 ### MAIN ###
