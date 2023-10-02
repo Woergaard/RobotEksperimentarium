@@ -6,6 +6,8 @@ import robot
 from numpy import linalg
 from time import sleep
 import random
+import matplotlib.pyplot as plt
+from matplotlib.animation import FFMpegWriter
 
 arlo = robot.Robot()
 
@@ -18,7 +20,8 @@ except ImportError:
 
 print("OpenCV version = " + cv2.__version__)
 
-import matplotlib.pyplot as plt
+
+
 
 #radius_arlo = 22.5
 #radius_QR = 17.5 
@@ -35,6 +38,7 @@ class Landmark:
         self.tvec = tvec
         self.x = tvec[0]
         self.z = tvec[2]
+        
 class Node:
     def __init__(self, x, z, parent):
         self.x = x
@@ -124,17 +128,20 @@ def is_spot_free(spot, landmarks, self, animation=True, writer=None):
             print('Occupied by ' + str(landmark.id))
             return False
 
+    print('Spot free!')
+    return True
+'''
 ###############
 # Caro Leger 
 ###############
         if animation:
-            self.draw_graph(spot)
+            self.draw_tree(spot)
             if writer is not None:
                 writer.grab_frame()
 
 #####
-    print('Spot free!')
-    return True
+'''
+    
 
 def find_nearest_node(x_new, G):
     distances = []
@@ -144,7 +151,7 @@ def find_nearest_node(x_new, G):
     return G.nodes[nearest_i], nearest_i
 
 
-def find_edge(nearest_node, steering_node):
+def make_edge(nearest_node, steering_node):
     x = steering_node.x - nearest_node.x
     z = steering_node.z - nearest_node.z
     edge = Node(x, z, nearest_node)
@@ -152,14 +159,15 @@ def find_edge(nearest_node, steering_node):
 
 
 def steer(nearest_node, steering_node, stepLength):
-    edge = find_edge(nearest_node, steering_node)
+    edge = make_edge(nearest_node, steering_node)
     nævner = np.sqrt(edge.x**2 + edge.z**2)
     x = nearest_node.x + (edge.x*10)/nævner
     z = nearest_node.z + (edge.z*10)/nævner
     new_node = Node(x, z, nearest_node)
     return new_node
 
-# Path planning med Rapidly-exploring random trees
+### RRT ###
+#  Path planning med Rapidly-exploring random trees
 def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
     G = Graf([rootNode], [])
     iters = 0
@@ -176,16 +184,10 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
                 return G, new_node
 
 
-
-
-from matplotlib.animation import FFMpegWriter
-
-
-
-
+### MAIN ###
 def run_RRT(img, arucoDict): 
     landmarks = landmark_detection(img, arucoDict)
-    goal = landmarks[0]
+    goal = landmarks[0] # lav om evt.
 
     rootNode = Node(0, 0, None)
     stepLength = 100 # milimeter
@@ -200,25 +202,38 @@ def run_RRT(img, arucoDict):
     ourMap.show_map()
     
 
-    
+    '''
     ### animation begynder her
+
+
+    show_animation = True
+    metadata = dict(title="RRT Test")
+    writer = FFMpegWriter(fps=15, metadata=metadata)
+    fig = plt.figure()
 
     show_animation = True 
     
-    FFMpegWriter = animation.writers['ffmpeg']
-    metadata = dict(title='Movie Test', artist='Matplotlib',
-                comment='RRT')
-    writer = FFMpegWriter(fps=15, metadata=metadata)
     
     fig = plt.figure()
 
     with writer.saving(fig, "writer_test.mp4", 100):
-        path = RRT.__animation(animation=show, writer=writer)
-        
-        writer.grab_frame()
-        
+        path = run_RRT.is_spot_free(animation=show_animation, writer=writer)
+    
+        if path is None:
+            print("Cannot find path")
+        else:
+            print("found path!!")
 
-########
+            # Draw final path
+            if show_animation:
+                ourMap.draw_tree()
+                #plt.plot([x for (x, y) in path], [y for (x, y) in path], '-r')
+                plt.grid(True)
+                #plt.pause(0.01)  # Need for Mac
+                plt.show()
+                writer.grab_frame()
+
+########'''
 
 def camera(command):
     # Open a camera device for capturing
