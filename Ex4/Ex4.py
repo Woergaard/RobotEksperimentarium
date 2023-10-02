@@ -174,10 +174,12 @@ def steer(nearest_node, steering_node, stepLength):
     x = (nearest_node.x - steering_node.x) * stepLength / linalg.norm(nearest_node.x - steering_node.x)#nævner + steering_node.x
     z = (nearest_node.z - steering_node.z) * stepLength / linalg.norm(nearest_node.z - steering_node.z) #nævner + steering_node.z
     
+    x = steering_node.x + x
+    z = steering_node.z + z
 
-
+    print("x:", x, "z:", z)
     
-    new_node = Node(steering_node.x + x, steering_node.z + z, nearest_node)
+    new_node = Node(x, z, nearest_node)
     return new_node
 
 ### RRT ###
