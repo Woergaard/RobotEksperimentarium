@@ -188,6 +188,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
             print(iters)
             nearest_node, nearest_i = find_nearest_node(steering_node, G)
             new_node = steer(nearest_node, steering_node, stepLength)
+            print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
             G.edges.append((nearest_node, new_node))
 
