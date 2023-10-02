@@ -159,7 +159,9 @@ def make_edge(nearest_node, steering_node):
     x = steering_node.x - nearest_node.x
     z = steering_node.z - nearest_node.z
     edge = Node(x, z, nearest_node)
+    print(edge)
     return edge
+    
 
 
 def steer(nearest_node, steering_node, stepLength):
