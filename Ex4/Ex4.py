@@ -239,7 +239,7 @@ def run_RRT(img, arucoDict, draw, drive):
     goal = Landmark(None, None, None, 'mål', [0, 0, 3000])  # lav om evt. landmarks[-1]
 
     rootNode = Node(0, 0, None)
-    stepLength = 500.0 # milimeter
+    stepLength = 300.0 # milimeter
     maxiter = 1500
     bias = 50
 
