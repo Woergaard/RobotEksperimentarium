@@ -75,6 +75,9 @@ class Map:
         print('Kanter: ' + str(G.edges))
         print('Noder: ' + str(G.nodes))
         for edge in G.edges:
+
+            print('Nearest node: ', edge[0].x, edge[0].z, 'New node: ', edge[1].x, edge[1].z)
+
             plt.plot([edge[0].x, edge[0].z] , [edge[1].x, edge[1].z], 'go-')
         
         for node in G.nodes: 
