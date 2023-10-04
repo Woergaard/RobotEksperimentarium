@@ -77,8 +77,8 @@ class Map:
         for edge in edges:
 
             print('Nearest node: ', edge[0].x, edge[0].z, 'New node: ', edge[1].x, edge[1].z)
-            
-            #plt.plot([edge[0].x, edge[0].z] , [edge[1].x, edge[1].z], 'go-')
+
+            plt.plot([edge[0].x, edge[1].x] , [edge[0].z, edge[1].z], 'go-')
         
         for node in nodes: 
             plt.plot(node.x, node.z, 'go')
