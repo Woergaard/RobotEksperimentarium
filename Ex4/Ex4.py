@@ -167,7 +167,7 @@ def find_nearest_node(x_new, G):
 def steer(nearest_node, steering_node, stepLength):
     #edge = make_edge(nearest_node, steering_node)
     #nævner = np.sqrt(edge.x**2 + edge.z**2)
-    #x = nearest_node.x - (edge.x*stepLength)/nævner
+    #x = nearest_node.x - (h.x*stepLength)/nævner
     #z = nearest_node.z - (edge.z*stepLength)/nævner
 
     #nævner = np.sqrt(steering_node.x**2 + steering_node.z**2)
@@ -182,15 +182,26 @@ def steer(nearest_node, steering_node, stepLength):
     #print("x:", x, "z:", z)
 
     ### Asgers Numpy Vectors ###
-    near_node = np.array([nearest_node.x, nearest_node.z])
-    steer_node = np.array([steering_node.x, steering_node.z])
-    xz = near_node - steer_node
-    magnitude = np.sqrt(xz[0]**2 + xz[1]**2) # vectors længde
-    new_vec = (xz * stepLength)/magnitude
+    #near_node = np.array([nearest_node.x, nearest_node.z])
+    #steer_node = np.array([steering_node.x, steering_node.z])
+    #xz = near_node - steer_node
+    #magnitude = np.sqrt(xz[0]**2 + xz[1]**2) # vectors længde
+    #new_vec = (xz * stepLength)/magnitude
     ### END ###
+
+    # s er antal skridt, så vi itere over denne hver gang et skridt er taget for at tjekke om der er frit. 
+
+    steering_vec = np.array([steering_node.x, steering_node.z])
+    nearest_vec = np.array([nearest_node.x, nearest_node.z])
     
-    new_node = Node(new_vec[0], new_vec[1], nearest_node)
-    print(new_vec.x, new_vec.z)
+    v = steering_vec - nearest_vec
+    e = v / linalg.norm(v)
+    q = nearest_vec + stepLength * e
+    
+    new_node = Node(q[0], q[1], nearest_node)
+    
+    #new_node = Node(new_vec[0], new_vec[1], nearest_node)
+    #print(new_vec.x, new_vec.z)
     return new_node
 
 ### RRT ###
