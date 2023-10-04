@@ -6,8 +6,10 @@ import robot
 from numpy import linalg
 from time import sleep
 import random
+import _utils
 import matplotlib.pyplot as plt
 from matplotlib.animation import FFMpegWriter
+import math
 
 arlo = robot.Robot()
 
@@ -63,7 +65,7 @@ class Map:
         self.landmarks += landmarks
 
         for landmark in self.landmarks:
-            plt.plot(landmark.x, landmark.z, 'ro', markersize = 10)
+            plt.plot(landmark.x, landmark.z, 'ro', markersize = 17)
             plt.annotate(str(landmark.id), xy=(landmark.x, landmark.z))
     
     def draw_tree(self, G):
@@ -84,8 +86,12 @@ class Map:
             plt.plot(node.x, node.z, 'go')
     
     def draw_goal(self, goal):
-        plt.plot(goal.x, goal.z, 'yo')
+        plt.plot(goal.x, goal.z, 'yo', markersize = 17)
         plt.annotate('Mål', xy=(goal.x, goal.z))
+
+    def draw_path(self, path):
+        for node in path:
+            plt.plot(node.x, node.z, 'po')
 
     def show_map(self):
         plt.plot(0,0, 'bo')
@@ -101,6 +107,23 @@ class Map:
 ### HJÆLPEFUNKTIONER, RRT ###
 def dist(node1, node2):
     return np.sqrt((node1.x-node2.x)**2+(node1.z-node2.z)**2) 
+
+def find_turn_angle(position, node):
+    myradians = math.atan2(node.y-position.y, node.x-position.x)
+    mydegrees = math.degrees(myradians)
+
+    if mydegrees < 0:
+        direction = 'left'
+    else:
+        direction = 'right'
+
+    return direction, mydegrees
+
+def inverse_direction(direction):
+    if 'left':
+        return 'right'
+    elif 'right':
+        return 'left'
 
 def landmark_detection(img, arucoDict): 
     """Funktionen returnerer en liste af placeringer i kameraets koordinatsystem samt id på de givne QR-koder"""
@@ -136,27 +159,14 @@ def landmark_detection(img, arucoDict):
 
     return lst
 
-def is_spot_free(spot, landmarks):
-    box_radius = 500.0
+def is_spot_free(spot, landmarks, radius):
 
     for landmark in landmarks:        
-        if dist(spot, landmark) < box_radius:
+        if dist(spot, landmark) < radius:
             print('Occupied by ' + str(landmark.id))
             return False
-
     #print('Spot free!')
     return True
-'''
-###############
-# Caro Leger 
-###############
-        if animation:
-            self.draw_tree(spot)
-            if writer is not None:
-                writer.grab_frame()
-self, animation=True, writer=None
-#####
-'''
     
 
 def find_nearest_node(x_new, G):
@@ -168,34 +178,17 @@ def find_nearest_node(x_new, G):
     return G.nodes[nearest_i]
 
 
-# def make_edge(nearest_node, steering_node):
-#     x = steering_node.x - nearest_node.x
-#     z = steering_node.z - nearest_node.z
-#     edge = Node(x, z, nearest_node)
-#     print(edge)
-#     return edge
-    
-
 
 def steer(nearest_node, steering_node, stepLength):
-
-
     # s er antal skridt, så vi itere over denne hver gang et skridt er taget for at tjekke om der er frit. 
-
     steering_vec = np.array([steering_node.x, steering_node.z])
     nearest_vec = np.array([nearest_node.x, nearest_node.z])
 
-    print(stepLength)
     v = steering_vec - nearest_vec
     e = v / linalg.norm(v)
     q = nearest_vec + stepLength * e
     
-    print('v:', v, ' e:',  e, ' q:',  q)
-    
     new_node = Node(q[0], q[1], nearest_node)
-    
-    #new_node = Node(new_vec[0], new_vec[1], nearest_node)
-    #print(new_vec.x, new_vec.z)
     return new_node
 
 ### RRT ###
@@ -205,7 +198,9 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
     iters = 0
     while iters < maxiter:
         steering_node = Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
-        if is_spot_free(steering_node, landmarks):
+        box_radius = 400.0
+
+        if is_spot_free(steering_node, landmarks, box_radius):
             iters += 1
             print(iters)
             nearest_node = find_nearest_node(steering_node, G)
@@ -215,7 +210,11 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
             G.nodes.append(new_node)
             G.edges.append((nearest_node, new_node))
 
-            if not is_spot_free(new_node, [goal]):
+            goal_radius = 200.0
+            if not is_spot_free(new_node, [goal], goal_radius):
+                goalNode = Node(goal.x, goal.z, new_node)
+                G.nodes.append(goalNode)
+                G.edges.append((new_node, goal))
                 return G, new_node
             
             # INDSÆT TJEK FOR, OM DEN NYE NODE HAR FRI PASSAGE TIL GOAL
@@ -224,7 +223,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
 
 
 ### MAIN ###
-def run_RRT(img, arucoDict, draw):
+def run_RRT(img, arucoDict, draw, drive):
     landmarks = landmark_detection(img, arucoDict)
     for landmark in landmarks:
         print(landmark.id)
@@ -232,7 +231,7 @@ def run_RRT(img, arucoDict, draw):
     goal = Landmark(None, None, None, 'mål', [0, 0, 3000])  # lav om evt. landmarks[-1]
 
     rootNode = Node(0, 0, None)
-    stepLength = 100 # milimeter
+    stepLength = 100.0 # milimeter
     maxiter = 1500
 
     ourMap = Map(4000, 4000)
@@ -244,40 +243,37 @@ def run_RRT(img, arucoDict, draw):
         ourMap.draw_landmarks(landmarks)
         ourMap.draw_goal(goal)
         ourMap.show_map()
+
+    if drive:
+        path = []
+        goalNode = G.nodes[-1]
+        path.append(goalNode.parent)
+
+        print('driving towards', goalNode)
+
+        notRoot = True
+
+        while notRoot:
+            if path[-1].parent != None:
+                path.append(path[-1].parent)
+            else:
+                notRoot = False
+
+        path = path.reverse()
+        ourMap.draw_path(path)
+
+        prevnode = Node(0, 0, None)
+        
+        for node in path:
+            direction, degrees = find_turn_angle(prevnode, node)
+            print(direction, degrees) 
+            _utils.sharp_turn(direction, degrees)
+            _utils.drive('forward', stepLength)
+            _utils.sharp_turn(inverse_direction(direction), degrees)
+            prevnode = node
+        
+        print('Arrived at goal!')
     
-
-    '''
-    ### animation begynder her
-
-
-    show_animation = True
-    metadata = dict(title="RRT Test")
-    writer = FFMpegWriter(fps=15, metadata=metadata)
-    fig = plt.figure()
-
-    show_animation = True 
-    
-    
-    fig = plt.figure()
-
-    with writer.saving(fig, "writer_test.mp4", 100):
-        path = run_RRT.is_spot_free(animation=show_animation, writer=writer)
-    
-        if path is None:
-            print("Cannot find path")
-        else:
-            print("found path!!")
-
-            # Draw final path
-            if show_animation:
-                ourMap.draw_tree()
-                #plt.plot([x for (x, y) in path], [y for (x, y) in path], '-r')
-                plt.grid(True)
-                #plt.pause(0.01)  # Need for Mac
-                plt.show()
-                writer.grab_frame()
-
-########'''
 
 def camera(command):
     # Open a camera device for capturing
@@ -314,44 +310,11 @@ def camera(command):
             ourMap = Map(4000, 4000)
             ourMap.draw_landmarks(landmarks)
 
-            is_spot_free(574, 846, landmarks)
+            is_spot_free(574, 846, landmarks, 400.0)
             sleep(2)
 
         if command == 'RRT':
-            run_RRT(image, arucoDict, True)
+            run_RRT(image, arucoDict, True, True)
 
 camera('RRT')
 
-
-'''
-if __name__ == '__main__':
-    main()
-
-
-            # NÅET TIL
-            steer
-            stepLength = 
-
-
-
-
-            g.nodes 
-
-
-            Xnearest = Nearest(G(V,E),Xnew) #find nearest vertex
-            Link = Chain(Xnew,Xnearest)
-            G.append(Link)
-            if Xnew in Qgoal:
-                Return G
-        
-
-
-        iters += 1
-
-    return rootNode
-
-
-Xnew  = RandomPosition()
-    if IsInObstacle(Xnew) == True:
-        continue
-'''
