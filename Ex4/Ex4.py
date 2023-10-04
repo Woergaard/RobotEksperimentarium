@@ -80,7 +80,7 @@ class Map:
 
             #print('Nearest node: ', edge[0].x, edge[0].z, 'New node: ', edge[1].x, edge[1].z)
 
-            plt.plot([edge[0].x, edge[1].x] , [edge[0].z, edge[1].z], 'go-')
+            plt.plot([edge[0].x, edge[1].x] , [edge[0].z, edge[1].z], 'ko-')
         
         #for node in nodes: 
         #    plt.plot(node.x, node.z, 'go')
@@ -234,7 +234,7 @@ def run_RRT(img, arucoDict, draw, drive):
     goal = Landmark(None, None, None, 'mål', [0, 0, 3000])  # lav om evt. landmarks[-1]
 
     rootNode = Node(0, 0, None)
-    stepLength = 200.0 # milimeter
+    stepLength = 500.0 # milimeter
     maxiter = 1500
 
     ourMap = Map(1500, 4000)
