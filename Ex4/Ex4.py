@@ -118,18 +118,21 @@ def landmark_detection(img, arucoDict):
     
     lst = []
     
-    if len(i)
-    for i in range(len(ids)):
-        world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
-        if np.dot(tvecs[i], np.array([1, 0, 0])) < 0:
-            direction = 'left'
-        else:
-            direction = 'right'
+    if ids == []: 
+        print("No marker detected")
+        return lst
+    else:
+        for i in range(len(ids)):
+            world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
+            if np.dot(tvecs[i], np.array([1, 0, 0])) < 0:
+                direction = 'left'
+            else:
+                direction = 'right'
 
-        lst.append(Landmark(linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i][0]))
-        print('dist: ' + str(linalg.norm(tvecs[i])) + ', vinkel: ' + str(world_angle) + direction + ', id: ' + str(ids[i][0]) + ', tvec: ' + str(tvecs[i][0]))
-    
-    lst.sort(key=lambda x: x.distance, reverse=False)
+            lst.append(Landmark(linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i][0]))
+            print('dist: ' + str(linalg.norm(tvecs[i])) + ', vinkel: ' + str(world_angle) + direction + ', id: ' + str(ids[i][0]) + ', tvec: ' + str(tvecs[i][0]))
+        
+        lst.sort(key=lambda x: x.distance, reverse=False)
 
     return lst
 
