@@ -257,6 +257,7 @@ def run_RRT(img, arucoDict, draw, drive):
             else:
                 notRoot = False
 
+        path.pop()
         path.reverse()
         print("PATH: ", path)
 
