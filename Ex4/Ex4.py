@@ -210,17 +210,23 @@ def steer(nearest_node, steering_node, stepLength):
 
 ### RRT ###
 #  Path planning med Rapidly-exploring random trees
-def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
+def RRT(self, goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, nearest_i):
     G = Graf([rootNode], [])
     iters = 0
-
+    self.node_list = [self.start]
     while iters < maxiter:
         steering_node = Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
         if is_spot_free(steering_node, landmarks):
             iters += 1
             print(iters)
-            nearest_node, nearest_i = find_nearest_node(steering_node, G)
+
+            nearest_i = self.find_nearst_node(self.node_list, steering_node)
+            nearest_node = self.node_list[nearest_i]
+
+
+            #nearest_node, nearest_i = find_nearest_node(steering_node, G)
             new_node = steer(nearest_node, steering_node, stepLength)
+            
             print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
             G.edges.append((nearest_node, new_node))
