@@ -275,8 +275,9 @@ def run_RRT(img, arucoDict, draw, drive):
             print(direction, degrees) 
             _utils.sharp_turn(direction, degrees)
             print('vinkelskift slut')
-            arlo.stop()
-            _utils.drive('forward', stepLength)
+            #arlo.stop()
+            _utils.drive('forwards', stepLength/1000)
+            print('kørsel slut')
             _utils.sharp_turn(inverse_direction(direction), degrees)
             prevnode = node
         
