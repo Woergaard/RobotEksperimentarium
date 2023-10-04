@@ -152,6 +152,7 @@ def find_nearest_node(x_new, G):
     for node in G.nodes:
         distances.append(abs(dist(x_new, node)))
     nearest_i = np.argmin(distances)
+    print('nearest i:', nearest_i)
     return G.nodes[nearest_i], nearest_i
 
 
@@ -193,10 +194,13 @@ def steer(nearest_node, steering_node, stepLength):
 
     steering_vec = np.array([steering_node.x, steering_node.z])
     nearest_vec = np.array([nearest_node.x, nearest_node.z])
-    
+
+    print(stepLength)
     v = steering_vec - nearest_vec
     e = v / linalg.norm(v)
     q = nearest_vec + stepLength * e
+    
+    print('v:' + v + 'e:' + e +'q:' + q)
     
     new_node = Node(q[0], q[1], nearest_node)
     
@@ -238,8 +242,8 @@ def run_RRT(img, arucoDict, draw):
     goal = Landmark(None, None, None, 'mål', [0, 0, 3000])  # lav om evt. landmarks[-1]
 
     rootNode = Node(0, 0, None)
-    stepLength = 200 # milimeter
-    maxiter = 250
+    stepLength = 100 # milimeter
+    maxiter = 5
 
     ourMap = Map(4000, 4000)
 
