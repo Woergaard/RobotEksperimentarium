@@ -232,10 +232,10 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
             
             print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
-            G.edges.append((nearest_node, new_node, steering_node))
+            G.edges.append((nearest_node, new_node))
 
-            if not is_spot_free(new_node, [goal]):
-                return G, new_node
+        if not is_spot_free(new_node, [goal]):
+            return G, new_node
             
             # INDSÆT TJEK FOR, OM DEN NYE NODE HAR FRI PASSAGE TIL GOAL
     
