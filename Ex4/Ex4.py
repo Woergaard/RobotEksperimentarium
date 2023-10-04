@@ -112,7 +112,7 @@ def find_turn_angle(position, node):
     myradians = math.atan2(node.z-position.z, node.x-position.x)
     mydegrees = math.degrees(myradians)
 
-    if mydegrees < 90:
+    if mydegrees > 90:
         direction = 'left'
     else:
         direction = 'right'
