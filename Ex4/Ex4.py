@@ -109,7 +109,7 @@ def dist(node1, node2):
     return np.sqrt((node1.x-node2.x)**2+(node1.z-node2.z)**2) 
 
 def find_turn_angle(position, node):
-    myradians = math.atan2(node.y-position.y, node.x-position.x)
+    myradians = math.atan2(node.z-position.z, node.x-position.x)
     mydegrees = math.degrees(myradians)
 
     if mydegrees < 0:
