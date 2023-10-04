@@ -63,7 +63,7 @@ class Map:
         self.landmarks += landmarks
 
         for landmark in self.landmarks:
-            plt.plot(landmark.x, landmark.z, 'ro')
+            plt.plot(landmark.x, landmark.z, 'ro', markersize = 10)
             plt.annotate(str(landmark.id), xy=(landmark.x, landmark.z))
     
     def draw_tree(self, G):
@@ -72,13 +72,13 @@ class Map:
         nodes = G.nodes
         edges = G.edges
         
-        print('Kanter: ' + str(G.edges))
-        print('Noder: ' + str(G.nodes))
+        #print('Kanter: ' + str(G.edges))
+        #print('Noder: ' + str(G.nodes))
         for edge in edges:
 
-            print('Nearest node: ', edge[0].x, edge[0].z, 'New node: ', edge[1].x, edge[1].z)
+            #print('Nearest node: ', edge[0].x, edge[0].z, 'New node: ', edge[1].x, edge[1].z)
 
-            plt.plot([edge[0].x, edge[1].x] , [edge[0].z, edge[1].z], 'o')
+            plt.plot([edge[0].x, edge[1].x] , [edge[0].z, edge[1].z], 'o-')
         
         for node in nodes: 
             plt.plot(node.x, node.z, 'go')
@@ -137,7 +137,7 @@ def landmark_detection(img, arucoDict):
     return lst
 
 def is_spot_free(spot, landmarks):
-    box_radius = 175.0
+    box_radius = 500.0
 
     for landmark in landmarks:        
         if dist(spot, landmark) < box_radius:
