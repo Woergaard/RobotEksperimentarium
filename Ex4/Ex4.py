@@ -243,7 +243,6 @@ def run_RRT(img, arucoDict, draw, drive):
         ourMap.draw_landmarks(landmarks)
         ourMap.draw_goal(goal)
 
-    if drive:
         path = []
         goalNode = G.nodes[-1]
         path.append(goalNode.parent)
@@ -259,11 +258,14 @@ def run_RRT(img, arucoDict, draw, drive):
                 notRoot = False
 
         path = path.reverse()
+
         ourMap.draw_path(path)
         ourMap.show_map()
 
+    if drive:
         prevnode = Node(0, 0, None)
         
+        print('path', path)
         for node in path:
             direction, degrees = find_turn_angle(prevnode, node)
             print(direction, degrees) 
