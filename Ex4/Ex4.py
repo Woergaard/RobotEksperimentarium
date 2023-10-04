@@ -91,7 +91,7 @@ class Map:
 
     def draw_path(self, path):
         for node in path:
-            plt.plot(node.x, node.z, 'po')
+            plt.plot(node.x, node.z, 'mo')
 
     def show_map(self):
         plt.plot(0,0, 'bo')
