@@ -200,6 +200,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias
     G = Graf([rootNode], [])
     iters = 0
     while iters < maxiter:
+        iters += 1
         random_number = random.randint(0, 100)
         if random_number < bias:
             steering_node = Node(goal.x, goal.z, None)
@@ -208,12 +209,11 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias
         
         box_radius = 400.0
 
-        if is_spot_free(steering_node, landmarks, box_radius):
-            iters += 1
-            print(iters)
-            nearest_node = find_nearest_node(steering_node, G)
-            new_node = steer(nearest_node, steering_node, stepLength)
-            
+        nearest_node = find_nearest_node(steering_node, G)
+        new_node = steer(nearest_node, steering_node, stepLength)
+        halfway_node = steer(nearest_node, steering_node, stepLength/2)
+        
+        if is_spot_free(new_node, landmarks, box_radius) and is_spot_free(halfway_node, landmarks, box_radius):
             #print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
             G.edges.append((nearest_node, new_node))
