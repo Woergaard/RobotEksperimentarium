@@ -247,6 +247,7 @@ def run_RRT(img, arucoDict, draw, drive):
         goalNode = G.nodes[-1]
         path.append(goalNode.parent)
 
+        print("PATH: ", path)
         print('driving towards', goalNode)
 
         notRoot = True
