@@ -113,7 +113,7 @@ def find_turn_angle(position, node):
     mydegrees = math.degrees(myradians)
 
     if mydegrees > 90:
-        mydegrees = 180 - mydegrees
+        mydegrees = mydegrees - 90
         direction = 'left'
     else:
         mydegrees = 90 - mydegrees
@@ -122,9 +122,9 @@ def find_turn_angle(position, node):
     return direction, mydegrees
 
 def inverse_direction(direction):
-    if 'left':
+    if direction == 'left':
         return 'right'
-    elif 'right':
+    elif direction == 'right':
         return 'left'
 
 def landmark_detection(img, arucoDict): 
@@ -275,6 +275,7 @@ def run_RRT(img, arucoDict, draw, drive):
             print(direction, degrees) 
             _utils.sharp_turn(direction, degrees)
             print('vinkelskift slut')
+            arlo.stop()
             _utils.drive('forward', stepLength)
             _utils.sharp_turn(inverse_direction(direction), degrees)
             prevnode = node
