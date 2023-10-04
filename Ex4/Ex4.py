@@ -247,7 +247,6 @@ def run_RRT(img, arucoDict, draw, drive):
         goalNode = G.nodes[-1]
         path.append(goalNode.parent)
 
-        print("PATH: ", path)
         print('driving towards', goalNode)
 
         notRoot = True
@@ -259,6 +258,7 @@ def run_RRT(img, arucoDict, draw, drive):
                 notRoot = False
 
         path = path.reverse()
+        print("PATH: ", path)
 
         ourMap.draw_path(path)
         ourMap.show_map()
