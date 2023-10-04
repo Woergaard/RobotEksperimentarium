@@ -216,14 +216,14 @@ def steer(nearest_node, steering_node, stepLength):
 def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
     G = Graf([rootNode], [])
     iters = 0
-    node_list = [start]
+    node_list = [rootNode]
     while iters < maxiter:
         steering_node = Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
         if is_spot_free(steering_node, landmarks):
             iters += 1
             print(iters)
 
-            nearest_i = find_nearst_node(node_list, steering_node)
+            nearest_i = find_nearest_node(node_list, steering_node)
             nearest_node = node_list[nearest_i]
 
 
