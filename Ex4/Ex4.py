@@ -113,8 +113,10 @@ def find_turn_angle(position, node):
     mydegrees = math.degrees(myradians)
 
     if mydegrees > 90:
+        mydegrees = 180 - mydegrees
         direction = 'left'
     else:
+        mydegrees = 90 - mydegrees
         direction = 'right'
 
     return direction, mydegrees
@@ -272,6 +274,7 @@ def run_RRT(img, arucoDict, draw, drive):
             direction, degrees = find_turn_angle(prevnode, node)
             print(direction, degrees) 
             _utils.sharp_turn(direction, degrees)
+            print(ø)
             _utils.drive('forward', stepLength)
             _utils.sharp_turn(inverse_direction(direction), degrees)
             prevnode = node
