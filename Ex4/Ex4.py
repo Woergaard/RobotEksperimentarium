@@ -80,10 +80,10 @@ class Map:
 
             #print('Nearest node: ', edge[0].x, edge[0].z, 'New node: ', edge[1].x, edge[1].z)
 
-            plt.plot([edge[0].x, edge[1].x] , [edge[0].z, edge[1].z], 'o-')
+            plt.plot([edge[0].x, edge[1].x] , [edge[0].z, edge[1].z], 'go-')
         
-        for node in nodes: 
-            plt.plot(node.x, node.z, 'go')
+        #for node in nodes: 
+        #    plt.plot(node.x, node.z, 'go')
     
     def draw_goal(self, goal):
         plt.plot(goal.x, goal.z, 'yo', markersize = 17)
@@ -101,7 +101,8 @@ class Map:
         plt.xlim(-self.xlim, self.xlim)
         plt.xlabel('x')
         plt.ylabel('z')
-        plt.show()
+        #plt.show()
+        plt.savefig('rute.png')
 
 
 ### HJÆLPEFUNKTIONER, RRT ###
@@ -208,7 +209,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
             nearest_node = find_nearest_node(steering_node, G)
             new_node = steer(nearest_node, steering_node, stepLength)
             
-            print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
+            #print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
             G.edges.append((nearest_node, new_node))
 
@@ -228,7 +229,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
 def run_RRT(img, arucoDict, draw, drive):
     landmarks = landmark_detection(img, arucoDict)
     for landmark in landmarks:
-        print(landmark.id)
+        print('landmarks fundet: ', landmark.id)
 
     goal = Landmark(None, None, None, 'mål', [0, 0, 3000])  # lav om evt. landmarks[-1]
 
@@ -269,15 +270,15 @@ def run_RRT(img, arucoDict, draw, drive):
     if drive:
         prevnode = Node(0, 0, None)
         
-        print('path', path)
+        #print('path', path)
         for node in path:
             direction, degrees = find_turn_angle(prevnode, node)
             print(direction, degrees) 
             _utils.sharp_turn(direction, degrees)
-            print('vinkelskift slut')
+            #print('vinkelskift slut')
             #arlo.stop()
             _utils.drive('forwards', stepLength/1000)
-            print('kørsel slut')
+            #print('kørsel slut')
             _utils.sharp_turn(inverse_direction(direction), degrees)
             prevnode = node
         
