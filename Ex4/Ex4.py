@@ -274,7 +274,7 @@ def run_RRT(img, arucoDict, draw, drive):
             direction, degrees = find_turn_angle(prevnode, node)
             print(direction, degrees) 
             _utils.sharp_turn(direction, degrees)
-            print(ø)
+            print('vinkelskift slut')
             _utils.drive('forward', stepLength)
             _utils.sharp_turn(inverse_direction(direction), degrees)
             prevnode = node
