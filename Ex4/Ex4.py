@@ -234,7 +234,7 @@ def run_RRT(img, arucoDict, draw, drive):
     stepLength = 100.0 # milimeter
     maxiter = 1500
 
-    ourMap = Map(4000, 4000)
+    ourMap = Map(1500, 4000)
 
     G, new_node = RRT(goal, ourMap.xlim, ourMap.zlim, maxiter, landmarks, rootNode, stepLength)
 
