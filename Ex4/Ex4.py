@@ -78,7 +78,7 @@ class Map:
 
             print('Nearest node: ', edge[0].x, edge[0].z, 'New node: ', edge[1].x, edge[1].z)
 
-            plt.plot([edge[0].x, edge[1].x] , [edge[0].z, edge[1].z], 'go-')
+            plt.plot([edge[0].x, edge[1].x] , [edge[0].z, edge[1].z], 'o')
         
         for node in nodes: 
             plt.plot(node.x, node.z, 'go')
@@ -118,6 +118,7 @@ def landmark_detection(img, arucoDict):
     
     lst = []
     
+    if len(i)
     for i in range(len(ids)):
         world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
         if np.dot(tvecs[i], np.array([1, 0, 0])) < 0:
@@ -229,7 +230,7 @@ def run_RRT(img, arucoDict, draw):
 
     rootNode = Node(0, 0, None)
     stepLength = 100 # milimeter
-    maxiter = 5
+    maxiter = 1500
 
     ourMap = Map(4000, 4000)
 
