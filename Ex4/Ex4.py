@@ -74,6 +74,9 @@ class Map:
         
         for edge in G.edges:
             plt.plot([edge[0].x, edge[0].z] , [edge[1].x, edge[1].z], 'go-')
+        
+        for nodes in G.nodes: 
+            plt.plot(nodes.x, nodes.z, 'go-')
     
     def draw_goal(self, goal):
         plt.plot(goal.x, goal.z, 'yo')
@@ -210,18 +213,18 @@ def steer(nearest_node, steering_node, stepLength):
 
 ### RRT ###
 #  Path planning med Rapidly-exploring random trees
-def RRT(self, goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, nearest_i):
+def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
     G = Graf([rootNode], [])
     iters = 0
-    self.node_list = [self.start]
+    node_list = [start]
     while iters < maxiter:
         steering_node = Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
         if is_spot_free(steering_node, landmarks):
             iters += 1
             print(iters)
 
-            nearest_i = self.find_nearst_node(self.node_list, steering_node)
-            nearest_node = self.node_list[nearest_i]
+            nearest_i = find_nearst_node(node_list, steering_node)
+            nearest_node = node_list[nearest_i]
 
 
             #nearest_node, nearest_i = find_nearest_node(steering_node, G)
