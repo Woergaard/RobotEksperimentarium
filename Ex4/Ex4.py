@@ -80,8 +80,8 @@ class Map:
 
             plt.plot([edge[0].x, edge[0].z] , [edge[1].x, edge[1].z], 'go-')
         
-        for node in G.nodes: 
-            plt.plot(node.x, node.z, 'go-')
+        #for node in G.nodes: 
+        #    plt.plot(node.x, node.z, 'go-')
     
     def draw_goal(self, goal):
         plt.plot(goal.x, goal.z, 'yo')
