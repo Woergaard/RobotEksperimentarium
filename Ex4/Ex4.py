@@ -200,7 +200,7 @@ def steer(nearest_node, steering_node, stepLength):
     e = v / linalg.norm(v)
     q = nearest_vec + stepLength * e
     
-    print('v:' + v + 'e:' + e +'q:' + q)
+    print('v:', v, ' e:',  e, ' q:',  q)
     
     new_node = Node(q[0], q[1], nearest_node)
     
