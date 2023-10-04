@@ -86,7 +86,7 @@ class Map:
         #    plt.plot(node.x, node.z, 'go')
     
     def draw_goal(self, goal):
-        plt.plot(goal.x, goal.z, 'ko', markersize = 17)
+        plt.plot(goal.x, goal.z, 'co', markersize = 17)
         plt.annotate('Mål', xy=(goal.x, goal.z))
 
     def draw_path(self, path):
