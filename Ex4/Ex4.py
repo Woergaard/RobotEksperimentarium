@@ -80,13 +80,13 @@ class Map:
 
             #print('Nearest node: ', edge[0].x, edge[0].z, 'New node: ', edge[1].x, edge[1].z)
 
-            plt.plot([edge[0].x, edge[1].x] , [edge[0].z, edge[1].z], 'ko-')
+            plt.plot([edge[0].x, edge[1].x] , [edge[0].z, edge[1].z], 'yo-')
         
         #for node in nodes: 
         #    plt.plot(node.x, node.z, 'go')
     
     def draw_goal(self, goal):
-        plt.plot(goal.x, goal.z, 'yo', markersize = 17)
+        plt.plot(goal.x, goal.z, 'ko', markersize = 17)
         plt.annotate('Mål', xy=(goal.x, goal.z))
 
     def draw_path(self, path):
@@ -196,11 +196,16 @@ def steer(nearest_node, steering_node, stepLength):
 
 ### RRT ###
 #  Path planning med Rapidly-exploring random trees
-def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
+def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias):
     G = Graf([rootNode], [])
     iters = 0
     while iters < maxiter:
-        steering_node = Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
+        random_number = random.randint(0, 100)
+        if random_number < bias:
+            steering_node = Node(goal.x, goal.z, None)
+        else:
+            steering_node = Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
+        
         box_radius = 400.0
 
         if is_spot_free(steering_node, landmarks, box_radius):
@@ -236,10 +241,11 @@ def run_RRT(img, arucoDict, draw, drive):
     rootNode = Node(0, 0, None)
     stepLength = 500.0 # milimeter
     maxiter = 1500
+    bias = 50
 
     ourMap = Map(1500, 4000)
 
-    G, new_node = RRT(goal, ourMap.xlim, ourMap.zlim, maxiter, landmarks, rootNode, stepLength)
+    G, new_node = RRT(goal, ourMap.xlim, ourMap.zlim, maxiter, landmarks, rootNode, stepLength, bias)
 
     if draw:
         ourMap.draw_tree(G)
