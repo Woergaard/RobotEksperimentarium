@@ -242,7 +242,6 @@ def run_RRT(img, arucoDict, draw, drive):
         ourMap.draw_tree(G)
         ourMap.draw_landmarks(landmarks)
         ourMap.draw_goal(goal)
-        ourMap.show_map()
 
     if drive:
         path = []
@@ -261,6 +260,7 @@ def run_RRT(img, arucoDict, draw, drive):
 
         path = path.reverse()
         ourMap.draw_path(path)
+        ourMap.show_map()
 
         prevnode = Node(0, 0, None)
         
