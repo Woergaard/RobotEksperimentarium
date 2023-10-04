@@ -101,8 +101,8 @@ class Map:
         plt.xlim(-self.xlim, self.xlim)
         plt.xlabel('x')
         plt.ylabel('z')
-        #plt.show()
-        plt.savefig('rute.png')
+        plt.show()
+        #plt.savefig('rute.png')
 
 
 ### HJÆLPEFUNKTIONER, RRT ###
