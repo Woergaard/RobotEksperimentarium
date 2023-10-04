@@ -117,7 +117,7 @@ def find_turn_angle(position, node):
     else:
         direction = 'right'
 
-    return direction, mydegrees
+    return direction-90.0, mydegrees
 
 def inverse_direction(direction):
     if 'left':
