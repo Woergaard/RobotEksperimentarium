@@ -69,19 +69,19 @@ class Map:
     def draw_tree(self, G):
         #for node in G.nodes:
         #    plt.plot(node.x, node.z, 'go')
-        self.nodes += G.nodes
-        self.edges += G.edges
+        nodes = G.nodes
+        edges = G.edges
         
         print('Kanter: ' + str(G.edges))
         print('Noder: ' + str(G.nodes))
-        for edge in G.edges:
+        for edge in edges:
 
             print('Nearest node: ', edge[0].x, edge[0].z, 'New node: ', edge[1].x, edge[1].z)
 
             plt.plot([edge[0].x, edge[0].z] , [edge[1].x, edge[1].z], 'go-')
         
-        #for node in G.nodes: 
-        #    plt.plot(node.x, node.z, 'go-')
+        for node in nodes: 
+            plt.plot(node.x, node.z, 'go')
     
     def draw_goal(self, goal):
         plt.plot(goal.x, goal.z, 'yo')
