@@ -72,11 +72,13 @@ class Map:
         self.nodes += G.nodes
         self.edges += G.edges
         
+        print('Kanter: ' + str(G.edges))
+        print('Noder: ' + str(G.nodes))
         for edge in G.edges:
             plt.plot([edge[0].x, edge[0].z] , [edge[1].x, edge[1].z], 'go-')
         
-        for nodes in G.nodes: 
-            plt.plot(nodes.x, nodes.z, 'go-')
+        for node in G.nodes: 
+            plt.plot(node.x, node.z, 'go-')
     
     def draw_goal(self, goal):
         plt.plot(goal.x, goal.z, 'yo')
@@ -156,7 +158,7 @@ def find_nearest_node(x_new, G):
         distances.append(abs(dist(x_new, node)))
     nearest_i = np.argmin(distances)
     print('nearest i:', nearest_i)
-    return G.nodes[nearest_i], nearest_i
+    return G.nodes[nearest_i]
 
 
 # def make_edge(nearest_node, steering_node):
@@ -169,29 +171,7 @@ def find_nearest_node(x_new, G):
 
 
 def steer(nearest_node, steering_node, stepLength):
-    #edge = make_edge(nearest_node, steering_node)
-    #nævner = np.sqrt(edge.x**2 + edge.z**2)
-    #x = nearest_node.x - (h.x*stepLength)/nævner
-    #z = nearest_node.z - (edge.z*stepLength)/nævner
 
-    #nævner = np.sqrt(steering_node.x**2 + steering_node.z**2)
-    #x = (nearest_node.x - steering_node.x)  / linalg.norm(nearest_node.x - steering_node.x)#nævner + steering_node.x
-    #z = (nearest_node.z - steering_node.z) / linalg.norm(nearest_node.z - steering_node.z) #nævner + steering_node.z
-    
-    #print("x:", x, "z:", z)
-
-    #x = steering_node.x + x * stepLength
-    #z = steering_node.z + z * stepLength
-
-    #print("x:", x, "z:", z)
-
-    ### Asgers Numpy Vectors ###
-    #near_node = np.array([nearest_node.x, nearest_node.z])
-    #steer_node = np.array([steering_node.x, steering_node.z])
-    #xz = near_node - steer_node
-    #magnitude = np.sqrt(xz[0]**2 + xz[1]**2) # vectors længde
-    #new_vec = (xz * stepLength)/magnitude
-    ### END ###
 
     # s er antal skridt, så vi itere over denne hver gang et skridt er taget for at tjekke om der er frit. 
 
@@ -216,26 +196,20 @@ def steer(nearest_node, steering_node, stepLength):
 def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength):
     G = Graf([rootNode], [])
     iters = 0
-    #node_list = [rootNode]
     while iters < maxiter:
         steering_node = Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
         if is_spot_free(steering_node, landmarks):
             iters += 1
             print(iters)
-
-#            nearest_i = find_nearest_node(node_list, steering_node)
-#            nearest_node = node_list[nearest_i]
-
-
-            nearest_node, nearest_i = find_nearest_node(steering_node, G)
+            nearest_node = find_nearest_node(steering_node, G)
             new_node = steer(nearest_node, steering_node, stepLength)
             
             print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
             G.edges.append((nearest_node, new_node))
 
-        if not is_spot_free(new_node, [goal]):
-            return G, new_node
+            if not is_spot_free(new_node, [goal]):
+                return G, new_node
             
             # INDSÆT TJEK FOR, OM DEN NYE NODE HAR FRI PASSAGE TIL GOAL
     
