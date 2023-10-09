@@ -260,6 +260,11 @@ def turn_and_watch(direction, img):
         return False
 
 def drive_to_landmarks(landmarks_lst):
+    '''
+    Robotten kører til de om egen akse, indtil den har fundet et landmark, OG der er frit.
+    Argumenter:
+        direction:  enten 'right' eller 'left'
+    '''    
     landmark = landmarks_lst[0]
 
     dist = landmark[0]
