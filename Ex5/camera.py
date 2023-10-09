@@ -3,7 +3,7 @@ import numpy as np
 import time
 import sys
 import threading
-import framebuffer
+import Ex5.framebuffer as framebuffer
 from pkg_resources import parse_version
 
 

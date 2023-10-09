@@ -217,12 +217,7 @@ try:
                 # sigma d er afstandsfejlen for kameraret + en lille størrelse 
                 
 
-        
-            ### sofie ###
-
-            landmark = landmarks_lst[0]
-            d_M = landmarks_lst.distance # den målte distance til det nærmeste landmark
-
+    
             def distance_for_particle(particle_i, landmark):
                 d_i = _utils.dist(particle_i, landmark)
                 return d_i
@@ -236,16 +231,6 @@ try:
                 nævner2 = 2 * sigma_d**2
 
                 return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
-
-            def distance_distribution(d_M, sigma_d, particles, landmark):
-                dist_weights = []
-                for i in range(len(particles)):
-                    d_i = distance_for_particle(particle[i], landmark)
-                    dist_weights.append(distance_weights(d_M, d_i))
-                                              
-                return dist_weights
-            
-            
             
             # Compute particle weights
             # XXX: You do this
@@ -254,7 +239,8 @@ try:
 
             # beregn: e_l, e_theta, d_i, \hat{e}_‡heta, p_theta, p_d
             
-            def orientation_distribution(phi_M, sigma_theta, theta_i, lx, ly, x_i, y_i):
+            def orientation_distribution(phi_M, sigma_theta, particle, landmark):
+                theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.y, particle.x, particle.y
                 d_i = np.sqrt((lx-x_i)**2+(ly-y_i)**2) 
                 e_l = np.array(lx-x_i, ly-y_i).T/d_i 
                 e_theta = np.array(np.cos(theta_i), np.sin(theta_i)).T
@@ -264,8 +250,25 @@ try:
                 p = (1/np.sqrt(2*np.pi*sigma_theta**2)) * np.exp(-((phi_M-phi_i)**2)/(2*sigma_theta**2))
                 
                 return p
+            
 
+            def update_weights(d_M, sigma_d, phi_M, sigma_theta, landmark, particles):    
+                for i in range(len(particles)):
+                    d_i = distance_for_particle(particle[i], landmark)
+                    dist_weight_i = distance_weights(d_M, d_i, sigma_d)
+
+                    orientation_weight_i = orientation_distribution(phi_M, sigma_theta, particle[i], landmark)
                 
+                    particle[i].setWeight = dist_weight_i * orientation_weight_i
+                
+            landmark = landmarks_lst[0]
+            d_M = landmark.distance # den målte distance til det nærmeste landmark
+            phi_M = landmark.vinkel
+            sigma_theta = 0.5
+            sigma_d = 0.9
+
+            update_weights(d_M, sigma_d, phi_M, sigma_theta, landmark, particles)
+
 
             # Resampling
             # XXX: You do this
