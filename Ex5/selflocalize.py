@@ -232,19 +232,18 @@ try:
                 Funktionen returnerer sandsynligheden for at obserrvere d_M givet d_i.
                 '''
                 nævner1 = 2 * np.pi * sigma_d**2
-
                 tæller2 = (d_M - d_i)**2
                 nævner2 = 2 * sigma_d**2
 
                 return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
 
             def calculate_distance_distributions(d_M, sigma_d, particles, landmark):
-                disdistributions
+                dist_distributions = []
                 for i in range(len(particles)):
                     d_i = distance_for_particle(particle[i], landmark)
-                    distance_distribution(d_M, d_i)
-
-                return
+                    dist_distributions.append(distance_distribution(d_M, d_i))
+                                              
+                return dist_distributions
             
             
             
