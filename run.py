@@ -8,7 +8,7 @@ with open('commit_number.txt', 'r+') as f:
 
 os.system('git pull')
 os.system('git add .')
-commit_message = 'Ex4 - ' + str(commit_number) + '. commit'
+commit_message = 'Ex5 - ' + str(commit_number) + '. commit'
 os.system('git commit -a -m "' + commit_message + '"')
 os.system('git push')
  
