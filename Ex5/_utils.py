@@ -221,7 +221,7 @@ def drive_and_sense():
 
 def turn_and_watch(direction, img):
     '''
-    Funktionen drejer robotten om egen akse, indtil den har fundet et landmark, OG der er frit.
+    Robotten drejer om egen akse, indtil den har fundet et landmark, OG der er frit.
     Argumenter:
         direction:  enten 'right' eller 'left'
     '''
