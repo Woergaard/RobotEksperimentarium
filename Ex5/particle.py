@@ -1,5 +1,5 @@
 import numpy as np
-import random_numbers as rn
+import Ex5.random_numbers as rn
 
 
 class Particle(object):
@@ -7,6 +7,7 @@ class Particle(object):
     def __init__(self, x=0.0, y=0.0, theta=0.0, weight=0.0):
         self.x = x
         self.y = y
+        self.z = y
         self.theta = np.mod(theta, 2.0*np.pi)
         self.weight = weight
 
@@ -64,8 +65,11 @@ def estimate_pose(particles_list):
      
 def move_particle(particle, delta_x, delta_y, delta_theta):
     """Move the particle by (delta_x, delta_y, delta_theta)"""
-    print("particle.py: move_particle not implemented. You should do this.") 
-
+    particle.setX(particle.getX() + delta_x)
+    particle.setY(particle.getY() + delta_y)
+    particle.setTheta(particle.getTheta() + delta_theta)
+    
+        
 
 def add_uncertainty(particles_list, sigma, sigma_theta):
     """Add some noise to each particle in the list. Sigma and sigma_theta is the noise

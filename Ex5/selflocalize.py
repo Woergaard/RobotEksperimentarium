@@ -1,10 +1,12 @@
 import cv2
-import Ex5.particle as particle
-import Ex5.camera as camera
+import particle
+import camera
 import numpy as np
 import time
 from timeit import default_timer as timer
 import sys
+import _utils
+import math
 
 
 # Flags
@@ -139,7 +141,7 @@ try:
 
     # Initialize the robot (XXX: You do this)
     if onRobot: 
-        pass 
+        arlo = robot.Robot()
 
     # Allocate space for world map
     world = np.zeros((500,500,3), dtype=np.uint8)
@@ -179,6 +181,8 @@ try:
         # Use motor controls to update particles
         # XXX: Make the robot drive
         # XXX: You do this
+        if onRobot: 
+            _utils.drive('forwards', 2)
 
 
         # Fetch next frame
@@ -186,17 +190,91 @@ try:
         
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(colour)
+        landmarks_lst = [] # liste af landmarks
+
         if not isinstance(objectIDs, type(None)):
             # List detected objects
             for i in range(len(objectIDs)):
                 print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
-                # XXX: Do something for each detected object - remember, the same ID may appear several times
+                tvectuple = landmarks[objectIDs[i]]
+                new_landmark = _utils.Landmark(dists[i], angles[i], None, objectIDs[i], None)
+                new_landmark.x = tvectuple[0]
+                new_landmark.z = tvectuple[0]
 
+                landmarks_lst.append(new_landmark)
+            
+            landmarks_lst.sort(key=lambda x: x.distance, reverse=False) # sorterer efter, hvor tætte objekterne er på os
+
+
+                # XXX: Do something for each detected object - remember, the same ID may appear several times
+                
+                # The handout code can also detect different landmarks in an image. To handle, this we suggest that you
+                # consider each landmark as an independent observation in the observation model. What this means is
+                # that the observation model should be extended with a product between the contributions from each
+                # landmark,
+
+                #lx og ly er landmarkets position 
+                # sigma d er afstandsfejlen for kameraret + en lille størrelse 
+                
+
+        
+            ### sofie ###
+
+            landmark = landmarks_lst[0]
+            d_M = landmarks_lst.distance # den målte distance til det nærmeste landmark
+
+            def distance_for_particle(particle_i, landmark):
+                d_i = _utils.dist(particle_i, landmark)
+                return d_i
+        
+            def distance_distribution(d_M, d_i, sigma_d):
+                '''
+                Funktionen returnerer sandsynligheden for at obserrvere d_M givet d_i.
+                '''
+                nævner1 = 2 * np.pi * sigma_d**2
+
+                tæller2 = (d_M - d_i)**2
+                nævner2 = 2 * sigma_d**2
+
+                return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
+
+            def calculate_distance_distributions(d_M, sigma_d, particles, landmark):
+                disdistributions
+                for i in range(len(particles)):
+                    d_i = distance_for_particle(particle[i], landmark)
+                    distance_distribution(d_M, d_i)
+
+                return
+            
+            
+            
             # Compute particle weights
             # XXX: You do this
+            # Beregn ligning (2) og (3) i opgave teksten
+            # kendte variable: lx, ly x(i), y(i), theta(i), d_M, phi_M
+
+            # beregn: e_l, e_theta, d_i, \hat{e}_‡heta, p_theta, p_d
+            
+            def orientation_distribution(phi_M, sigma_theta, theta_i, lx, ly, x_i, y_i):
+                d_i = np.sqrt((lx-x_i)**2+(ly-y_i)**2) 
+                e_l = np.array(lx-x_i, ly-y_i).T/d_i 
+                e_theta = np.array(np.cos(theta_i), np.sin(theta_i)).T
+                hat_e_theta = np.array(-np.sin(theta_i), np.cos(theta_i)).T 
+                phi_i = np.sign(np.dot(e_l,hat_e_theta))*np.arccos(np.dot(e_l, e_theta))
+                
+                p = (1/np.sqrt(2*np.pi*sigma_theta**2)) * np.exp(-((phi_M-phi_i)**2)/(2*sigma_theta**2))
+                
+                return p
+
+                
 
             # Resampling
             # XXX: You do this
+            # Resample (x,y) from eq. (2) and \theta from (3)
+            # Ikke kopiere pointeren til objektet medn kopierer det faktisk objekt (eller lave det som en objekt)
+            
+
+
 
             # Draw detected objects
             cam.draw_aruco_objects(colour)
