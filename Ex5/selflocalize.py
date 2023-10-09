@@ -227,7 +227,7 @@ try:
                 d_i = _utils.dist(particle_i, landmark)
                 return d_i
         
-            def distance_distribution(d_M, d_i, sigma_d):
+            def distance_weights(d_M, d_i, sigma_d):
                 '''
                 Funktionen returnerer sandsynligheden for at obserrvere d_M givet d_i.
                 '''
@@ -237,13 +237,13 @@ try:
 
                 return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
 
-            def calculate_distance_distributions(d_M, sigma_d, particles, landmark):
-                dist_distributions = []
+            def distance_distribution(d_M, sigma_d, particles, landmark):
+                dist_weights = []
                 for i in range(len(particles)):
                     d_i = distance_for_particle(particle[i], landmark)
-                    dist_distributions.append(distance_distribution(d_M, d_i))
+                    dist_weights.append(distance_weights(d_M, d_i))
                                               
-                return dist_distributions
+                return dist_weights
             
             
             
