@@ -11,6 +11,7 @@ from numpy import linalg
 import matplotlib.pyplot as plt
 import math
 
+"""
 try:
     import picamera2
     print("Camera.py: Using picamera2 module")
@@ -20,8 +21,10 @@ except ImportError:
 
 print("OpenCV version = " + cv2.__version__)
 
+
 ### DEFINEREDE PARAMETRE ###
 arlo = robot.Robot()
+"""
 
 rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
