@@ -46,10 +46,10 @@ CBLACK = (0, 0, 0)
 
 # Landmarks.
 # The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
-landmarkIDs = [1, 2]
+landmarkIDs = [1, 4]
 landmarks = {
     1: (0.0, 0.0),  # Coordinates for landmark 1
-    2: (300.0, 0.0)  # Coordinates for landmark 2
+    4: (300.0, 0.0)  # Coordinates for landmark 2
 }
 landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
 
@@ -241,8 +241,7 @@ try:
             
             def orientation_distribution(phi_M, sigma_theta, particle, landmark):
                 theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.z, particle.x, particle.y
-                d_i = np.sqrt((lx-x_i)**2+(ly-y_i)**2) 
-                print(d_i)
+                d_i = np.sqrt((lx-x_i)**2+(ly-y_i)**2)
                 e_l = np.array([lx-x_i, ly-y_i]).T/d_i 
                 e_theta = np.array([np.cos(theta_i), np.sin(theta_i)]).T
                 hat_e_theta = np.array([-np.sin(theta_i), np.cos(theta_i)]).T 
@@ -305,15 +304,12 @@ try:
 
             # Show world
             cv2.imshow(WIN_World, world)
-            
-            print("den er nået hertil")
-    
   
 finally: 
     # Make sure to clean up even if an exception occurred
     
     # Close all windows
-    cv2.destroyAllWindows()
+    #cv2.destroyAllWindows()
 
     # Clean-up capture thread
     cam.terminateCaptureThread()
