@@ -365,12 +365,6 @@ def drive_to_landmarks(landmarks):
     arlo.stop()
     return
     
-
-
-
-### RRT ###
-
-
 ### HJÆLPEFUNKTIONER, RRT ###
 def dist(node1, node2):
     '''
@@ -433,7 +427,7 @@ def landmark_detection(img, arucoDict):
     if ids == []: 
         print("No marker detected")
         return lst
-    else:
+    elif ids is not None:
         for i in range(len(ids)):
             world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
             if np.dot(tvecs[i], np.array([1, 0, 0])) < 0:
@@ -603,7 +597,9 @@ def run_RRT(img, arucoDict, draw, drive_after_plan):
             prevnode = node
         
         print('Arrived at goal!')
-    
+
+
+### KAMERA ###  
 def camera(command, show):
     '''
     Funktionen åbner kameraet og udfører en kommando.
