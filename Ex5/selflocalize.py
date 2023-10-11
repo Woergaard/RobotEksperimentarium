@@ -130,7 +130,7 @@ try:
 
 
     # Initialize particles
-    num_particles = 200
+    num_particles = 1000
     particles = initialize_particles(num_particles)
 
     est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
@@ -277,7 +277,8 @@ try:
             # Ikke kopiere pointeren til objektet medn kopierer det faktisk objekt (eller lave det som en objekt)
             
             '''
-            _utils.sir()
+            gaussian = 
+            _utils.sir(1000, 'gaussian', gaussian)
             '''
 
             # sofies noter
@@ -294,17 +295,18 @@ try:
 
     
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
-        print(est_pose)
 
         if showGUI:
             # Draw map
             draw_world(est_pose, particles, world)
-    
+
             # Show frame
             cv2.imshow(WIN_RF1, colour)
 
             # Show world
             cv2.imshow(WIN_World, world)
+            
+            print("den er nået hertil")
     
   
 finally: 
