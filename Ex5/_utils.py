@@ -657,5 +657,98 @@ def camera(command, show):
                 drive_to_landmarks(landmarks)
                 time.sleep(15)
 
-camera('RRT', False)
 
+### SIR RESAMPLING ###
+
+from scipy.stats import norm
+
+# Define the Gaussian distributions
+gaussians = [(0.3, 2.0, 1.0), (0.4, 5.0, 2.0), (0.3, 9.0, 1.0)]
+
+# Define the pose distribution p(x)
+def p(x):
+    '''
+    Funktionen definerer en posefordeling.
+    Argumenter:
+        img:  billedet fra kameraet
+        arucoDict:   en dictonary af QR koder.
+    '''
+    return sum(w * norm.pdf(x, mu, sigma) for w, mu, sigma in gaussians)
+
+# Define the proposal distribution q(x)
+def q_uniform(x):
+    return np.random.uniform(0, 15, size=int(x))
+
+# Define the new proposal distribution q(x)
+def q_gauss(x, drawSample : bool):
+    if drawSample: 
+        return np.random.normal(5, 4, size=int(x))
+    else: 
+        return norm.pdf(x, 5, 4)
+
+
+# Perform the SIR algorithm
+def sir(k, distibrution):
+    # Compute weights
+    if distibrution == 'uniform':
+        # Generate initial samples
+        samples = q_uniform(k)
+        weights = p(samples) / (1/15)#q_uniform(k) #This is wrong: You should divide by the probability density of the sample. For this uniform distribution it is 1/15.
+    elif distibrution == 'gauss': 
+        # Generate initial samples
+        samples = q_gauss(k, True)
+        weights = p(samples) / q_gauss(samples, False) #This is again wrong: Here you should divide by the probability density of the samples 
+                                                       #evaluated in the density function for the  Gaussian a.k.a Normal distribution.
+    # Normalize weights
+    weights /= sum(weights) 
+
+    # Resample according to weights
+    resamples = np.random.choice(samples, size=k, p=weights)
+
+    return resamples
+
+def perform_SIR():
+    # Perform the SIR algorithm for different values of k
+    for k in [20, 100, 1000]:
+        resamples = sir(k, 'uniform')
+
+        # Calculate histogram
+        counts, bins = np.histogram(resamples, bins=30)
+
+        # Normalize counts by total number of samples
+        fractions = counts / k
+
+        # Plot histogram of fractions
+        plt.bar(bins[:-1], fractions, width=np.diff(bins), alpha=0.5, label=f'k={k}')
+
+    # Plot the pose distribution
+    x = np.linspace(0, 15, 1000)
+    plt.plot(x, p(x), 'r', label='p(x)')
+
+    plt.legend()
+    plt.xlim(0,15)
+    plt.savefig('Ex2/uniform.png')
+    plt.show()
+    plt.close()
+
+    # Perform the SIR algorithm for different values of k
+for k in [20, 100, 1000]:
+    resamples = sir(k, 'gauss')
+    # Calculate histogram
+    counts, bins = np.histogram(resamples, bins=30)
+
+    # Normalize counts by total number of samples
+    fractions = counts / k
+
+    # Plot histogram of fractions
+    plt.bar(bins[:-1], fractions, width=np.diff(bins), alpha=0.5, label=f'k={k}')
+
+    # Plot the pose distribution
+    x = np.linspace(0, 15, 1000)
+    plt.plot(x, p(x), 'r', label='p(x)')
+
+    plt.legend()
+    plt.xlim(0,15)
+    plt.savefig('Ex2/gauss.png')
+    plt.show()
+    plt.close()
