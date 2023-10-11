@@ -277,7 +277,7 @@ try:
             # Ikke kopiere pointeren til objektet medn kopierer det faktisk objekt (eller lave det som en objekt)
             
             '''
-            _utils.
+            _utils.sir()
             '''
 
             # sofies noter
@@ -294,6 +294,7 @@ try:
 
     
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
+        print(est_pose)
 
         if showGUI:
             # Draw map
