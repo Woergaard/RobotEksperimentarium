@@ -7,6 +7,7 @@ from timeit import default_timer as timer
 import sys
 import _utils
 import math
+import random
 
 
 # Flags
@@ -46,9 +47,9 @@ CBLACK = (0, 0, 0)
 
 # Landmarks.
 # The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
-landmarkIDs = [1, 4]
+landmarkIDs = [2, 4]
 landmarks = {
-    1: (0.0, 0.0),  # Coordinates for landmark 1
+    2: (0.0, 0.0),  # Coordinates for landmark 1
     4: (300.0, 0.0)  # Coordinates for landmark 2
 }
 landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
@@ -265,8 +266,8 @@ try:
             landmark = landmarks_lst[0]
             d_M = landmark.distance # den målte distance til det nærmeste landmark
             phi_M = landmark.vinkel
-            sigma_theta = 0.5
-            sigma_d = 0.9
+            sigma_theta = 0.5 
+            sigma_d = 0.3
 
             update_weights(d_M, sigma_d, phi_M, sigma_theta, landmark, particles)
 
@@ -277,20 +278,45 @@ try:
             # Ikke kopiere pointeren til objektet medn kopierer det faktisk objekt (eller lave det som en objekt)
 
             # Asgers forsøg
-#            particle.add_uncertainty(particles, sigma_d, sigma_theta)
+            #num_removed_particles = num_particles * 0.05
+            #particles.sort(key = elm.getWeight())
+            #for i in range(num_removed_particles): 
+            #   particles.pop(i)
+            #   particles.append(particle(rn.randn(0.0, sigma_d), rn.randn(0.0, sigma_d), theta, weight))
+
+            #resampled_particles = particles.copy()
+            #particle.add_uncertainty(resampled_particles, sigma_d, sigma_theta)
+            #particles = resampled_particles
             #
             
+            def normalize_weights(particles):
+                sum_weights = 0
+                for par in particles:
+                    weight =  par.getWeight()
+                    sum_weights += weight
+                    print(sum_weights)
+                for par in particles:
+                    weight =  par.getWeight()
+                    par.setWeight(weight / sum_weights)
+                
+            normalize_weights(particles)
 
-            ### Sofie¨
-#            new_particles = []
-#            for i in range(num_particles):
-#                new_particles.append()
-#            particles = 
-#            gaussian = [(0.3, 2.0, 1.0), (0.4, 5.0, 2.0), (0.3, 9.0, 1.0)]
-
-#            _utils.sir(1000, 'gaussian', gaussian)
-
+            ## Sofie
+            old_particles = []
+            for par in particles:
+                weight =  par.getWeight()
+                print(weight)
+                times = weight * 1000000.0
+                for i in range(int(times)):
+                    old_particles.append(par)
             
+            new_particles = []
+            for i in range(num_particles):
+               drawnSample = random.choice(old_particles)
+               newParticle = particle.Particle(x = drawnSample.x, y = drawnSample.y, theta = drawnSample.theta, weight = drawnSample.weight)
+               new_particles.append(newParticle)
+
+            particles = new_particles            
 
             # sofies noter
             ### tilføj forskellig mængde støj afhængig af, om u fx. robotten drejer, kører ligeud eller holder stille.
