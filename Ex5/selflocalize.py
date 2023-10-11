@@ -12,7 +12,7 @@ import random
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = True # Whether or not we are running on the Arlo robot
+onRobot = False # Whether or not we are running on the Arlo robot
 
 
 def isRunningOnArlo():
@@ -28,12 +28,11 @@ if isRunningOnArlo():
 
 
 try:
-    import robot
+    #import Ex5.src.handout.python.robot as robot
     onRobot = True
 except ImportError:
     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
     onRobot = False
-
 
 # Some color constants in BGR format
 CRED = (0, 0, 255)
@@ -89,7 +88,7 @@ def draw_world(est_pose, particles, world):
         colour = jet(particle.getWeight() / max_weight)
         cv2.circle(world, (x,y), 2, colour, 2)
         b = (int(particle.getX() + 15.0*np.cos(particle.getTheta()))+offsetX, 
-                                     ymax - (int(particle.getY() + 15.0*np.sin(particle.getTheta()))+offsetY))
+        ymax - (int(particle.getY() + 15.0*np.sin(particle.getTheta()))+offsetY))
         cv2.line(world, (x,y), b, colour, 2)
 
     # Draw landmarks
@@ -101,11 +100,9 @@ def draw_world(est_pose, particles, world):
     # Draw estimated robot pose
     a = (int(est_pose.getX())+offsetX, ymax-(int(est_pose.getY())+offsetY))
     b = (int(est_pose.getX() + 15.0*np.cos(est_pose.getTheta()))+offsetX, 
-                                 ymax-(int(est_pose.getY() + 15.0*np.sin(est_pose.getTheta()))+offsetY))
+    ymax-(int(est_pose.getY() + 15.0*np.sin(est_pose.getTheta()))+offsetY))
     cv2.circle(world, a, 5, CMAGENTA, 2)
     cv2.line(world, a, b, CMAGENTA, 2)
-
-
 
 def initialize_particles(num_particles):
     particles = []
@@ -115,7 +112,6 @@ def initialize_particles(num_particles):
         particles.append(p)
 
     return particles
-
 
 # Main program #
 try:
@@ -142,7 +138,8 @@ try:
 
     # Initialize the robot (XXX: You do this)
     if onRobot: 
-        arlo = robot.Robot()
+        #arlo = robot.Robot()
+        print('hej')
 
     # Allocate space for world map
     world = np.zeros((500,500,3), dtype=np.uint8)
@@ -158,7 +155,7 @@ try:
 
     Xlst = []
     iters = 0
-    while True:
+    while True: # ændre hvis vi vil køre flere and iters < 10
         
         # Move the robot according to user input (only for testing)
         action = cv2.waitKey(10)
@@ -182,7 +179,7 @@ try:
         # XXX: Make the robot drive
         # XXX: You do this
         if onRobot: 
-            _utils.drive('forwards', 2)
+            None#_utils.drive('forwards', 2)
 
 
         # Fetch next frame
@@ -191,40 +188,63 @@ try:
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(colour)
         landmarks_lst = [] # liste af landmarks
-
+        
         Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
+        
+        sigma_theta = 0.01
+        sigma_d = 20.0
+        #particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
         if not isinstance(objectIDs, type(None)):
             # List detected objects
             for i in range(len(objectIDs)):
-                print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
-                tvectuple = landmarks[objectIDs[i]]
-                new_landmark = _utils.Landmark(dists[i], angles[i], None, objectIDs[i], (0,0,0))
-                new_landmark.x = tvectuple[0]
-                new_landmark.z = tvectuple[0]
+                if type(objectIDs[i]) == int:
+                    print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
+                    if objectIDs[i] in objectIDs[i+1:]:
+                        same_id_indexes = [index for index, id in enumerate(objectIDs) if id == objectIDs[i]]
+                        index_and_dist = [(dists[index], index) for index in same_id_indexes] 
+                        index_and_dist.sort(key=lambda x: x[0])
+                        closest_id = index_and_dist[0][1]
+                        for index in same_id_indexes:
+                            objectIDs[i] = 'kassen er set før'
+                    else:
+                        closest_id = objectIDs[i]
 
-                landmarks_lst.append(new_landmark)
+                            
+                    
+                    tvectuple = landmarks[closest_id]
+                    new_landmark = _utils.Landmark(dists[i], angles[i], None, closest_id, (0,0,0))
+                    new_landmark.x = tvectuple[0]
+                    new_landmark.z = tvectuple[0]
+
+                    landmarks_lst.append(new_landmark)
             
             landmarks_lst.sort(key=lambda x: x.distance, reverse=False) # sorterer efter, hvor tætte objekterne er på os
 
 
-                # XXX: Do something for each detected object - remember, the same ID may appear several times
-                
-                # The handout code can also detect different landmarks in an image. To handle, this we suggest that you
-                # consider each landmark as an independent observation in the observation model. What this means is
-                # that the observation model should be extended with a product between the contributions from each
-                # landmark,
+            # XXX: Do something for each detected object - remember, the same ID may appear several times
+            
+            # The handout code can also detect different landmarks in an image. To handle, this we suggest that you
+            # consider each landmark as an independent observation in the observation model. What this means is
+            # that the observation model should be extended with a product between the contributions from each
+            # landmark,
 
-                #lx og ly er landmarkets position 
-                # sigma d er afstandsfejlen for kameraret + en lille størrelse 
-                
-                #HER ASGER
-                # Step 1) FØR vi udregner vægtene skal vi tilføje u og noise (altså bevægelsen) 
-            def shake_up_particles(particles_lst, sigma, sigma_theta, step_x, step_y, step_theta):
+            #lx og ly er landmarkets position 
+            # sigma d er afstandsfejlen for kameraret + en lille størrelse 
+            
+            #HER ASGER
+            # Step 1) FØR vi udregner vægtene skal vi tilføje u og noise (altså bevægelsen)
+
+            def shake_up_particles(particles, sigma_d, sigma_theta, step_x, step_y, step_theta):
                 for i in range(len(particles)):
                     particle.move_particle(particles[i], step_x, step_y, step_theta) 
                     
-                particle.add_uncertainty(particles_lst, sigma, sigma_theta)
+                particle.add_uncertainty(particles, sigma_d, sigma_theta)
+
+                return particles
+
+
+            #particles = shake_up_particles(particles, sigma_d, sigma_theta, 0.0, 0.0, 0.0)
 
             # u = ('drive', 10.0)
                 
@@ -264,22 +284,36 @@ try:
             
 
 
-            def update_weights(d_M, sigma_d, phi_M, sigma_theta, landmark, particles):    
+            def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):    
                 for i in range(len(particles)):
+                    landmark = landmarks_lst[0]
+                    d_M = landmark.distance # den målte distance til landmarket
+                    phi_M = landmark.vinkel
                     d_i = distance_for_particle(particles[i], landmark)
                     dist_weight_i = distance_weights(d_M, d_i, sigma_d)
 
                     orientation_weight_i = orientation_distribution(phi_M, sigma_theta, particles[i], landmark)
-                
-                    particles[i].setWeight(dist_weight_i * orientation_weight_i)
-                
-            landmark = landmarks_lst[0]
-            d_M = landmark.distance # den målte distance til det nærmeste landmark
-            phi_M = landmark.vinkel
-            sigma_theta = 0.3
-            sigma_d = 0.02
 
-            update_weights(d_M, sigma_d, phi_M, sigma_theta, landmark, particles)
+                    particles[i].setWeight(np.prod(dist_weight_i * orientation_weight_i))
+
+                    '''
+                    Double landmark:
+                    landmarks_weights = []
+                    for landmark in landmarks_lst:
+                        d_M = landmark.distance # den målte distance til landmarket
+                        phi_M = landmark.vinkel
+                        d_i = distance_for_particle(particles[i], landmark)
+                        dist_weight_i = distance_weights(d_M, d_i, sigma_d)
+
+                        orientation_weight_i = orientation_distribution(phi_M, sigma_theta, particles[i], landmark)
+
+                        landmarks_weights.append(dist_weight_i * orientation_weight_i)
+
+                    particles[i].setWeight(np.prod(landmarks_weights))
+                    '''
+                
+            update_weights(sigma_d, sigma_theta, landmarks_lst, particles)
+                
             
             # Resampling
             # XXX: You do this
@@ -287,7 +321,7 @@ try:
             # Ikke kopiere pointeren til objektet men kopierer det faktisk objekt (eller lave det som en objekt)
             
             
-            ''''
+            '''
                 TODO : 
                 Step 1) FØR vi udregner vægtene skal vi tilføje noise og u (altså bevægelsen)
                 Step 2) Udregn vægte (DONE!)
@@ -295,23 +329,28 @@ try:
                 Step 4) Inddel vægtene på et interval fra 0 til 1, hold styr på grænserne (DONE!)
                 Step 5) Lav en HELT NY MÆNGDE, hvor vi via random.choice trækker 1000 nye partikler (og laver kopier) (DONE!)
                 Step 6) Sæt partikles lig den nye mængde (DONE!)
-
+                Step 7) Lav pathplan via RRT og kør robotten den første edge 
+                Step 8) Gå til step 1) og gentag med u lig første edges længde og vinkel
+                step 9) Støj til når landmark er ude af synsvinkel. 
             '''
             
             def normalize_weights(particles):
-                sum_weights = 0
+                sum_weights = 0.0
                 for par in particles:
                     weight =  par.getWeight()
                     sum_weights += weight
-                    print(sum_weights)
+                
+                weights_after = 0.0
                 for par in particles:
                     weight =  par.getWeight()
                     par.setWeight((weight / sum_weights))
+                    weights_after += weight / sum_weights
                 
             normalize_weights(particles)
 
             def make_intervals(particles):
                 intervals = []
+                lower = 0.0
                 for par in particles:
                     weight =  par.getWeight()
                     upper = lower + weight
@@ -330,13 +369,14 @@ try:
 
             new_particles = []
             for i in range(num_particles):
-                drawnNumber = random.choice(0, 1) #ændress
-                drawnSample = find_interval(drawnNumber, intervals)
+                drawnNumber = random.uniform(0, 1)
+                drawnIndex = find_interval(drawnNumber, intervals)
+                drawnSample = particles[drawnIndex]
                 newParticle = particle.Particle(x = drawnSample.x, y = drawnSample.y, theta = drawnSample.theta, weight = drawnSample.weight)
                 new_particles.append(newParticle)
 
             particles = new_particles            
-            
+            print(len(new_particles))
             
             # sofies noter
             ### tilføj forskellig mængde støj afhængig af, om u fx. robotten drejer, kører ligeud eller holder stille.
@@ -353,6 +393,13 @@ try:
     
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
 
+
+        #def path_planning(img, arucoDict, draw, drive_after_plan): 
+        #    
+        #    _utils.RRT((0.0, 1500.0), 4000.0, 4000.0, 100, landmarks, est_pose, 300.0, 50)
+        #
+        #    _utils.run_RRT(img, arucoDict, draw, drive_after_plan)
+
         if showGUI:
             # Draw map
             draw_world(est_pose, particles, world)
@@ -363,13 +410,13 @@ try:
             # Show world
             cv2.imshow(WIN_World, world)
 
-    iters += 1
+        iters += 1
 
 finally: 
     # Make sure to clean up even if an exception occurred
     
     # Close all windows
-    #cv2.destroyAllWindows()
+    cv2.destroyAllWindows()
 
     # Clean-up capture thread
     cam.terminateCaptureThread()
