@@ -11,7 +11,7 @@ import math
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = True # Whether or not we are running on the Arlo robot
+onRobot = False # Whether or not we are running on the Arlo robot
 
 
 def isRunningOnArlo():
@@ -259,7 +259,7 @@ try:
 
                     orientation_weight_i = orientation_distribution(phi_M, sigma_theta, particle[i], landmark)
                 
-                    particle[i].setWeight = dist_weight_i * orientation_weight_i
+                    particle[i].setWeight(dist_weight_i * orientation_weight_i)
                 
             landmark = landmarks_lst[0]
             d_M = landmark.distance # den målte distance til det nærmeste landmark
@@ -277,6 +277,9 @@ try:
             
 
 
+            # sofies noter
+            ### tilføj forskellig mængde støj afhængig af, om u fx. robotten drejer, kører ligeud eller holder stille.
+            ### 
 
             # Draw detected objects
             cam.draw_aruco_objects(colour)
