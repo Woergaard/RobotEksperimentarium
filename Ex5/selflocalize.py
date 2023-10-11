@@ -282,7 +282,7 @@ try:
             #particles.sort(key = elm.getWeight())
             #for i in range(num_removed_particles): 
             #   particles.pop(i)
-            #   particles.append(particle(rn.randn(0.0, sigma_d), rn.randn(0.0, sigma_d), theta, weight))
+            #   particles.append(particle.Particle(600.0*np.random.ranf() - 100.0, 600.0*np.random.ranf() - 250.0, np.mod(2.0*np.pi*np.random.ranf(), 2.0*np.pi), 1.0/num_particles))
 
             #resampled_particles = particles.copy()
             #particle.add_uncertainty(resampled_particles, sigma_d, sigma_theta)
