@@ -155,7 +155,10 @@ try:
     else:
         cam = camera.Camera(0, 'macbookpro', useCaptureThread = True)
 
+    Xlst = []
+    iters = 0
     while True:
+        
 
         # Move the robot according to user input (only for testing)
         action = cv2.waitKey(10)
@@ -175,9 +178,6 @@ try:
             elif action == ord('d'): # Right
                 angular_velocity -= 0.2
 
-
-
-        
         # Use motor controls to update particles
         # XXX: Make the robot drive
         # XXX: You do this
@@ -274,7 +274,14 @@ try:
             # XXX: You do this
             # Resample (x,y) from eq. (2) and \theta from (3)
             # Ikke kopiere pointeren til objektet medn kopierer det faktisk objekt (eller lave det som en objekt)
+
+            # Asgers forsøg
+            particle.add_uncertainty(particle_lst, sigma_d, sigma_theta)
+            #
             
+
+            ### Sofie¨
+            particle.
             gaussian = [(0.3, 2.0, 1.0), (0.4, 5.0, 2.0), (0.3, 9.0, 1.0)]
 
             _utils.sir(1000, 'gaussian', gaussian)
@@ -305,6 +312,7 @@ try:
 
             # Show world
             cv2.imshow(WIN_World, world)
+    
   
 finally: 
     # Make sure to clean up even if an exception occurred
