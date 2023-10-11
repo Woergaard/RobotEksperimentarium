@@ -242,6 +242,7 @@ try:
             def orientation_distribution(phi_M, sigma_theta, particle, landmark):
                 theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.z, particle.x, particle.y
                 d_i = np.sqrt((lx-x_i)**2+(ly-y_i)**2) 
+                print(d_i)
                 e_l = np.array([lx-x_i, ly-y_i]).T/d_i 
                 e_theta = np.array([np.cos(theta_i), np.sin(theta_i)]).T
                 hat_e_theta = np.array([-np.sin(theta_i), np.cos(theta_i)]).T 
@@ -275,11 +276,14 @@ try:
             # Resample (x,y) from eq. (2) and \theta from (3)
             # Ikke kopiere pointeren til objektet medn kopierer det faktisk objekt (eller lave det som en objekt)
             
-
+            '''
+            _utils.
+            '''
 
             # sofies noter
             ### tilføj forskellig mængde støj afhængig af, om u fx. robotten drejer, kører ligeud eller holder stille.
             ### 
+
 
             # Draw detected objects
             cam.draw_aruco_objects(colour)
