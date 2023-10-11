@@ -254,12 +254,12 @@ try:
 
             def update_weights(d_M, sigma_d, phi_M, sigma_theta, landmark, particles):    
                 for i in range(len(particles)):
-                    d_i = distance_for_particle(particle[i], landmark)
+                    d_i = distance_for_particle(particles[i], landmark)
                     dist_weight_i = distance_weights(d_M, d_i, sigma_d)
 
-                    orientation_weight_i = orientation_distribution(phi_M, sigma_theta, particle[i], landmark)
+                    orientation_weight_i = orientation_distribution(phi_M, sigma_theta, particles[i], landmark)
                 
-                    particle[i].setWeight(dist_weight_i * orientation_weight_i)
+                    particles[i].setWeight(dist_weight_i * orientation_weight_i)
                 
             landmark = landmarks_lst[0]
             d_M = landmark.distance # den målte distance til det nærmeste landmark
