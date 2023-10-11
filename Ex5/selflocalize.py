@@ -266,8 +266,8 @@ try:
             landmark = landmarks_lst[0]
             d_M = landmark.distance # den målte distance til det nærmeste landmark
             phi_M = landmark.vinkel
-            sigma_theta = 0.03
-            sigma_d = 0.02
+            sigma_theta = 0.3
+            sigma_d = 0.2
 
             update_weights(d_M, sigma_d, phi_M, sigma_theta, landmark, particles)
 
