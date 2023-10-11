@@ -240,7 +240,7 @@ try:
             # beregn: e_l, e_theta, d_i, \hat{e}_‡heta, p_theta, p_d
             
             def orientation_distribution(phi_M, sigma_theta, particle, landmark):
-                theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.y, particle.x, particle.y
+                theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.z, particle.x, particle.y
                 d_i = np.sqrt((lx-x_i)**2+(ly-y_i)**2) 
                 e_l = np.array(lx-x_i, ly-y_i).T/d_i 
                 e_theta = np.array(np.cos(theta_i), np.sin(theta_i)).T
