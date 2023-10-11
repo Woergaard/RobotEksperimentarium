@@ -130,7 +130,7 @@ try:
 
 
     # Initialize particles
-    num_particles = 1000
+    num_particles = 20
     particles = initialize_particles(num_particles)
 
     est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
@@ -242,18 +242,12 @@ try:
             def orientation_distribution(phi_M, sigma_theta, particle, landmark):
                 theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.z, particle.x, particle.y
                 d_i = np.sqrt((lx-x_i)**2+(ly-y_i)**2) 
-                print(d_i)
                 e_l = np.array([lx-x_i, ly-y_i]).T/d_i 
-                print(e_l)
                 e_theta = np.array([np.cos(theta_i), np.sin(theta_i)]).T
-                print(e_theta)
                 hat_e_theta = np.array([-np.sin(theta_i), np.cos(theta_i)]).T 
-                print(hat_e_theta)
                 phi_i = np.sign(np.dot(e_l,hat_e_theta))*np.arccos(np.dot(e_l, e_theta))
-                print(phi_i)
-                
+
                 p = (1/np.sqrt(2*np.pi*sigma_theta**2)) * np.exp(-((phi_M-phi_i)**2)/(2*sigma_theta**2))
-                print(p)
                 
                 return p
             
