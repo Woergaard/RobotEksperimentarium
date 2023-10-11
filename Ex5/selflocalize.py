@@ -197,7 +197,7 @@ try:
             for i in range(len(objectIDs)):
                 print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
                 tvectuple = landmarks[objectIDs[i]]
-                new_landmark = _utils.Landmark(dists[i], angles[i], None, objectIDs[i], None)
+                new_landmark = _utils.Landmark(dists[i], angles[i], None, objectIDs[i], (0,0,0))
                 new_landmark.x = tvectuple[0]
                 new_landmark.z = tvectuple[0]
 
