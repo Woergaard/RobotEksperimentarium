@@ -218,10 +218,7 @@ try:
                 #lx og ly er landmarkets position 
                 # sigma d er afstandsfejlen for kameraret + en lille størrelse 
                 
-                #HER ASGER
-            def shake_up_particles():
-                for i in range(len(particles):
-                               add_uncertainty(particles_list, sigma, sigma_theta)
+
     
             def distance_for_particle(particle_i, landmark):
                 d_i = _utils.dist(particle_i, landmark)
@@ -273,24 +270,29 @@ try:
             sigma_d = 0.02
 
             update_weights(d_M, sigma_d, phi_M, sigma_theta, landmark, particles)
-            
+
+            ''''
+                TODO : 
+                Step 1) 
+
+            '''
             # Resampling
             # XXX: You do this
             # Resample (x,y) from eq. (2) and \theta from (3)
-            # Ikke kopiere pointeren til objektet men kopierer det faktisk objekt (eller lave det som en objekt)
-            
-            
-            ''''
-                TODO : 
-                Step 1) FØR vi udregner vægtene skal vi tilføje noise og u (altså bevægelsen)
-                Step 2) Udregn vægte (DONE!)
-                Step 3) Normaliser vægte (DONE!)
-                Step 4) Inddel vægtene på et interval fra 0 til 1, hold styr på grænserne
-                Step 5) Lav en HELT NY MÆNGDE, hvor vi via random.choice trækker 1000 nye partikler (og laver kopier)
-                Step 6) Sæt partikles lig den nye mængde (DONE!)
+            # Ikke kopiere pointeren til objektet medn kopierer det faktisk objekt (eller lave det som en objekt)
 
-            '''
+            # Asgers forsøg
+            num_removed_particles = num_particles * 0.05
+            particles.sort(key = lambda x: x.getWeight())
+            for i in range(int(num_removed_particles)): 
+               particles.pop(i)
+               particles.append(particle.Particle(600.0*np.random.ranf() - 100.0, 600.0*np.random.ranf() - 250.0, np.mod(2.0*np.pi*np.random.ranf(), 2.0*np.pi), 1.0/num_particles))
+
+            resampled_particles = particles.copy()
+            particle.add_uncertainty(resampled_particles, sigma_d, sigma_theta)
+            particles = resampled_particles
             
+            ''
             def normalize_weights(particles):
                 sum_weights = 0
                 for par in particles:
@@ -302,8 +304,8 @@ try:
                     par.setWeight((weight / sum_weights))
                 
             normalize_weights(particles)
-            
-            ### skal gøres med interval
+
+            ## Sofie
             old_particles = []
             for par in particles:
                 weight =  par.getWeight()
@@ -313,20 +315,17 @@ try:
                 for i in range(int(times)):
                     old_particles.append(par)
             
-            ### ny mængde
             new_particles = []
             for i in range(num_particles):
-                drawnNumber = random.choice(0, 1) #ændress
-                
-                drawnSample = 
+                drawnSample = random.choice(old_particles)
                 newParticle = particle.Particle(x = drawnSample.x, y = drawnSample.y, theta = drawnSample.theta, weight = drawnSample.weight)
                 new_particles.append(newParticle)
 
-                #addnew_particles = particle.Particle(600.0*np.random.ranf() - 100.0, 600.0*np.random.ranf() - 250.0, np.mod(2.0*np.pi*np.random.ranf(), 2.0*np.pi), 1.0/num_particles)
-                #new_particles.append(addnew_particles)
+                addnew_particles = particle.Particle(600.0*np.random.ranf() - 100.0, 600.0*np.random.ranf() - 250.0, np.mod(2.0*np.pi*np.random.ranf(), 2.0*np.pi), 1.0/num_particles)
+                new_particles.append(addnew_particles)
 
             particles = new_particles            
-            
+'''
             
             # sofies noter
             ### tilføj forskellig mængde støj afhængig af, om u fx. robotten drejer, kører ligeud eller holder stille.
@@ -364,3 +363,4 @@ finally:
     # Clean-up capture thread
     cam.terminateCaptureThread()
 
+'''
