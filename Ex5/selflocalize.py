@@ -11,7 +11,7 @@ import math
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = True # Whether or not we are running on the Arlo robot
+onRobot = False # Whether or not we are running on the Arlo robot
 
 
 def isRunningOnArlo():
@@ -275,14 +275,15 @@ try:
             # Resample (x,y) from eq. (2) and \theta from (3)
             # Ikke kopiere pointeren til objektet medn kopierer det faktisk objekt (eller lave det som en objekt)
             
-            '''
-            gaussian = 
+            gaussian = [(0.3, 2.0, 1.0), (0.4, 5.0, 2.0), (0.3, 9.0, 1.0)]
+
             _utils.sir(1000, 'gaussian', gaussian)
-            '''
+
+            
 
             # sofies noter
             ### tilføj forskellig mængde støj afhængig af, om u fx. robotten drejer, kører ligeud eller holder stille.
-            ### 
+            ### tilføj 2 vases: 1. den ser to sider af det samme landmark. 2. den ser mere end ét landmarks.
 
 
             # Draw detected objects
