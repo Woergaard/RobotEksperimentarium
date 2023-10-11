@@ -159,7 +159,6 @@ try:
     iters = 0
     while True:
         
-
         # Move the robot according to user input (only for testing)
         action = cv2.waitKey(10)
         if action == ord('q'): # Quit
@@ -191,6 +190,8 @@ try:
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(colour)
         landmarks_lst = [] # liste af landmarks
+
+        Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
 
         if not isinstance(objectIDs, type(None)):
             # List detected objects
@@ -276,15 +277,18 @@ try:
             # Ikke kopiere pointeren til objektet medn kopierer det faktisk objekt (eller lave det som en objekt)
 
             # Asgers forsøg
-            particle.add_uncertainty(particle_lst, sigma_d, sigma_theta)
+#            particle.add_uncertainty(particles, sigma_d, sigma_theta)
             #
             
 
             ### Sofie¨
-            particle.
-            gaussian = [(0.3, 2.0, 1.0), (0.4, 5.0, 2.0), (0.3, 9.0, 1.0)]
+#            new_particles = []
+#            for i in range(num_particles):
+#                new_particles.append()
+#            particles = 
+#            gaussian = [(0.3, 2.0, 1.0), (0.4, 5.0, 2.0), (0.3, 9.0, 1.0)]
 
-            _utils.sir(1000, 'gaussian', gaussian)
+#            _utils.sir(1000, 'gaussian', gaussian)
 
             
 
@@ -312,7 +316,8 @@ try:
 
             # Show world
             cv2.imshow(WIN_World, world)
-    
+
+    iters += 1
   
 finally: 
     # Make sure to clean up even if an exception occurred
