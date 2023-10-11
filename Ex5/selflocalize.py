@@ -297,7 +297,7 @@ try:
                     print(sum_weights)
                 for par in particles:
                     weight =  par.getWeight()
-                    par.setWeight(weight / sum_weights)
+                    par.setWeight(weight / sum_weights + 0.5)
                 
             normalize_weights(particles)
 
