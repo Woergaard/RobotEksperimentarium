@@ -1,6 +1,6 @@
 ### IMPORTERING ###
 from time import sleep
-#import robot
+import robot
 import time
 import random
 import cv2 # OpenCV library
@@ -10,8 +10,11 @@ import numpy as np
 from numpy import linalg
 import matplotlib.pyplot as plt
 import math
+import particle
+from timeit import default_timer as timer
+import random
 
-"""
+'''
 try:
     import picamera2
     print("Camera.py: Using picamera2 module")
@@ -24,7 +27,7 @@ print("OpenCV version = " + cv2.__version__)
 
 ### DEFINEREDE PARAMETRE ###
 arlo = robot.Robot()
-"""
+'''
 
 rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
@@ -293,12 +296,12 @@ class Map:
         for node in path:
             plt.plot(node.x, node.z, 'mo')
 
-    def show_map(self):
+    def show_map(self, arlo_position):
         '''
         Funktionen viser kortet.
         '''
-        plt.plot(0,0, 'bo')
-        plt.annotate('ArloCinque', xy=(0, 0))
+        plt.plot(arlo_position[0],arlo_position[1], 'bo')
+        plt.annotate('ArloCinque', xy=arlo_position)
         
         plt.ylim(0, self.zlim)
         plt.xlim(-self.xlim, self.xlim)
@@ -423,6 +426,7 @@ def landmark_detection(img, arucoDict):
     
     # Giver distancen til boxen
     _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
+    
     
     lst = []
     
@@ -587,7 +591,7 @@ def run_RRT(img, arucoDict, draw, drive_after_plan):
         print("PATH: ", path)
 
         ourMap.draw_path(path)
-        ourMap.show_map()
+        ourMap.show_map((0,0))
 
     if drive_after_plan:
         prevnode = Node(0, 0, None)
@@ -659,13 +663,15 @@ def camera(command, show):
                 landmarks = landmark_detection(image, arucoDict)
                 drive_to_landmarks(landmarks)
                 time.sleep(15)
+        
+        elif command == 'turn_and_watch':
+            turn_and_watch('right', image)
 
 
 ### SIR RESAMPLING ###
 
 import numpy as np
 from scipy.stats import norm
-
 
 def p(x, gaussians):
     '''
@@ -718,3 +724,197 @@ def sir(k, distibrution, gaussian):
     resamples = np.random.choice(samples, size=k, p=weights)
 
     return resamples
+
+
+### EGET KODE TIL SELF-LOCALIZE ###
+def distance_for_particle(particle_i, landmark):
+    d_i = dist(particle_i, landmark)
+    return d_i
+
+def distance_weights(d_M, d_i, sigma_d):
+    '''
+    Funktionen returnerer sandsynligheden for at obserrvere d_M givet d_i.
+    '''
+    nævner1 = 2 * np.pi * sigma_d**2
+    tæller2 = (d_M - d_i)**2
+    nævner2 = 2 * sigma_d**2
+
+    return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
+
+def orientation_distribution(phi_M, sigma_theta, particle, landmark):
+    theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.z, particle.x, particle.y
+    d_i = np.sqrt((lx-x_i)**2+(ly-y_i)**2)
+    e_l = np.array([lx-x_i, ly-y_i]).T/d_i 
+    e_theta = np.array([np.cos(theta_i), np.sin(theta_i)]).T
+    hat_e_theta = np.array([-np.sin(theta_i), np.cos(theta_i)]).T 
+    phi_i = np.sign(np.dot(e_l,hat_e_theta))*np.arccos(np.dot(e_l, e_theta))
+
+    p = (1/np.sqrt(2*np.pi*sigma_theta**2)) * np.exp(-((phi_M-phi_i)**2)/(2*sigma_theta**2))
+
+    return p
+
+def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):     
+    for i in range(len(particles)):
+        landmark_weight = 1.0
+        landmark_weight_j = 0.0
+        for j in range(len(landmarks_lst)):
+            landmark = landmarks_lst[j]
+            d_M = landmark.distance # den målte distance til landmarket
+            phi_M = landmark.vinkel
+            d_j = distance_for_particle(particles[i], landmark)
+            dist_weight_j = distance_weights(d_M, d_j, sigma_d)
+
+            orientation_weight_j = orientation_distribution(phi_M, sigma_theta, particles[i], landmark)
+
+            landmark_weight_j = landmark_weight * dist_weight_j * orientation_weight_j
+
+        particles[i].setWeight(landmark_weight_j)
+
+def make_intervals(particles):
+    intervals = []
+    lower = 0.0
+    for par in particles:
+        weight =  par.getWeight()
+        upper = lower + weight
+        intervals.append((lower, upper))
+        lower = upper
+
+    return intervals
+
+def normalize_weights(particles):
+    sum_weights = 0.0
+    for par in particles:
+        weight =  par.getWeight()
+        sum_weights += weight
+    
+    weights_after = 0.0
+    for par in particles:
+        weight =  par.getWeight()
+        par.setWeight((weight / sum_weights))
+        weights_after += weight / sum_weights
+
+def find_interval(værdi, intervals):
+    for i in range(0, len(intervals)):
+        if intervals[i][0] <= værdi < intervals[i][1]:
+            return i
+    return -1
+
+def generate_new_particles(num_particles, particles, intervals):
+    new_particles = []
+    for i in range(num_particles):
+        drawnNumber = random.uniform(0, 1)
+        drawnIndex = find_interval(drawnNumber, intervals)
+        drawnSample = particles[drawnIndex]
+        newParticle = particle.Particle(x = drawnSample.x, y = drawnSample.y, theta = drawnSample.theta, weight = drawnSample.weight)
+        new_particles.append(newParticle)
+    
+    return new_particles
+
+def make_list_of_landmarks(objectIDs, dists, angles, landmarks):
+    landmarks_lst = [] # liste af landmarks
+    # List detected objects
+    for i in range(len(objectIDs)):
+        if type(objectIDs[i]) == np.int32:
+            print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
+            if objectIDs[i] in objectIDs[i+1:]:
+                same_id_indexes = [index for index, id in enumerate(objectIDs) if id == objectIDs[i]]
+                index_and_dist = [(dists[index], index) for index in same_id_indexes] 
+                index_and_dist.sort(key=lambda x: x[0])
+                closest_index = index_and_dist[0][1]
+                for index in same_id_indexes:
+                    objectIDs[i] = 404
+                    
+            else: 
+                closest_index = i
+
+            if objectIDs[i] != 404:
+                print('ID:')
+                print(closest_index)
+                tvectuple = landmarks[objectIDs[closest_index]]
+                new_landmark = Landmark(dists[closest_index], angles[closest_index], None, objectIDs[closest_index], (0,0,0))
+                new_landmark.x = tvectuple[0]
+                new_landmark.z = tvectuple[0]
+
+                landmarks_lst.append(new_landmark)
+    
+
+    landmarks_lst.sort(key=lambda x: x.distance, reverse=False) # sorterer efter, hvor tætte objekterne er på os
+
+    return landmarks_lst
+
+
+
+### UDLEVERET KODE TIL SELF-LOCALIZE ###
+
+def bgr_colors():
+    # Some color constants in BGR format
+    CRED = (0, 0, 255)
+    CGREEN = (0, 255, 0)
+    CBLUE = (255, 0, 0)
+    CCYAN = (255, 255, 0)
+    CYELLOW = (0, 255, 255)
+    CMAGENTA = (255, 0, 255)
+    CWHITE = (255, 255, 255)
+    CBLACK = (0, 0, 0)
+    return CRED, CGREEN, CBLUE, CCYAN, CYELLOW, CMAGENTA, CWHITE, CBLACK
+
+CRED, CGREEN, CBLUE, CCYAN, CYELLOW, CMAGENTA, CWHITE, CBLACK = bgr_colors()
+
+def jet(x):
+    """Colour map for drawing particles. This function determines the colour of 
+    a particle from its weight."""
+    r = (x >= 3.0/8.0 and x < 5.0/8.0) * (4.0 * x - 3.0/2.0) + (x >= 5.0/8.0 and x < 7.0/8.0) + (x >= 7.0/8.0) * (-4.0 * x + 9.0/2.0)
+    g = (x >= 1.0/8.0 and x < 3.0/8.0) * (4.0 * x - 1.0/2.0) + (x >= 3.0/8.0 and x < 5.0/8.0) + (x >= 5.0/8.0 and x < 7.0/8.0) * (-4.0 * x + 7.0/2.0)
+    b = (x < 1.0/8.0) * (4.0 * x + 1.0/2.0) + (x >= 1.0/8.0 and x < 3.0/8.0) + (x >= 3.0/8.0 and x < 5.0/8.0) * (-4.0 * x + 5.0/2.0)
+
+    return (255.0*r, 255.0*g, 255.0*b)
+
+def draw_world(est_pose, particles, world, landmarks, landmarkIDs, landmark_colors):
+    """Visualization.
+    This functions draws robots position in the world coordinate system."""
+
+    # Fix the origin of the coordinate system
+    offsetX = 100
+    offsetY = 250
+
+    # Constant needed for transforming from world coordinates to screen coordinates (flip the y-axis)
+    ymax = world.shape[0]
+
+    world[:] = CWHITE # Clear background to white
+
+    # Find largest weight
+    max_weight = 0
+    for particle in particles:
+        max_weight = max(max_weight, particle.getWeight())
+
+    # Draw particles
+    for particle in particles:
+        x = int(particle.getX() + offsetX)
+        y = ymax - (int(particle.getY() + offsetY))
+        colour = jet(particle.getWeight() / max_weight)
+        cv2.circle(world, (x,y), 2, colour, 2)
+        b = (int(particle.getX() + 15.0*np.cos(particle.getTheta()))+offsetX, 
+        ymax - (int(particle.getY() + 15.0*np.sin(particle.getTheta()))+offsetY))
+        cv2.line(world, (x,y), b, colour, 2)
+
+    # Draw landmarks
+    for i in range(len(landmarkIDs)):
+        ID = landmarkIDs[i]
+        lm = (int(landmarks[ID][0] + offsetX), int(ymax - (landmarks[ID][1] + offsetY)))
+        cv2.circle(world, lm, 5, landmark_colors[i], 2)
+
+    # Draw estimated robot pose
+    a = (int(est_pose.getX())+offsetX, ymax-(int(est_pose.getY())+offsetY))
+    b = (int(est_pose.getX() + 15.0*np.cos(est_pose.getTheta()))+offsetX, 
+    ymax-(int(est_pose.getY() + 15.0*np.sin(est_pose.getTheta()))+offsetY))
+    cv2.circle(world, a, 5, CMAGENTA, 2)
+    cv2.line(world, a, b, CMAGENTA, 2)
+
+def initialize_particles(num_particles):
+    particles = []
+    for i in range(num_particles):
+        # Random starting points. 
+        p = particle.Particle(600.0*np.random.ranf() - 100.0, 600.0*np.random.ranf() - 250.0, np.mod(2.0*np.pi*np.random.ranf(), 2.0*np.pi), 1.0/num_particles)
+        particles.append(p)
+
+    return particles
