@@ -44,6 +44,7 @@ leftWheelFactor = 1.06225
 standardSpeed = 50.0
 
 def selflocalize(cam, showGUI, maxiters):
+    return (0,0,0)
     '''
     try:
         # Initialize particles
