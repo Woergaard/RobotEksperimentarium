@@ -448,8 +448,8 @@ landmark_colors = [CRED, CGREEN,  CCYAN, CYELLOW] # Colors used when drawing the
 
 landmarkIDs = [1, 2]
 landmarks = {
-    1: (150.0, 200.0),
-    2: (0.0, 200.0)
+    1: (1500.0, 2000.0),
+    2: (0.0, 2000.0)
 }
 landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
 
