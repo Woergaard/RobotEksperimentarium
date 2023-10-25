@@ -412,7 +412,7 @@ def camera(command, params, show):
 
 
 CRED, CGREEN, CBLUE, CCYAN, CYELLOW, CMAGENTA, CWHITE, CBLACK = _utils.bgr_colors()
-
+'''
 landmarkIDs = [1, 2, 3, 4, 1]
 landmarks = {
     1: (0.0, 0.0),
@@ -421,6 +421,15 @@ landmarks = {
     4: (400.0, 300.0),
 }
 landmark_colors = [CRED, CGREEN,  CCYAN, CYELLOW] # Colors used when drawing the landmarks
+'''
+
+landmarkIDs = [1, 2]
+landmarks = {
+    1: (150.0, 200.0),
+    2: (0.0, 200.0)
+}
+landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
+
 
 num_steps = 3
 
@@ -456,5 +465,5 @@ def robo_rally(landmarkIDs):
     arlo.stop()
     print('Rute færdiggjort!')
 
-robo_rally()
+robo_rally(landmarkIDs)
             
