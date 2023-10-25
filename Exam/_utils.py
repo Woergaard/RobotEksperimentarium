@@ -295,10 +295,10 @@ class Map:
         '''
         i = 0
         for node in path:
-            print(i)
-            print(node.x)
-            print(node.z)
-            print(node.parent)
+            #print(i)
+            #print(node.x)
+           # print(node.z)
+           # print(node.parent)
             plt.plot(node.x, node.z, 'mo')
             i += 1
 
