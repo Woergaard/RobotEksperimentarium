@@ -391,7 +391,7 @@ def camera(command, params, show):
         cv2.namedWindow(WIN_RF)
         cv2.moveWindow(WIN_RF, 100, 100)
     
-    while cv2._utils.waitKey(4) == -1: # _utils.wait for a key pressed event
+    while cv2.waitKey(4) == -1: # _utils.wait for a key pressed event
         image = cam.capture_array("main")
         
         # Show frames
