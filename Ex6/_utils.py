@@ -14,7 +14,7 @@ import particle
 from timeit import default_timer as timer
 import random
 
-'''
+
 try:
     import picamera2
     print("Camera.py: Using picamera2 module")
@@ -27,7 +27,7 @@ print("OpenCV version = " + cv2.__version__)
 
 ### DEFINEREDE PARAMETRE ###
 arlo = robot.Robot()
-'''
+
 
 rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
