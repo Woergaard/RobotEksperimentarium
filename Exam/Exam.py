@@ -176,6 +176,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias
     '''
     G = _utils.Graf([rootNode], [])
     iters = 0
+    print('hej4')
     while iters < maxiter:
         iters += 1
         random_number = random.randint(0, 100)
@@ -189,7 +190,8 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias
         nearest_node = _utils.find_nearest_node(steering_node, G)
         new_node = _utils.steer(nearest_node, steering_node, stepLength)
         halfway_node = _utils.steer(nearest_node, steering_node, stepLength/2)
-        
+
+        print(iters) 
         if _utils.is_spot_free(new_node, landmarks, box_radius) and _utils.is_spot_free(halfway_node, landmarks, box_radius):
             #print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
