@@ -127,7 +127,7 @@ def turn_and_watch(direction, img, landmarkIDs):
 
     # If at least one marker is detected
     if len(aruco_corners) > 0 and landmark_spotted:
-        for i in range(ids):
+        for i in range(len(ids)):
             corner = aruco_corners[i]
             # The corners are ordered as top-left, top-right, bottom-right, bottom-left
             top_left = corner[0][0]
