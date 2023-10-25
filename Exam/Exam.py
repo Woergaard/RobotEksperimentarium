@@ -231,6 +231,9 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
 
     G, new_node = RRT(goal, localMap.xlim, localMap.zlim, maxiter, seen_landmarks, rootNode, stepLength, bias)
 
+    print('G - noder:')
+    print(G.nodes)
+    
     if draw:
         localMap.draw_tree(G)
         localMap.draw_landmarks(seen_landmarks)
