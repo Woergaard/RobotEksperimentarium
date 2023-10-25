@@ -391,7 +391,6 @@ def use_camera(command, params, show):
     imageSize = (1280, 720)
     FPS = 60
     cam = picamera2.Picamera2()
-    print('hej1')
     frame_duration_limit = int(1/FPS * 1000000) # Microseconds
     # Change configuration to set resolution, framerate
     picam2_config = cam.create_video_configuration({"size": imageSize, "format": 'RGB888'}, controls={"FrameDurationLimits": (frame_duration_limit, frame_duration_limit)}, queue=False)
@@ -476,6 +475,8 @@ def robo_rally(landmarkIDs):
                     found = use_camera('turn_and_watch', [landmarkIDs], True)
                     if found:
                         lost = False
+                    else:
+                        print('hej3')
                     iters += 1
                 else:
                     print('Påbegynder frikørsel for at få øje på et landmark')
