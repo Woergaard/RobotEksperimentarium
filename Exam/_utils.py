@@ -293,8 +293,14 @@ class Map:
         '''
         Funktionen plotter Arlos sti gennem et RRT.
         '''
+        i = 0
         for node in path:
+            print(i)
+            print(node.x)
+            print(node.z)
+            print(node.parent)
             plt.plot(node.x, node.z, 'mo')
+            i += 1
 
     def show_map(self, arlo_position):
         '''
@@ -443,7 +449,7 @@ def landmark_detection(img, arucoDict):
                 direction = 'right'
 
             lst.append(Landmark(linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i][0]))
-            print('dist: ' + str(linalg.norm(tvecs[i])) + ', vinkel: ' + str(world_angle) + direction + ', id: ' + str(ids[i][0]) + ', tvec: ' + str(tvecs[i][0]))
+            #print('dist: ' + str(linalg.norm(tvecs[i])) + ', vinkel: ' + str(world_angle) + direction + ', id: ' + str(ids[i][0]) + ', tvec: ' + str(tvecs[i][0]))
         
         lst.sort(key=lambda x: x.distance, reverse=False) # sorterer listen, så det nærmeste landmark er først.
 
