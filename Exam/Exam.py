@@ -294,7 +294,7 @@ def drive_carefully(direction, meters):
         arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 0)
 
     driveSeconds = _utils.metersToSeconds(meters)
-    _utils.wait_and_sense(driveSeconds)
+    wait_and_sense(driveSeconds)
 
 def drive_one_move():
     pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
