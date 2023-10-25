@@ -77,12 +77,6 @@ def selflocalize(cam, showGUI, maxiters):
         
             est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
 
-            #def path_planning(img, arucoDict, draw, drive_after_plan): 
-            #    
-            #    _utils.RRT((0.0, 1500.0), 4000.0, 4000.0, 100, landmarks, est_pose, 300.0, 50)
-            #
-            #    _utils.run_RRT(img, arucoDict, draw, drive_after_plan)
-
             if showGUI:
                 # Draw map
                 _utils.draw_world(est_pose, particles, world, landmarks, landmarkIDs, landmark_colors)
@@ -379,12 +373,10 @@ def use_camera(command, params, show):
     imageSize = (1280, 720)
     FPS = 60
     cam = picamera2.Picamera2()
-    frame_duration_limit = int(1/FPS * 1000000) # Microseconds
+    #frame_duration_limit = int(1/FPS * 1000000) # Microseconds
     # Change configuration to set resolution, framerate
-    picam2_config = cam.create_video_configuration({"size": imageSize, "format": 'RGB888'},
-                                                                controls={"FrameDurationLimits": (frame_duration_limit, frame_duration_limit)},
-                                                                queue=False)
-    cam.configure(picam2_config) # Not really necessary
+    #picam2_config = cam.create_video_configuration({"size": imageSize, "format": 'RGB888'}, controls={"FrameDurationLimits": (frame_duration_limit, frame_duration_limit)}, queue=False)
+    #cam.configure(picam2_config) # Not really necessary
     cam.start(show_preview=False)
 
     print(cam.camera_configuration()) # Print the camera configuration in use
