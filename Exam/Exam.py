@@ -231,7 +231,7 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
 
     rootNode = _utils.Node(arlo_position[0], arlo_position[1], None) # Arlos position
     maxiter = 1500
-    bias = 50
+    bias = 20
 
     localMap = _utils.Map(3000.0, 4500.0)
 
