@@ -1,0 +1,43 @@
+PLAN FOR EKSAMENS PROJEKTET: 
+
+
+ONSDAG DEN 25. OKTOBER:
+    * selflocalize
+        * Håndtere to kasser (DONE) 
+        * tjek om, weights er ikke helt rigtige 
+        * Ruteplan - til at kører mellem to kasser
+        * Få Arlo til at køre denne plan
+    * Ex6 
+        * rå skitse til reel kode færdig
+        * Begynd på at implementere noget af den rå skitse
+
+MANDAG DEN 30. OKTOBER:
+
+
+ONSDAG DEN 1. NOVEMBER:
+
+
+
+
+STRATEGI FOR EKSAMENS PROJEKTET: 
+
+FOR ID IN ROUTEID:
+
+    WHILE NOT LANDMARKFOUND:
+
+        HVIS LOST:
+            TURN AND WATCH
+            SELFLOCALIZE
+
+        LAV RRT PLAN
+
+        FOR I IN RANGE STEP_LÆNGDE:
+            DRIVE AND SENSE # 1. den drejer en vinkel 2. den kører en distance IMENS HOLDER DEN ØJE MED SINE SONARER
+            SELFLOCALIZE
+
+            LANDMARKFOUND = CHECK IF LANDMARK IS FOUND BASED ON DISTANCE (ID)
+
+        WHEN LANDMARK IS LOST OUT OF SIGHT BUT WE THINK WE ARE CLOSE:
+            APPROACH AND SENSE - kør tæt på, mens den sørger for, at den ikke kører ind ind i.
+
+    IF LANDMARKFOUND CONTINUE

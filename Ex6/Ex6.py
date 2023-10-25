@@ -7,36 +7,26 @@ import sys
 import _utils
 import robot
 import particle
+from time import sleep
+import random
 
+
+try:
+    import picamera2
+    print("Camera.py: Using picamera2 module")
+except ImportError:
+    print("Camera.py: picamera2 module not available")
+    exit(-1)
+
+print("OpenCV version = " + cv2.__version__)
+
+
+### DEFINEREDE PARAMETRE ###
 arlo = robot.Robot()
 
-def drive(sensorer):
-'''
-    Tjekker om den kan fortsætte denne på gældende vej
-        - ping sensorerne om den er i god nok distance fra obstacles eller landmarks
-'''
-    
-def drive_carefull(): 
-'''
-    Tjekker om den har ramt et obstacle eller ej.
-        - Hvis ja, skal den ping sensorer og finde hvilken vej er den bedste mulige vej
-        - Hvis nej, skal den fortsætte som den gjorde
-'''
-
-
-
-           
-        
-
-
-## hav noget med et kort, hvor tingene kan tegnes ind
-
-
-
-### SOFIE ###
-
-
-
+rightWheelFactor = 1.0
+leftWheelFactor = 1.06225
+standardSpeed = 50.0
 
 def selflocalize(cam, showGUI, maxiters):
     try:
@@ -110,7 +100,6 @@ def selflocalize(cam, showGUI, maxiters):
 
         return est_pose, landmarks_lst
 
-
 def turn_and_watch(direction, img):
     '''
     Robotten drejer om egen akse, indtil den har fundet et landmark, OG der er frit.
@@ -129,6 +118,7 @@ def turn_and_watch(direction, img):
     
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
     aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict)
+
     # If at least one marker is detected
     if len(aruco_corners) > 0:
         for corner in aruco_corners:
@@ -144,15 +134,13 @@ def turn_and_watch(direction, img):
         return True
     else: 
         arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
-        turnSeconds = degreeToSeconds(20)
-        wait(turnSeconds)
+        turnSeconds = _utils.degreeToSeconds(20)
+        _utils.wait(turnSeconds)
         arlo.stop()
-        wait(2.0)
+        _utils.wait(2.0)
 
         return False
     
-
-
 def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias):
     '''
     Funktionen returnerer et RRT med Arlo som rod.
@@ -166,30 +154,30 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias
         stepLength:   distancen mellem den returnerede node og nearest_node
         bias:   en værdi mellem 0 og 100, der jo højere den er, angiver, at vi vurderer, at banen er meget simpel.
     '''
-    G = Graf([rootNode], [])
+    G = _utils.Graf([rootNode], [])
     iters = 0
     while iters < maxiter:
         iters += 1
         random_number = random.randint(0, 100)
         if random_number < bias:
-            steering_node = Node(goal.x, goal.z, None)
+            steering_node = _utils.Node(goal.x, goal.z, None)
         else:
-            steering_node = Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
+            steering_node = _utils.Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
         
         box_radius = 400.0
 
-        nearest_node = find_nearest_node(steering_node, G)
-        new_node = steer(nearest_node, steering_node, stepLength)
-        halfway_node = steer(nearest_node, steering_node, stepLength/2)
+        nearest_node = _utils.find_nearest_node(steering_node, G)
+        new_node = _utils.steer(nearest_node, steering_node, stepLength)
+        halfway_node = _utils.steer(nearest_node, steering_node, stepLength/2)
         
-        if is_spot_free(new_node, landmarks, box_radius) and is_spot_free(halfway_node, landmarks, box_radius):
+        if _utils.is_spot_free(new_node, landmarks, box_radius) and _utils.is_spot_free(halfway_node, landmarks, box_radius):
             #print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
             G.edges.append((nearest_node, new_node))
 
             goal_radius = 200.0
-            if not is_spot_free(new_node, [goal], goal_radius):
-                goalNode = Node(goal.x, goal.z, new_node)
+            if not _utils.is_spot_free(new_node, [goal], goal_radius):
+                goalNode = _utils.Node(goal.x, goal.z, new_node)
                 G.nodes.append(goalNode)
                 G.edges.append((new_node, goal))
                 return G, new_node
@@ -198,7 +186,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias
     
     return G, new_node
 
-def make_RRT_path(img, arucoDict, draw, arlo_position, goal):
+def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
     '''
     Funktionen danner et RRT og kører efter det.
     Argumenter:
@@ -207,13 +195,15 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal):
         draw: bool, der angiver, om funktionen skal tegne et kort
         goal: et Landmark, der er vores midlertidige mål
     '''
-    
+
     seen_landmarks = _utils.landmark_detection(img, arucoDict)
     for seen_landmark in seen_landmarks:
         print('Landmarks, der kan ses: ', seen_landmark.id)
 
-    rootNode = _utils.Node(arlo_position[0], arlo_position[1], None) # Arlos position
-    stepLength = 300.0 # milimeter
+    for landmark in rally_landmarks:
+        seen_landmarks.append(landmark)
+
+    rootNode = _utils._utils.Node(arlo_position[0], arlo_position[1], None) # Arlos position
     maxiter = 1500
     bias = 50
 
@@ -223,7 +213,7 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal):
 
     if draw:
         localMap.draw_tree(G)
-        localMap.draw_landmarks(landmarks)
+        localMap.draw_landmarks(seen_landmarks)
         localMap.draw_goal(goal)
 
         path = []
@@ -249,20 +239,126 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal):
     
     return path
 
+def wait_and_sense(seconds):
+    '''
+    Funktionen venter i den tid, som robotten skal udføre en bestemt action.
+    Samme tanke som Sleep, men kan måske sørge for den kan holde sig opdateret på sine omgivelser.
+    Argumenter:
+        start:    starttidspunkts
+        seconds:  sekunder, der skal ventes
+    '''
+    start = time.perf_counter()
+    isDriving = True
+    pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
 
-def drive_path_and_sense(path, stepLength):
-        prevnode = _utils.Node(0, 0, None)
-        for node in path:
-            direction, degrees = _utils.find_turn_angle(prevnode, node)
-            print(direction, degrees) 
-            _utils.sharp_turn(direction, degrees)
-            drive('forwards', stepLength/1000)
-            _utils.sharp_turn(_utils.inverse_direction(direction), degrees)
-            prevnode = node
+    while (isDriving and pingFront > 350 and pingLeft > 250 and pingRight > 250):
+        pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+        sleep(0.041)
+        if (time.perf_counter() - start > seconds):
+            isDriving = False
+
+def drive_carefully(direction, meters):
+    '''
+    Funktionen kører robotten et antal meter.
+    Argumenter:
+        direction:  enten 'forwards', 'backwards', 'left' eller 'right'
+        meters:   meter, der skal køres
+    '''
+    if direction == 'forwards':
+        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+    elif direction == 'backwards':
+        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 0)
+
+    driveSeconds = _utils.metersToSeconds(meters)
+    _utils.wait_and_sense(driveSeconds)
+
+
+def drive_one_move():
+    pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+
+    if pingFront < 100:
+        _utils.sharp_turn('left', 90.0)
+    else:
+        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+    
+    dirLst = ['right', 'left']
+
+    while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
+        pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+        print(pingFront, pingLeft, pingRight, pingBack)
+        sleep(0.041)
+    
+    # three sensors detected
+    if (pingFront < 350 and pingLeft < 250 and pingRight < 250):
+        _utils.turn_and_sense('left')  
+
+    # two sensors detected
+    elif (pingFront < 350 and pingLeft < 250):
+        _utils.turn_and_sense('right')
+    elif (pingFront < 350 and pingRight < 250):
+        _utils.turn_and_sense('left')
+    elif (pingLeft < 250 and pingRight < 250):
+        _utils.turn_and_sense('left')
+
+    # one sensors deteced
+    elif(pingFront <= 350):
+        randomDirection = random.choice(dirLst)
+        _utils.turn_and_sense(randomDirection)
+    elif (pingLeft < 250): 
+        _utils.turn_and_sense('right')
+    elif (pingRight < 250):
+        _utils.turn_and_sense('left')
         
-        print('Arrived at goal!')
+def drive_free_carefully(seconds):
+    '''
+    Funktionen kører robotten frem, indtil der er en forhindring. Så drejer den, indtil at der er frit.
+    '''
+    start = time.perf_counter()
+    isDriving = True
+    pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
 
+    while isDriving:
+        drive_one_move()
+        if (time.perf_counter() - start > seconds):
+            isDriving = False
 
+def landmark_reached(reached_node, temp_goal):
+    if _utils.dist(reached_node, temp_goal) < 350.0:
+        return True
+    else:
+        return False
+
+def drive_path_and_sense(path, temp_goal, num_steps, stepLength):
+    prevnode = _utils._utils.Node(0, 0, None)
+    for i in range(num_steps):
+        node = path[i]
+        direction, degrees = _utils.find_turn_angle(prevnode, node)
+        print(direction, degrees) 
+
+        # Robotten drejer
+        _utils.sharp_turn(direction, degrees)
+        
+        # Robotten tjekker, om der er frit
+        pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+        if pingFront < 500 and pingLeft < 400 and pingRight < 400:
+            return False
+    
+        # Robotten kører, mens den holder øje, om den støder ind i noget
+        drive_carefully('forwards', stepLength/1000)
+
+        # Tjekker, om der er blevet afbrudt grundet spærret vej
+        pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+        if (pingFront < 350 and pingLeft < 250 and pingRight < 250):
+            return False
+
+        # Robotten drejer tilbage
+        _utils.sharp_turn(_utils.inverse_direction(direction), degrees)
+        
+        if landmark_reached(node, temp_goal):
+            return True
+
+        prevnode = node
+    return False
 
 def camera(command, params, show):
     '''
@@ -285,7 +381,7 @@ def camera(command, params, show):
 
     print(cam.camera_configuration()) # Print the camera configuration in use
 
-    time.sleep(1)  # wait for camera to setup
+    time.sleep(1)  # _utils.wait for camera to setup
 
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
     
@@ -295,7 +391,7 @@ def camera(command, params, show):
         cv2.namedWindow(WIN_RF)
         cv2.moveWindow(WIN_RF, 100, 100)
     
-    while cv2.waitKey(4) == -1: # Wait for a key pressed event
+    while cv2._utils.waitKey(4) == -1: # _utils.wait for a key pressed event
         image = cam.capture_array("main")
         
         # Show frames
@@ -306,40 +402,13 @@ def camera(command, params, show):
             arlo_position = selflocalize(cam, show, params[0])
             return arlo_position
 
-        elif command == 'drive_to_landmark':
-            if turn_and_watch('left', image) == True: 
-                arlo.stop()
-                landmarks = landmark_detection(image, arucoDict)
-                drive_to_landmarks(landmarks)
-                time.sleep(15)
-        
         elif command == 'turn_and_watch':
-            turn_and_watch('right', image)
+            return turn_and_watch('left', image)
 
         elif command == 'RRT':
             arlo_position = selflocalize(cam, show, params[0])
-            
-
-
-
-
-def check_if_in_range(): 
-
-    #Distancen til fra arlo til landmark
-    landmark_dist = 
-
-    #Den range som vi minimum skal være fra landmark 
-    check_range = 300
- 
-    
-    if landmark_dist > check_range:
-        return True
-
-    else: 
-        return False 
-
-          
-
+            path = make_RRT_path(image, arucoDict, True, arlo_position, params[1], params[2])
+            return path 
 
 
 CRED, CGREEN, CBLUE, CCYAN, CYELLOW, CMAGENTA, CWHITE, CBLACK = _utils.bgr_colors()
@@ -351,143 +420,39 @@ landmarks = {
     3: (400.0, 0.0),
     4: (400.0, 300.0),
 }
-landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
+landmark_colors = [CRED, CGREEN,  CCYAN, CYELLOW] # Colors used when drawing the landmarks
 
-num_of_steps = 2
+num_steps = 3
+
+stepLength = 300.0 # milimeter
 
 def robo_rally(landmarkIDs):
-    
     globalMap = _utils.Map(3000, 4000) # kortets størrelse
-
     for landmarkID in landmarkIDs:
         globalMap.landmarks.append(_utils.Landmark(None, None, None, landmarkID, landmarks[landmarkID])) # liste af alle spottede landmarks
-    
     rally_landmarks = globalMap.landmarks # liste af landmarks i rækkefølgen efter rallyet
 
-    lost = True
-    for goal in rally_landmarks:
-        print('Søger efter landmark ' + str(goal.id))
+    for temp_goal in rally_landmarks:
+        print('Søger efter landmark ' + str(temp_goal.id))
         landmarkfound = False
 
         while not landmarkfound:
 
-            arlo_position = camera('selflocalize', [200], True)
-
-            if arlo_position != int:
-                lost = True
-
-            if lost:
-                _utils.turn_and_watch()
+            if camera('turn_and_watch', [], True):
                 arlo_position = camera('selflocalize', [200], True)
-                lost = False
-            
-            
-            path = camera('RRT', [200, goal], True) # skriv
+                arlo_node = _utils._utils.Node(arlo_position[0], arlo_position[1], None)
+                landmarkfound = landmark_reached(arlo_node, temp_goal)
 
-            path_clear = True
-            
-            while path_clear:
-                for i in range(num_of_steps):
-                    path_clear = _utils.drive_to_landmark_and_sense() # stopper hvis den støder på noget
-                    
-                    landmarkfound = check_if_in_range(goal.id)
+                if not landmarkfound:
+                    path = camera('RRT', [200, temp_goal, rally_landmarks], True) #laver en path med RRT, skal også have arlo position
+                    landmarkfound = _utils.drive_path_and_sense(path, temp_goal, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
         
+            else:
+                drive_free_carefully(2.0)
+
         if landmarkfound:
-            print('Landmark ' + str(goal.id) + ' er fundet! Tillykke!')
+            print('Landmark ' + str(temp_goal.id) + ' er fundet! Tillykke!')
 
-    
-    # gør noget, hvis vi ikke kan se landmarket, men vi skal approache
-                    
-
-                
-
-
-
-
-'''
-FOR ID IN ROUTEID:
-
-    WHILE NOT LANDMARKFOUND:
-
-        HVIS LOST:
-            TURN AND WATCH
-            SELFLOCALIZE
-
-        LAV RRT PLAN
-
-        FOR I IN RANGE STEP_LÆNGDE:
-            DRIVE AND SENSE # 1. den drejer en vinkel 2. den kører en distance IMENS HOLDER DEN ØJE MED SINE SONARER
-            SELFLOCALIZE
-
-            LANDMARKFOUND = CHECK IF LANDMARK IS FOUND BASED ON DISTANCE (ID)
-
-        WHEN LANDMARK IS LOST OUT OF SIGHT BUT WE THINK WE ARE CLOSE:
-            APPROACH AND SENSE - kør tæt på, mens den sørger for, at den ikke kører ind ind i.
-
-    IF LANDMARKFOUND CONTINUE
-
-'''
-
-### KAMERA ###  
-          
-def turn_and_sense(direction):
-    '''
-    Funktionen drejer robotten om egen akse, indtil der er frit.
-    Argumenter:
-        direction:  enten 'right' eller 'left'
-    '''
-    if direction == "right":
-        r, l = 1, 0
-    elif direction == "left":
-        r, l = 0, 1
-    else:
-        print("Indtast enten 'left' eller 'right' som retning")
-        return
-
-    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, r, l)
-    pingFront, pingLeft, pingRight, pingBack = sensor()
-
-    while (pingFront < 500 and pingLeft < 400 and pingRight < 400):
-        pingFront, pingLeft, pingRight, pingBack = sensor()
-
-def drive_and_sense():
-    '''
-    Funktionen kører robotten frem, indtil der er en forhindring. Så drejer den, indtil at der er frit.
-    '''
-    pingFront, pingLeft, pingRight, pingBack = sensor()
-
-    if pingFront < 100:
-        sharp_turn('left', 90.0)
-    else:
-        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
-    
-    dirLst = ['right', 'left']
-
-    while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
-        pingFront, pingLeft, pingRight, pingBack = sensor()
-        print(pingFront, pingLeft, pingRight, pingBack)
-        sleep(0.041)
-    
-    # three sensors detected
-    if (pingFront < 350 and pingLeft < 250 and pingRight < 250):
-        turn_and_sense('left')  
-
-    # two sensors detected
-    elif (pingFront < 350 and pingLeft < 250):
-        turn_and_sense('right')
-    elif (pingFront < 350 and pingRight < 250):
-        turn_and_sense('left')
-    elif (pingLeft < 250 and pingRight < 250):
-        turn_and_sense('left')
-
-    # one sensors deteced
-    elif(pingFront <= 350):
-        randomDirection = random.choice(dirLst)
-        turn_and_sense(randomDirection)
-    elif (pingLeft < 250): 
-        turn_and_sense('right')
-    elif (pingRight < 250):
-        turn_and_sense('left')
-    
-        
-    drive_and_sense()
+    arlo.stop()
+    print('Rute færdiggjort!')
+            

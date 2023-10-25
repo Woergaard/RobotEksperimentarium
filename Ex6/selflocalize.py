@@ -99,7 +99,7 @@ try:
     iters = 0
     while True: # ændre hvis vi vil køre flere and iters < 10
         # Move the robot according to user input (only for testing)
-        action = cv2.waitKey(10)
+        action = cv2.waitKey(1)
         if action == ord('q'): # Quit
             break
     

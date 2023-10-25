@@ -756,19 +756,19 @@ def orientation_distribution(phi_M, sigma_theta, particle, landmark):
 def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):     
     for i in range(len(particles)):
         landmark_weight = 1.0
-        landmark_weight_j = 0.0
+        
         for j in range(len(landmarks_lst)):
             landmark = landmarks_lst[j]
             d_M = landmark.distance # den målte distance til landmarket
-            phi_M = landmark.vinkel
+            phi_M = landmark.vinkel 
             d_j = distance_for_particle(particles[i], landmark)
             dist_weight_j = distance_weights(d_M, d_j, sigma_d)
 
             orientation_weight_j = orientation_distribution(phi_M, sigma_theta, particles[i], landmark)
 
-            landmark_weight_j = landmark_weight * dist_weight_j * orientation_weight_j
+            landmark_weight = landmark_weight * dist_weight_j * orientation_weight_j
 
-        particles[i].setWeight(landmark_weight_j)
+        particles[i].setWeight(landmark_weight)
 
 def make_intervals(particles):
     intervals = []
@@ -833,16 +833,14 @@ def make_list_of_landmarks(objectIDs, dists, angles, landmarks):
                 tvectuple = landmarks[objectIDs[closest_index]]
                 new_landmark = Landmark(dists[closest_index], angles[closest_index], None, objectIDs[closest_index], (0,0,0))
                 new_landmark.x = tvectuple[0]
-                new_landmark.z = tvectuple[0]
+                new_landmark.z = tvectuple[1]
 
                 landmarks_lst.append(new_landmark)
     
-
-    landmarks_lst.sort(key=lambda x: x.distance, reverse=False) # sorterer efter, hvor tætte objekterne er på os
+    
+        landmarks_lst.sort(key=lambda x: x.distance, reverse=False) # sorterer efter, hvor tætte objekterne er på os
 
     return landmarks_lst
-
-
 
 ### UDLEVERET KODE TIL SELF-LOCALIZE ###
 
