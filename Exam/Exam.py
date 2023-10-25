@@ -191,6 +191,8 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias
         new_node = _utils.steer(nearest_node, steering_node, stepLength)
         halfway_node = _utils.steer(nearest_node, steering_node, stepLength/2)
 
+        print(new_node.x)
+        print(new_node.z)
         #print(iters) 
         if _utils.is_spot_free(new_node, landmarks, box_radius) and _utils.is_spot_free(halfway_node, landmarks, box_radius):
             #print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
