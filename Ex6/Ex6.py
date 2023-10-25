@@ -29,6 +29,8 @@ leftWheelFactor = 1.06225
 standardSpeed = 50.0
 
 def selflocalize(cam, showGUI, maxiters):
+    return (0,0)
+    '''
     try:
         # Initialize particles
         num_particles = 1000
@@ -93,6 +95,7 @@ def selflocalize(cam, showGUI, maxiters):
         cam.terminateCaptureThread()
 
         return est_pose, landmarks_lst
+    '''
 
 def turn_and_watch(direction, img, landmarkIDs):
     '''
