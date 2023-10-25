@@ -500,10 +500,9 @@ def robo_rally(landmarkIDs):
             if not landmarkfound:
                 print('Påbegynder RRT-sti.')
                 path = use_camera(cam, arucoDict, 'RRT', [200, temp_goal, rally_landmarks], True) #laver en path med RRT, skal også have arlo position
-                print('Kører ' + str(num_steps) + 'af vores RRT sti.')
-                landmarkfound = _utils.drive_path_and_sense(path, temp_goal, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
-                
-
+                print('Kører ' + str(num_steps) + ' trin af vores RRT sti.')
+                landmarkfound = drive_path_and_sense(path, temp_goal, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
+    
         if landmarkfound:
             print('Landmark ' + str(temp_goal.id) + ' er fundet! Tillykke!')
 
