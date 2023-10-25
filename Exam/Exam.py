@@ -41,7 +41,7 @@ arlo = robot.Robot()
 
 rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
-standardSpeed = 50.0
+standardSpeed = 50.0/4
 
 def selflocalize(cam, showGUI, maxiters):
     return (0,0)
@@ -481,7 +481,7 @@ def robo_rally(landmarkIDs):
                     if found:
                         lost = False
                     else:
-                        print('hej3')
+                        print('Drejer og forsøger at finde landmarks.')
                     iters += 1
                 else:
                     print('Påbegynder frikørsel for at få øje på et landmark')
