@@ -459,7 +459,7 @@ def is_spot_free(spot, landmarks, radius):
     '''
     for landmark in landmarks:        
         if dist(spot, landmark) < radius:
-            print('Occupied by ' + str(landmark.id))
+            #print('Occupied by ' + str(landmark.id))
             return False
     return True
     
@@ -474,7 +474,7 @@ def find_nearest_node(x_new, G):
     for node in G.nodes:
         distances.append(abs(dist(x_new, node)))
     nearest_i = np.argmin(distances)
-    print('nearest i:', nearest_i)
+    #print('nearest i:', nearest_i)
     return G.nodes[nearest_i]
 
 def steer(nearest_node, steering_node, stepLength):

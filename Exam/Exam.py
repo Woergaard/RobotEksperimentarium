@@ -421,7 +421,6 @@ def use_camera(cam, arucoDict, command, params, show):
             cv2.imshow(WIN_RF, image)
 
         if command == 'selflocalize':
-            print('nået hertil i loopet')
             arlo_position = selflocalize(cam, show, params[0])
             return arlo_position
 
