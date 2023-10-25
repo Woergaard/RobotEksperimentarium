@@ -10,6 +10,21 @@ import particle
 from time import sleep
 import random
 
+from time import sleep
+import robot
+import time
+import random
+import cv2 # OpenCV library
+import time
+from pprint import *
+import numpy as np
+from numpy import linalg
+import matplotlib.pyplot as plt
+import math
+import particle
+from timeit import default_timer as timer
+import random
+
 
 try:
     import picamera2
@@ -376,12 +391,14 @@ def use_camera(command, params, show):
     imageSize = (1280, 720)
     FPS = 60
     cam = picamera2.Picamera2()
+    print('hej1')
     frame_duration_limit = int(1/FPS * 1000000) # Microseconds
     # Change configuration to set resolution, framerate
     picam2_config = cam.create_video_configuration({"size": imageSize, "format": 'RGB888'}, controls={"FrameDurationLimits": (frame_duration_limit, frame_duration_limit)}, queue=False)
     cam.configure(picam2_config) # Not really necessary
     cam.start(show_preview=False)
 
+    print('hej2')
     #print(cam.camera_configuration()) # Print the camera configuration in use
 
     time.sleep(1)  # _utils.wait for camera to setup
