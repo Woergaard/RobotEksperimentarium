@@ -487,7 +487,8 @@ def robo_rally(landmarkIDs):
                     print('Påbegynder frikørsel for at få øje på et landmark')
                     drive_free_carefully(2.0)
                     iters = 0 
-                
+            
+            arlo.stop()
             print('Begynder selflokalisering.')
             arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200], True)
             arlo_node = _utils.Node(arlo_position[0], arlo_position[1], None)
