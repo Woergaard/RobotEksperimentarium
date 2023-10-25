@@ -43,9 +43,7 @@ rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
 standardSpeed = 50.0
 
-def selflocalize(cam, showGUI, maxiters):
-    return (0,0)
-    '''
+def selflocalize(cam, showGUI, maxiters, landmarks):
     try:
         # Initialize particles
         num_particles = 1000
@@ -110,7 +108,7 @@ def selflocalize(cam, showGUI, maxiters):
         cam.terminateCaptureThread()
 
         return est_pose, landmarks_lst
-    '''
+    
 
 def turn_and_watch(direction, img, landmarkIDs):
     '''
@@ -417,7 +415,7 @@ def camera_setup():
 
     return cam, arucoDict
 
-def use_camera(cam, arucoDict, command, params, show):
+def use_camera(cam, arucoDict, command, params, show, landmarks):
     # Open a window
     if show:
         WIN_RF = "Example 1"
@@ -432,14 +430,14 @@ def use_camera(cam, arucoDict, command, params, show):
             cv2.imshow(WIN_RF, image)
 
         if command == 'selflocalize':
-            arlo_position = selflocalize(cam, show, params[0])
+            arlo_position = selflocalize(cam, show, params[0], landmarks)
             return arlo_position
 
         elif command == 'turn_and_watch':
             return turn_and_watch('left', image, params[0])
 
         elif command == 'RRT':
-            arlo_position = selflocalize(cam, show, params[0])
+            arlo_position = selflocalize(cam, show, params[0], landmarks)
             path = make_RRT_path(image, arucoDict, True, arlo_position, params[1], params[2])
             return path 
 
