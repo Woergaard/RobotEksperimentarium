@@ -122,8 +122,9 @@ def turn_and_watch(direction, img, landmarkIDs):
     landmark_spotted = False
     while not landmark_spotted:
         for id in landmarkIDs:
-            if id in ids:
-                landmark_spotted = True
+            if len(ids) > 0:
+                if id in ids:
+                    landmark_spotted = True
 
     # If at least one marker is detected
     if len(aruco_corners) > 0 and landmark_spotted:
