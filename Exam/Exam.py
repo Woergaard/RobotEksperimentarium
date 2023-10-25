@@ -380,7 +380,7 @@ def drive_path_and_sense(path, temp_goal, num_steps, stepLength):
         prevnode = node
     return False
 
-def camera_setup(show):
+def camera_setup():
     '''
     Funktionen åbner kameraet og udfører en kommando.
     Argumenter:
@@ -403,16 +403,16 @@ def camera_setup(show):
     time.sleep(1)  # _utils.wait for camera to setup
 
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
-    
+
+    return cam, arucoDict
+
+def use_camera(cam, arucoDict, command, params, show):
     # Open a window
     if show:
         WIN_RF = "Example 1"
         cv2.namedWindow(WIN_RF)
         cv2.moveWindow(WIN_RF, 100, 100)
-
-    return cam, arucoDict
-
-def use_camera(cam, arucoDict, command, params, show):
+    
     while cv2.waitKey(4) == -1: # _utils.wait for a key pressed event
         image = cam.capture_array("main")
         
@@ -464,7 +464,7 @@ def robo_rally(landmarkIDs):
         globalMap.landmarks.append(_utils.Landmark(None, None, None, landmarkID, landmarks[landmarkID])) # liste af alle spottede landmarks
     rally_landmarks = globalMap.landmarks # liste af landmarks i rækkefølgen efter rallyet
 
-    cam, arucoDict = camera_setup(True)
+    cam, arucoDict = camera_setup()
 
     for temp_goal in rally_landmarks:
         print('Søger efter landmark ' + str(temp_goal.id))
