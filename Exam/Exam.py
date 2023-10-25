@@ -380,7 +380,7 @@ def drive_path_and_sense(path, temp_goal, num_steps, stepLength):
         prevnode = node
     return False
 
-def use_camera(command, params, show):
+def camera_setup(show):
     '''
     Funktionen åbner kameraet og udfører en kommando.
     Argumenter:
@@ -409,7 +409,10 @@ def use_camera(command, params, show):
         WIN_RF = "Example 1"
         cv2.namedWindow(WIN_RF)
         cv2.moveWindow(WIN_RF, 100, 100)
-    
+
+    return cam, arucoDict
+
+def use_camera(cam, arucoDict, command, params, show):
     while cv2.waitKey(4) == -1: # _utils.wait for a key pressed event
         image = cam.capture_array("main")
         
@@ -461,6 +464,8 @@ def robo_rally(landmarkIDs):
         globalMap.landmarks.append(_utils.Landmark(None, None, None, landmarkID, landmarks[landmarkID])) # liste af alle spottede landmarks
     rally_landmarks = globalMap.landmarks # liste af landmarks i rækkefølgen efter rallyet
 
+    cam, arucoDict = camera_setup(True)
+
     for temp_goal in rally_landmarks:
         print('Søger efter landmark ' + str(temp_goal.id))
         landmarkfound = False
@@ -472,7 +477,7 @@ def robo_rally(landmarkIDs):
 
             while lost:
                 if iters < 10:
-                    found = use_camera('turn_and_watch', [landmarkIDs], True)
+                    found = use_camera(cam, arucoDict, 'turn_and_watch', [landmarkIDs], True)
                     if found:
                         lost = False
                     else:
@@ -484,7 +489,7 @@ def robo_rally(landmarkIDs):
                     iters = 0 
                 
             print('Begynder selflokalisering.')
-            arlo_position = use_camera('selflocalize', [200], True)
+            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200], True)
             arlo_node = _utils._utils.Node(arlo_position[0], arlo_position[1], None)
             landmarkfound = landmark_reached(arlo_node, temp_goal)
 
@@ -492,7 +497,7 @@ def robo_rally(landmarkIDs):
 
             if not landmarkfound:
                 print('Påbegynder RRT-sti.')
-                path = use_camera('RRT', [200, temp_goal, rally_landmarks], True) #laver en path med RRT, skal også have arlo position
+                path = use_camera(cam, arucoDict, 'RRT', [200, temp_goal, rally_landmarks], True) #laver en path med RRT, skal også have arlo position
                 print('Kører ' + str(num_steps) + 'af vores RRT sti.')
                 landmarkfound = _utils.drive_path_and_sense(path, temp_goal, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
                 
