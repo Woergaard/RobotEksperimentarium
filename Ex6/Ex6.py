@@ -118,11 +118,11 @@ def turn_and_watch(direction, img, landmarkIDs):
     
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
-
+    
     landmark_spotted = False
     while not landmark_spotted:
         for id in landmarkIDs:
-            if len(ids) > 0:
+            if ids is not None:
                 if id in ids:
                     landmark_spotted = True
 
