@@ -100,7 +100,7 @@ def selflocalize(cam, showGUI, maxiters):
 
         return est_pose, landmarks_lst
 
-def turn_and_watch(direction, img):
+def turn_and_watch(direction, img, landmarkIDs):
     '''
     Robotten drejer om egen akse, indtil den har fundet et landmark, OG der er frit.
     Argumenter:
@@ -117,10 +117,16 @@ def turn_and_watch(direction, img):
     arlo.go_diff(leftWheelFactor*standardSpeed*0.6, rightWheelFactor*standardSpeed*0.6, r, l)
     
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
-    aruco_corners, _, _ = cv2.aruco.detectMarkers(img, arucoDict)
+    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
+
+    landmark_spotted = False
+    while not landmark_spotted:
+        for id in landmarkIDs:
+            if id in ids:
+                landmark_spotted = True
 
     # If at least one marker is detected
-    if len(aruco_corners) > 0:
+    if len(aruco_corners) > 0 and landmark_spotted:
         for corner in aruco_corners:
             # The corners are ordered as top-left, top-right, bottom-right, bottom-left
             top_left = corner[0][0]
@@ -360,7 +366,7 @@ def drive_path_and_sense(path, temp_goal, num_steps, stepLength):
         prevnode = node
     return False
 
-def camera(command, params, show):
+def use_camera(command, params, show):
     '''
     Funktionen åbner kameraet og udfører en kommando.
     Argumenter:
@@ -403,7 +409,7 @@ def camera(command, params, show):
             return arlo_position
 
         elif command == 'turn_and_watch':
-            return turn_and_watch('left', image)
+            return turn_and_watch('left', image, params[0])
 
         elif command == 'RRT':
             arlo_position = selflocalize(cam, show, params[0])
@@ -447,13 +453,14 @@ def robo_rally(landmarkIDs):
 
         while not landmarkfound:
 
-            if camera('turn_and_watch', [], True):
-                arlo_position = camera('selflocalize', [200], True)
+            if use_camera('turn_and_watch', [landmarkIDs], True):
+                print('Landmark set!')
+                arlo_position = use_camera('selflocalize', [200], True)
                 arlo_node = _utils._utils.Node(arlo_position[0], arlo_position[1], None)
                 landmarkfound = landmark_reached(arlo_node, temp_goal)
 
                 if not landmarkfound:
-                    path = camera('RRT', [200, temp_goal, rally_landmarks], True) #laver en path med RRT, skal også have arlo position
+                    path = use_camera('RRT', [200, temp_goal, rally_landmarks], True) #laver en path med RRT, skal også have arlo position
                     landmarkfound = _utils.drive_path_and_sense(path, temp_goal, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
         
             else:
