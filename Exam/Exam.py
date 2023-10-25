@@ -194,6 +194,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias
             #print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
             G.edges.append((nearest_node, new_node))
+            print('node tilføjes til træ')
 
             goal_radius = 200.0
             if not _utils.is_spot_free(new_node, [goal], goal_radius):
@@ -474,20 +475,20 @@ def robo_rally(landmarkIDs):
         while not landmarkfound:
 
             lost = True
-            iters = 0
+            iterations = 0
 
             while lost:
-                if iters < 10:
+                if iterations < 10:
                     found = use_camera(cam, arucoDict, 'turn_and_watch', [landmarkIDs], True)
                     if found:
                         lost = False
                     else:
                         print('Drejer og forsøger at finde landmarks.')
-                    iters += 1
+                    iterations += 1
                 else:
                     print('Påbegynder frikørsel for at få øje på et landmark')
                     drive_free_carefully(2.0)
-                    iters = 0 
+                    iterations = 0 
             
             arlo.stop()
             print('Begynder selflokalisering.')
