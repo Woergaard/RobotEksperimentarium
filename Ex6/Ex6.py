@@ -373,13 +373,13 @@ def use_camera(command, params, show):
     imageSize = (1280, 720)
     FPS = 60
     cam = picamera2.Picamera2()
-    #frame_duration_limit = int(1/FPS * 1000000) # Microseconds
+    frame_duration_limit = int(1/FPS * 1000000) # Microseconds
     # Change configuration to set resolution, framerate
-    #picam2_config = cam.create_video_configuration({"size": imageSize, "format": 'RGB888'}, controls={"FrameDurationLimits": (frame_duration_limit, frame_duration_limit)}, queue=False)
-    #cam.configure(picam2_config) # Not really necessary
+    picam2_config = cam.create_video_configuration({"size": imageSize, "format": 'RGB888'}, controls={"FrameDurationLimits": (frame_duration_limit, frame_duration_limit)}, queue=False)
+    cam.configure(picam2_config) # Not really necessary
     cam.start(show_preview=False)
 
-    print(cam.camera_configuration()) # Print the camera configuration in use
+    #print(cam.camera_configuration()) # Print the camera configuration in use
 
     time.sleep(1)  # _utils.wait for camera to setup
 
@@ -399,6 +399,7 @@ def use_camera(command, params, show):
             cv2.imshow(WIN_RF, image)
 
         if command == 'selflocalize':
+            print('nået hertil i loopet')
             arlo_position = selflocalize(cam, show, params[0])
             return arlo_position
 
