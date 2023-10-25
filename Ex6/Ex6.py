@@ -455,4 +455,6 @@ def robo_rally(landmarkIDs):
 
     arlo.stop()
     print('Rute færdiggjort!')
+
+robo_rally()
             
