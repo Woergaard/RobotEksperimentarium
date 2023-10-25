@@ -296,7 +296,6 @@ def drive_carefully(direction, meters):
     driveSeconds = _utils.metersToSeconds(meters)
     _utils.wait_and_sense(driveSeconds)
 
-
 def drive_one_move():
     pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
 
@@ -435,7 +434,6 @@ def use_camera(cam, arucoDict, command, params, show):
             arlo_position = selflocalize(cam, show, params[0])
             path = make_RRT_path(image, arucoDict, True, arlo_position, params[1], params[2])
             return path 
-
 
 CRED, CGREEN, CBLUE, CCYAN, CYELLOW, CMAGENTA, CWHITE, CBLACK = _utils.bgr_colors()
 '''
