@@ -293,7 +293,7 @@ def drive_one_move():
 
     while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
         pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-        print(pingFront, pingLeft, pingRight, pingBack)
+        #print(pingFront, pingLeft, pingRight, pingBack)
         sleep(0.041)
     
     # three sensors detected
