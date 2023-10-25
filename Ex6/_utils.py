@@ -232,7 +232,7 @@ class Landmark:
         self.id = id
         self.tvec = tvec
         self.x = tvec[0]
-        self.z = tvec[2]
+        self.z = tvec[1]
         
 class Node:
     '''
