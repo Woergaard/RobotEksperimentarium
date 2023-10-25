@@ -455,24 +455,33 @@ def robo_rally(landmarkIDs):
 
         while not landmarkfound:
 
-            if use_camera('turn_and_watch', [landmarkIDs], True):
+            lost = True
+            iters = 0
+
+            while lost:
+                if iters < 10:
+                    found = use_camera('turn_and_watch', [landmarkIDs], True)
+                    if found:
+                        lost = False
+                    iters += 1
+                else:
+                    print('Påbegynder frikørsel for at få øje på et landmark')
+                    drive_free_carefully(2.0)
+                    iters = 0 
                 
-                print('Begynder selflokalisering.')
-                arlo_position = use_camera('selflocalize', [200], True)
-                arlo_node = _utils._utils.Node(arlo_position[0], arlo_position[1], None)
-                landmarkfound = landmark_reached(arlo_node, temp_goal)
+            print('Begynder selflokalisering.')
+            arlo_position = use_camera('selflocalize', [200], True)
+            arlo_node = _utils._utils.Node(arlo_position[0], arlo_position[1], None)
+            landmarkfound = landmark_reached(arlo_node, temp_goal)
 
-                print('Arlo befinder sig på position ' + str(arlo_position))
+            print('Arlo befinder sig på position ' + str(arlo_position))
 
-                if not landmarkfound:
-                    print('Påbegynder RRT-sti.')
-                    path = use_camera('RRT', [200, temp_goal, rally_landmarks], True) #laver en path med RRT, skal også have arlo position
-                    print('Kører ' + str(num_steps) + 'af vores RRT sti.')
-                    landmarkfound = _utils.drive_path_and_sense(path, temp_goal, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
-        
-            else:
-                print('Påbegynder frikørsel for at få øje på et landmark')
-                drive_free_carefully(2.0)
+            if not landmarkfound:
+                print('Påbegynder RRT-sti.')
+                path = use_camera('RRT', [200, temp_goal, rally_landmarks], True) #laver en path med RRT, skal også have arlo position
+                print('Kører ' + str(num_steps) + 'af vores RRT sti.')
+                landmarkfound = _utils.drive_path_and_sense(path, temp_goal, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
+                
 
         if landmarkfound:
             print('Landmark ' + str(temp_goal.id) + ' er fundet! Tillykke!')
