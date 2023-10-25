@@ -41,7 +41,7 @@ arlo = robot.Robot()
 
 rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
-standardSpeed = 25.0
+standardSpeed = 50.0
 
 def selflocalize(cam, showGUI, maxiters):
     return (0,0)
