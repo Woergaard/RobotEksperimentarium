@@ -161,7 +161,7 @@ def turn_and_watch(direction, img, landmarkIDs):
 
         return False
     
-def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias):
+def RRT(goal, mapsizex, mapsizez, maxiter, seen_landmarks, rootNode, stepLength, bias):
     '''
     Funktionen returnerer et RRT med Arlo som rod.
     Argumenter:
@@ -169,7 +169,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias
         mapsizex: størrelsen på banen i x-aksen
         mapsizez: størrelsen på banen i z-aksen
         maxiter:  det maksimale antal iterationer
-        landmarks: liste af landmarks
+        seen_landmarks: liste af seen_landmarks
         rootNode:  Arlos position
         stepLength:   distancen mellem den returnerede node og nearest_node
         bias:   en værdi mellem 0 og 100, der jo højere den er, angiver, at vi vurderer, at banen er meget simpel.
@@ -194,7 +194,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, landmarks, rootNode, stepLength, bias
         print(new_node.x)
         print(new_node.z)
         #print(iters) 
-        if _utils.is_spot_free(new_node, landmarks, box_radius) and _utils.is_spot_free(halfway_node, landmarks, box_radius):
+        if _utils.is_spot_free(new_node, seen_landmarks, box_radius) and _utils.is_spot_free(halfway_node, seen_landmarks, box_radius):
             #print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
             G.edges.append((nearest_node, new_node))
@@ -232,7 +232,7 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
     maxiter = 1500
     bias = 50
 
-    localMap = _utils.Map(2000, 4500)
+    localMap = _utils.Map(2000.0, 4500.0)
 
     print(goal.x)
     print(goal.z)
@@ -456,7 +456,7 @@ landmark_colors = [CRED, CGREEN,  CCYAN, CYELLOW] # Colors used when drawing the
 '''
 
 landmarkIDs = [1, 2]
-landmarks = {
+landmarks_dict = {
     1: (1500.0, 2000.0),
     2: (0.0, 2000.0)
 }
@@ -470,7 +470,7 @@ stepLength = 300.0 # milimeter
 def robo_rally(landmarkIDs):
     globalMap = _utils.Map(3000, 4000) # kortets størrelse
     for landmarkID in landmarkIDs:
-        globalMap.landmarks.append(_utils.Landmark(None, None, None, landmarkID, landmarks[landmarkID])) # liste af alle spottede landmarks
+        globalMap.landmarks.append(_utils.Landmark(None, None, None, landmarkID, landmarks_dict[landmarkID])) # liste af alle spottede landmarks
     rally_landmarks = globalMap.landmarks # liste af landmarks i rækkefølgen efter rallyet
 
     cam, arucoDict = camera_setup()
