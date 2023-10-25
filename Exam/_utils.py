@@ -295,7 +295,7 @@ class Map:
         '''
         i = 0
         for node in path:
-            #print(i)
+            print(i)
             #print(node.x)
            # print(node.z)
            # print(node.parent)
