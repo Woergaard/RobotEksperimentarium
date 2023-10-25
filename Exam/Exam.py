@@ -239,6 +239,7 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
         path = []
         goalNode = G.nodes[-1]
         path.append(goalNode.parent)
+        print(path)
         localMap.draw_path(path)
         print('driving towards', goalNode)
 
