@@ -223,7 +223,7 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
     for landmark in rally_landmarks:
         seen_landmarks.append(landmark)
 
-    rootNode = _utils._utils.Node(arlo_position[0], arlo_position[1], None) # Arlos position
+    rootNode = _utils.Node(arlo_position[0], arlo_position[1], None) # Arlos position
     maxiter = 1500
     bias = 50
 
@@ -349,7 +349,7 @@ def landmark_reached(reached_node, temp_goal):
         return False
 
 def drive_path_and_sense(path, temp_goal, num_steps, stepLength):
-    prevnode = _utils._utils.Node(0, 0, None)
+    prevnode = _utils.Node(0, 0, None)
     for i in range(num_steps):
         node = path[i]
         direction, degrees = _utils.find_turn_angle(prevnode, node)
@@ -490,7 +490,7 @@ def robo_rally(landmarkIDs):
                 
             print('Begynder selflokalisering.')
             arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200], True)
-            arlo_node = _utils._utils.Node(arlo_position[0], arlo_position[1], None)
+            arlo_node = _utils.Node(arlo_position[0], arlo_position[1], None)
             landmarkfound = landmark_reached(arlo_node, temp_goal)
 
             print('Arlo befinder sig på position ' + str(arlo_position))
