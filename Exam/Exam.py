@@ -227,12 +227,13 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
 
     for landmark in rally_landmarks:
         seen_landmarks.append(landmark)
+        print('Landmarks, vi ved er der: ', landmark.id)
 
     rootNode = _utils.Node(arlo_position[0], arlo_position[1], None) # Arlos position
     maxiter = 1500
     bias = 50
 
-    localMap = _utils.Map(2000.0, 4500.0)
+    localMap = _utils.Map(3000.0, 4500.0)
 
     print(goal.x)
     print(goal.z)
