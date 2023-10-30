@@ -251,11 +251,11 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
 
         path = []
         goalNode = G.nodes[-1]
-        print(len(G.nodes))
-        positions_list = []
-        for i in range(len(G.nodes)):
-            positions_list.append((G.nodes[i].x, G.nodes[i].z))
-        print(positions_list)
+        # print(len(G.nodes))
+        # positions_list = []
+        # for i in range(len(G.nodes)):
+        #     positions_list.append((G.nodes[i].x, G.nodes[i].z))
+        # print(positions_list)
         path.append(goalNode.parent)
         print(type(path[-1]))
         #print(path)
@@ -264,7 +264,7 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
 
         notRoot = True
 
-        if not goalNode.x == rootNode.x and goalNode.z == rootNode.z:
+        if not goalNode.x == rootNode.x and not goalNode.z == rootNode.z:
             while notRoot:
                 if path[-1].parent != None:
                     path.append(path[-1].parent)
