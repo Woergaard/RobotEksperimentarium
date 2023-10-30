@@ -74,11 +74,12 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
 
         for iters in range(maxiters):
             print(iters)
+            image = cam.capture_array("main")
             # Fetch next frame
-            colour = cam.get_next_frame()
-            print('hej1.1')
+            #colour = cam.get_next_frame()
+            #print('hej1.1')
             # Detect objects
-            objectIDs, dists, angles = cam.detect_aruco_objects(colour)
+            objectIDs, dists, angles = cam.detect_aruco_objects(image)
             print('hej1.2')
             Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
             
@@ -98,7 +99,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 particles = _utils.generate_new_particles(num_particles, particles, intervals)
 
                 # Draw detected objects
-                cam.draw_aruco_objects(colour)
+                cam.draw_aruco_objects(image)
             else:
                 # No observation - reset weights to uniform distribution
                 for p in particles:
@@ -113,7 +114,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
                 
                 # Show frame
-                cv2.imshow(WIN_RF1, colour)
+                cv2.imshow(WIN_RF1, image)
 
                 # Show world
                 cv2.imshow(WIN_World, world)
@@ -457,7 +458,7 @@ def camera_setup():
     return cam, arucoDict
 
 def use_camera(cam, arucoDict, command, params, showcamera, show):
-    # Open a window
+    # Open a window'''
     if showcamera:
         print('Kameraet vises.')
         WIN_RF = "Example 1"
@@ -559,7 +560,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
                     landmarkfound = drive_path_and_sense(path, temp_goal_Node, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
                 else:
                     print('RRT-træ betod kun af Arlos position, æv :(')
-
+                    
             '''
         if landmarkfound:
             print('Landmark ' + str(temp_goal.id) + ' er fundet! Tillykke!')
