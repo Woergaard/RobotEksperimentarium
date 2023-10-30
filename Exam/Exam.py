@@ -476,7 +476,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, show):
 
     cam, arucoDict = camera_setup()
 
-    arlo_position = (500.0,0,0)
+    arlo_position = _utils.Node(500.0, 0.0, None)
 
     for temp_goal in rally_landmarks:
         print('Søger efter landmark ' + str(temp_goal.id))
