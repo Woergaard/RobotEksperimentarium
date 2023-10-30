@@ -257,7 +257,7 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
         #     positions_list.append((G.nodes[i].x, G.nodes[i].z))
         # print(positions_list)
         path.append(goalNode.parent)
-        print(type(path[-1]))
+        #print(type(path[-1]))
         #print(path)
         #localMap.draw_path(path)
         print('Driving towards', goalNode.x, goalNode.z)
@@ -273,7 +273,7 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
 
             path.pop()
             path.reverse()
-            print("PATH: ", path)
+            #print("PATH: ", path)
 
             localMap.draw_path(path)
             localMap.show_map(arlo_position)
@@ -450,8 +450,8 @@ def use_camera(cam, arucoDict, command, params, show):
             return turn_and_watch('left', image, params[0])
 
         elif command == 'RRT':
-            arlo_position = selflocalize(cam, show, params[0], params[1], params[2], params[3], params[4])
-            path = make_RRT_path(image, arucoDict, True, arlo_position, params[5], params[6])
+            #arlo_position = selflocalize(cam, show, params[0], params[1], params[2], params[3], params[4])
+            path = make_RRT_path(image, arucoDict, True, params[0], params[1], params[2])
             return path 
 
 CRED, CGREEN, CBLUE, CCYAN, CYELLOW, CMAGENTA, CWHITE, CBLACK = _utils.bgr_colors()
@@ -475,7 +475,7 @@ landmarks_dict = {
 }
 landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW] # Colors used when drawing the landmarks
 
-num_steps = 2
+num_steps = 4
 
 stepLength = 500.0 # milimeter
 
@@ -523,7 +523,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, show):
 
             if not landmarkfound:
                 print('Påbegynder RRT-sti.')
-                path = use_camera(cam, arucoDict, 'RRT', [200, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, temp_goal_Node, rally_landmarks], show) #laver en path med RRT, skal også have arlo position
+                path = use_camera(cam, arucoDict, 'RRT', [arlo_position, temp_goal_Node, rally_landmarks], show) #laver en path med RRT, skal også have arlo position
                 if len(path)>1:
                     print('Kører ' + str(num_steps) + ' trin af vores RRT sti.')
                     landmarkfound = drive_path_and_sense(path, temp_goal_Node, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
