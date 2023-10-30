@@ -112,8 +112,16 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
 
                 # Show world
                 cv2.imshow(WIN_World, world)
+
+            waiting = True
+            while waiting:
+                if (time.perf_counter() - 0 > 10):
+                    waiting = False
             
             iters += 1
+
+        
+
         est_pose = _utils.Node(est_pose.x, est_pose.y, None)
     
     finally:
@@ -489,11 +497,11 @@ landmarks = {
 landmark_colors = [CRED, CGREEN,  CCYAN, CYELLOW] # Colors used when drawing the landmarks
 '''
 
-landmarkIDs = [1, 2, 3, 4]
+landmarkIDs = [1, 2, 4]
 landmarks_dict = {
     1: (0.0, 0.0),
     2: (0.0, 3000.0),
-    3: (4000.0, 0.0),
+    #3: (4000.0, 0.0),
     4: (4000.0, 3000.0)
 }
 landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW] # Colors used when drawing the landmarks
