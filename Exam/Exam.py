@@ -43,8 +43,10 @@ rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
 standardSpeed = 50.0
 
-def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors):
+def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position):
     #return (750.0,0.0)
+    est_pose = ()
+    landmarks_lst = []
     
     try:
         # Initialize particles
@@ -98,9 +100,10 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
             
             iters += 1
+    
+    finally:
         return est_pose, landmarks_lst
     '''
-    finally:
         # Make sure to clean up even if an exception occurred
         
         # Close all windows
@@ -109,7 +112,6 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         # Clean-up capture thread
         cam.terminateCaptureThread()
     '''
-        
 
 def turn_and_watch(direction, img, landmarkIDs):
     '''
@@ -432,15 +434,15 @@ def use_camera(cam, arucoDict, command, params, show):
             cv2.imshow(WIN_RF, image)
 
         if command == 'selflocalize':
-            arlo_position = selflocalize(cam, show, params[0], params[1], params[2], params[3])
+            arlo_position = selflocalize(cam, show, params[0], params[1], params[2], params[3], params[4])
             return arlo_position
 
         elif command == 'turn_and_watch':
             return turn_and_watch('left', image, params[0])
 
         elif command == 'RRT':
-            arlo_position = selflocalize(cam, show, params[0], params[1], params[2], params[3])
-            path = make_RRT_path(image, arucoDict, True, arlo_position, params[4], params[5])
+            arlo_position = selflocalize(cam, show, params[0], params[1], params[2], params[3], params[4])
+            path = make_RRT_path(image, arucoDict, True, arlo_position, params[5], params[6])
             return path 
 
 CRED, CGREEN, CBLUE, CCYAN, CYELLOW, CMAGENTA, CWHITE, CBLACK = _utils.bgr_colors()
@@ -474,6 +476,8 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, show):
 
     cam, arucoDict = camera_setup()
 
+    arlo_position = (500.0,0,0)
+
     for temp_goal in rally_landmarks:
         print('Søger efter landmark ' + str(temp_goal.id))
         landmarkfound = False
@@ -500,7 +504,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, show):
             
             arlo.stop()
             print('Begynder selflokalisering.')
-            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200, landmarkIDs, landmarks_dict, landmark_colors], show)
+            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200, landmarkIDs, landmarks_dict, landmark_colors, arlo_position], show)
             arlo_node = _utils.Node(arlo_position[0], arlo_position[1], None)
             landmarkfound = landmark_reached(arlo_node, temp_goal_Node)
 
@@ -508,7 +512,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, show):
 
             if not landmarkfound:
                 print('Påbegynder RRT-sti.')
-                path = use_camera(cam, arucoDict, 'RRT', [200, landmarkIDs, landmarks_dict, landmark_colors, temp_goal_Node, rally_landmarks], show) #laver en path med RRT, skal også have arlo position
+                path = use_camera(cam, arucoDict, 'RRT', [200, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, temp_goal_Node, rally_landmarks], show) #laver en path med RRT, skal også have arlo position
                 print('Kører ' + str(num_steps) + ' trin af vores RRT sti.')
                 landmarkfound = drive_path_and_sense(path, temp_goal_Node, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
     
