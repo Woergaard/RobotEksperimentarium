@@ -98,7 +98,8 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
             
             iters += 1
-
+        return est_pose, landmarks_lst
+    '''
     finally:
         # Make sure to clean up even if an exception occurred
         
@@ -107,8 +108,8 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
 
         # Clean-up capture thread
         cam.terminateCaptureThread()
-
-        return est_pose, landmarks_lst
+    '''
+        
 
 def turn_and_watch(direction, img, landmarkIDs):
     '''
