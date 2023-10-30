@@ -149,7 +149,7 @@ def turn_and_watch(direction, img, landmarkIDs):
             bottom_left = corner[0][3]
 
             print('Landmark ' + str(ids[i]) + 'detekteret via turn_and_watch.')
-            print(top_left, top_right, bottom_right, bottom_left)
+           # print(top_left, top_right, bottom_right, bottom_left)
 
         return True
     else: 
@@ -375,7 +375,7 @@ def drive_path_and_sense(path, temp_goal, num_steps, stepLength):
     for i in range(num_steps):
         node = path[i]
         direction, degrees = _utils.find_turn_angle(prevnode, node)
-        print(direction, degrees) 
+        print('Drejer ' + str(degrees) + 'grader i retning ' + str(direction)) 
 
         # Robotten drejer
         _utils.sharp_turn(direction, degrees)
