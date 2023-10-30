@@ -102,8 +102,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         est_pose = _utils.Node(est_pose.x, est_pose.y, None)
     
     finally:
-        return est_pose
-    '''
+    
         # Make sure to clean up even if an exception occurred
         
         # Close all windows
@@ -111,7 +110,9 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
 
         # Clean-up capture thread
         cam.terminateCaptureThread()
-    '''
+
+    return est_pose
+    
 
 def turn_and_watch(direction, img, landmarkIDs):
     '''
@@ -536,5 +537,5 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, show):
     arlo.stop()
     print('Rute færdiggjort!')
 
-robo_rally(landmarkIDs, landmarks_dict, landmark_colors, False)
+robo_rally(landmarkIDs, landmarks_dict, landmark_colors, True)
             
