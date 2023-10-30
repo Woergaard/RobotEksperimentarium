@@ -177,7 +177,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, seen_landmarks, rootNode, stepLength,
     '''
     G = _utils.Graf([rootNode], [])
     iters = 0
-    print('hej4')
+    #print('hej4')
     while iters < maxiter:
         iters += 1
         random_number = random.randint(0, 100)
@@ -224,11 +224,11 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
 
     seen_landmarks = _utils.landmark_detection(img, arucoDict)
     for seen_landmark in seen_landmarks:
-        print('Landmarks, der kan ses: ', seen_landmark.id, seen_landmark.x, seen_landmark.z)
+        print('Landmarks, der kan ses: ' + str(seen_landmark.id) + ' på position ' + str(seen_landmark.x) + ', ' + str(seen_landmark.z))
 
     for landmark in rally_landmarks:
         seen_landmarks.append(landmark)
-        print('Landmarks, vi ved er der: ', landmark.id, landmark.x, landmark.z)
+        print('Landmarks, vi ved er der: ' + str(landmark.id) + ' på position ' + str(landmark.x) + ', ' + str(landmark.z))
 
     rootNode = arlo_position # Arlos position
     maxiter = 1500
@@ -236,8 +236,8 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
 
     localMap = _utils.Map(3000.0, 4500.0)
 
-    print(goal.x)
-    print(goal.z)
+    #print(goal.x)
+    #print(goal.z)
 
     G, new_node = RRT(goal, localMap.xlim, localMap.zlim, maxiter, seen_landmarks, rootNode, stepLength, bias)
 
@@ -251,10 +251,11 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
 
         path = []
         goalNode = G.nodes[-1]
-        # print(len(G.nodes))
-        # for i in range(len(G.nodes)):
-        #     print(i)
-        #     print(G.nodes[i].x, G.nodes[i].z)
+        print(len(G.nodes))
+        positions_list = []
+        for i in range(len(G.nodes)):
+            positions_list.append(G.nodes[i].x, G.nodes[i].z)
+        print(positions_list)
         path.append(goalNode.parent)
         #print(path)
         #localMap.draw_path(path)
@@ -415,7 +416,7 @@ def camera_setup():
     cam.configure(picam2_config) # Not really necessary
     cam.start(show_preview=False)
 
-    print('hej2')
+    #print('hej2')
     #print(cam.camera_configuration()) # Print the camera configuration in use
 
     time.sleep(1)  # _utils.wait for camera to setup
