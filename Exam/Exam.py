@@ -48,6 +48,15 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
     est_pose = prior_position
     
     try:
+        if showGUI:
+            # Open windows
+            WIN_RF1 = "Robot view"
+            cv2.namedWindow(WIN_RF1)
+            cv2.moveWindow(WIN_RF1, 50, 50)
+
+            WIN_World = "World view"
+            cv2.namedWindow(WIN_World)
+            cv2.moveWindow(WIN_World, 500, 50)
         # Initialize particles
         num_particles = 1000
         particles = _utils.initialize_particles(num_particles)
@@ -97,6 +106,12 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             if showGUI:
                 # Draw map
                 _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
+                
+                # Show frame
+                cv2.imshow(WIN_RF1, colour)
+
+                # Show world
+                cv2.imshow(WIN_World, world)
             
             iters += 1
         est_pose = _utils.Node(est_pose.x, est_pose.y, None)
@@ -110,6 +125,8 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
 
         # Clean-up capture thread
         #cam.terminateCaptureThread()
+
+        cv2.destroyAllWindows()
 
         return est_pose
     
@@ -236,7 +253,7 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
     maxiter = 1500
     bias = 20
 
-    localMap = _utils.Map(3000.0, 4500.0)
+    localMap = _utils.Map(4500.0, 3500.0)
 
     #print(goal.x)
     #print(goal.z)
