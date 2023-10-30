@@ -465,7 +465,7 @@ def is_spot_free(spot, landmarks, radius):
     '''
     for landmark in landmarks:        
         if dist(spot, landmark) < radius:
-            print('Feltet ' + str(math.floor(spot.x)) + ', ' + str(math.floor(spot.z)) + ' er besat af ' + str(landmark.id))
+            #print('Feltet ' + str(math.floor(spot.x)) + ', ' + str(math.floor(spot.z)) + ' er besat af ' + str(landmark.id))
             return False
     return True
     
