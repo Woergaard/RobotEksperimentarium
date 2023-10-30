@@ -57,6 +57,8 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             WIN_World = "World view"
             cv2.namedWindow(WIN_World)
             cv2.moveWindow(WIN_World, 500, 50)
+        
+        print('hej1')
         # Initialize particles
         num_particles = 1000
         particles = _utils.initialize_particles(num_particles)
@@ -102,8 +104,10 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                     p.setWeight(1.0/num_particles)
         
             est_pose = particle.estimate_pose(particles)
+            print(est_pose)
 
             if showGUI:
+                print('hej2')
                 # Draw map
                 _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
                 
@@ -113,18 +117,14 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 # Show world
                 cv2.imshow(WIN_World, world)
 
-            waiting = True
-            while waiting:
-                if (time.perf_counter() - 0 > 10):
-                    waiting = False
+                time.sleep(10)
             
-            iters += 1
-
-        
+            iters += 1  
 
         est_pose = _utils.Node(est_pose.x, est_pose.y, None)
     
     finally:
+        print('hejhej')
     
         # Make sure to clean up even if an exception occurred
         
@@ -188,7 +188,6 @@ def turn_and_watch(direction, img, landmarkIDs):
 
         return False
     
-
 def RRT(goal, mapsizex, mapsizez, maxiter, seen_landmarks, rootNode, stepLength, bias):
     '''
     Funktionen returnerer et RRT med Arlo som rod.
@@ -311,8 +310,6 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
     
         return path
     
-
-
 def wait_and_sense(seconds):
     '''
     Funktionen venter i den tid, som robotten skal udføre en bestemt action.
@@ -462,6 +459,7 @@ def camera_setup():
 def use_camera(cam, arucoDict, command, params, showcamera, show):
     # Open a window
     if showcamera:
+        print('Kameraet vises.')
         WIN_RF = "Example 1"
         cv2.namedWindow(WIN_RF)
         cv2.moveWindow(WIN_RF, 100, 100)
@@ -552,6 +550,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
 
             print('Arlo befinder sig på position ', arlo_position.x, arlo_position.z)
 
+            '''
             if not landmarkfound:
                 print('Påbegynder RRT-sti.')
                 path = use_camera(cam, arucoDict, 'RRT', [arlo_position, temp_goal_Node, rally_landmarks], showcamera, show) #laver en path med RRT, skal også have arlo position
@@ -560,6 +559,8 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
                     landmarkfound = drive_path_and_sense(path, temp_goal_Node, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
                 else:
                     print('RRT-træ betod kun af Arlos position, æv :(')
+
+            '''
         if landmarkfound:
             print('Landmark ' + str(temp_goal.id) + ' er fundet! Tillykke!')
 
