@@ -73,6 +73,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         Xlst = []
         iters = 0
         while iters < maxiters:
+            print(iters)
             # Fetch next frame
             colour = cam.get_next_frame()
             
