@@ -468,7 +468,7 @@ num_steps = 3
 
 stepLength = 300.0 # milimeter
 
-def robo_rally(landmarkIDs):
+def robo_rally(landmarkIDs, show):
     globalMap = _utils.Map(3000, 4000) # kortets størrelse
     for landmarkID in landmarkIDs:
         globalMap.landmarks.append(_utils.Landmark(None, None, None, landmarkID, landmarks_dict[landmarkID])) # liste af alle spottede landmarks
@@ -489,7 +489,7 @@ def robo_rally(landmarkIDs):
 
             while lost:
                 if iterations < 10:
-                    found = use_camera(cam, arucoDict, 'turn_and_watch', [landmarkIDs], True)
+                    found = use_camera(cam, arucoDict, 'turn_and_watch', [landmarkIDs], show)
                     if found:
                         lost = False
                     else:
@@ -502,7 +502,7 @@ def robo_rally(landmarkIDs):
             
             arlo.stop()
             print('Begynder selflokalisering.')
-            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200], True)
+            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200], show)
             arlo_node = _utils.Node(arlo_position[0], arlo_position[1], None)
             landmarkfound = landmark_reached(arlo_node, temp_goal_Node)
 
@@ -510,7 +510,7 @@ def robo_rally(landmarkIDs):
 
             if not landmarkfound:
                 print('Påbegynder RRT-sti.')
-                path = use_camera(cam, arucoDict, 'RRT', [200, temp_goal_Node, rally_landmarks], True) #laver en path med RRT, skal også have arlo position
+                path = use_camera(cam, arucoDict, 'RRT', [200, temp_goal_Node, rally_landmarks], show) #laver en path med RRT, skal også have arlo position
                 print('Kører ' + str(num_steps) + ' trin af vores RRT sti.')
                 landmarkfound = drive_path_and_sense(path, temp_goal_Node, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
     
@@ -520,5 +520,5 @@ def robo_rally(landmarkIDs):
     arlo.stop()
     print('Rute færdiggjort!')
 
-robo_rally(landmarkIDs)
+robo_rally(landmarkIDs, False)
             
