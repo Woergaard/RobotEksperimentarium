@@ -106,12 +106,12 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         # Make sure to clean up even if an exception occurred
         
         # Close all windows
-        cv2.destroyAllWindows()
+        #cv2.destroyAllWindows()
 
         # Clean-up capture thread
-        cam.terminateCaptureThread()
+        #cam.terminateCaptureThread()
 
-    return est_pose
+        return est_pose
     
 
 def turn_and_watch(direction, img, landmarkIDs):
