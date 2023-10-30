@@ -259,6 +259,7 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
         notRoot = True
 
         while notRoot:
+            print(type(path[-1]))
             if path[-1].parent != None:
                 path.append(path[-1].parent)
             else:
