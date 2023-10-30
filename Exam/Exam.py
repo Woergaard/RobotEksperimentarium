@@ -71,8 +71,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
 
         Xlst = []
-        iters = 0
-        while iters < maxiters:
+        for iters in range(maxiters):
             print(iters)
             # Fetch next frame
             colour = cam.get_next_frame()
@@ -119,8 +118,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 cv2.imshow(WIN_World, world)
 
                 time.sleep(10)
-            
-            iters += 1  
+
 
         est_pose = _utils.Node(est_pose.x, est_pose.y, None)
     
@@ -545,7 +543,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
             
             arlo.stop()
             print('Begynder selflokalisering.')
-            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [50, landmarkIDs, landmarks_dict, landmark_colors, arlo_position], showcamera, show)
+            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200, landmarkIDs, landmarks_dict, landmark_colors, arlo_position], showcamera, show)
             #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
 
