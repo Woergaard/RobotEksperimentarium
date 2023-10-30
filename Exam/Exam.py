@@ -99,6 +99,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
             
             iters += 1
+        est_pose = _utils.Node(est_pose.x, est_pose.y, None)
     
     finally:
         return est_pose
