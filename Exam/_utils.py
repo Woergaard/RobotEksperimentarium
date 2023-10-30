@@ -306,7 +306,7 @@ class Map:
         '''
         Funktionen viser kortet.
         '''
-        plt.plot(arlo_position[0],arlo_position[1], 'bo')
+        plt.plot(arlo_position.x,arlo_position.z, 'bo')
         plt.annotate('ArloCinque', xy=arlo_position)
         
         plt.ylim(0, self.zlim)
