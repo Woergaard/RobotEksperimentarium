@@ -45,8 +45,7 @@ standardSpeed = 50.0
 
 def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position):
     #return (750.0,0.0)
-    est_pose = ()
-    landmarks_lst = []
+    est_pose = prior_position
     
     try:
         # Initialize particles
@@ -102,7 +101,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             iters += 1
     
     finally:
-        return est_pose, landmarks_lst
+        return est_pose
     '''
         # Make sure to clean up even if an exception occurred
         
