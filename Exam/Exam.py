@@ -508,7 +508,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, show):
             #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
 
-            print('Arlo befinder sig på position ' + str(arlo_position.x, arlo_position.z))
+            print('Arlo befinder sig på position ', arlo_position.x, arlo_position.z)
 
             if not landmarkfound:
                 print('Påbegynder RRT-sti.')
