@@ -463,10 +463,9 @@ landmarks_dict = {
 }
 landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
 
-
 num_steps = 3
 
-stepLength = 300.0 # milimeter
+stepLength =500.0 # milimeter
 
 def robo_rally(landmarkIDs, show):
     globalMap = _utils.Map(3000, 4000) # kortets størrelse
