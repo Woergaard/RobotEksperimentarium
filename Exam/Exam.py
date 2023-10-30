@@ -533,7 +533,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
 
             while lost:
                 if iterations < 10:
-                    found = use_camera(cam, arucoDict, 'turn_and_watch', [landmarkIDs], show)
+                    found = use_camera(cam, arucoDict, 'turn_and_watch', [landmarkIDs], showcamera, show)
                     if found:
                         lost = False
                     else:
@@ -567,4 +567,3 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
     print('Rute færdiggjort!')
 
 robo_rally(landmarkIDs, landmarks_dict, landmark_colors, False, True)
-            
