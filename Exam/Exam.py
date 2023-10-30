@@ -204,7 +204,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, seen_landmarks, rootNode, stepLength,
         if random_number < bias:
             steering_node = _utils.Node(goal.x, goal.z, None)
         else:
-            steering_node = _utils.Node(random.randrange(-mapsizex, mapsizex), random.randrange(0, mapsizez), None)
+            steering_node = _utils.Node(random.randrange(-500, mapsizex), random.randrange(-500, mapsizez), None)
         
         box_radius = 400.0
 
