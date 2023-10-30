@@ -199,7 +199,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, seen_landmarks, rootNode, stepLength,
             #print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
             G.edges.append((nearest_node, new_node))
-            print('Node med position' + str(new_node.x) + ', ' + str(new_node.z) + ' tilføjes til RRT')
+            print('Node med position ' + str(math.floor(new_node.x)) + ', ' + str(math.floor(new_node.z)) + ' tilføjes til RRT')
 
             goal_radius = 200.0
             if not _utils.is_spot_free(new_node, [goal], goal_radius):
