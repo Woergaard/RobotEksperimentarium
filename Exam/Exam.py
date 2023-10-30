@@ -180,6 +180,7 @@ def turn_and_watch(direction, img, landmarkIDs):
 
         return False
     
+
 def RRT(goal, mapsizex, mapsizez, maxiter, seen_landmarks, rootNode, stepLength, bias):
     '''
     Funktionen returnerer et RRT med Arlo som rod.
@@ -241,8 +242,11 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
         goal: et Landmark, der er vores midlertidige mål
     '''
 
-    seen_landmarks = _utils.landmark_detection(img, arucoDict)
+    seen_landmarks = _utils.landmark_detection(img, arucoDict, arlo_position)
     for seen_landmark in seen_landmarks:
+        seen_landmark.x = seen_landmark.x + arlo_position.x
+        seen_landmark.z = seen_landmark.z + arlo_position.z
+        seen_landmark.tvec = (seen_landmark.x, seen_landmark.z)
         print('Landmarks, der kan ses: ' + str(seen_landmark.id) + ' på position ' + str(math.floor(seen_landmark.x)) + ', ' + str(math.floor(seen_landmark.z)))
 
     for landmark in rally_landmarks:
