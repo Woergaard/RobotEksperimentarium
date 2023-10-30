@@ -71,14 +71,15 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
 
         Xlst = []
+
         for iters in range(maxiters):
             print(iters)
             # Fetch next frame
             colour = cam.get_next_frame()
-            
+            print('hej1.1')
             # Detect objects
             objectIDs, dists, angles = cam.detect_aruco_objects(colour)
-            
+            print('hej1.2')
             Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
             
             sigma_theta = 0.57
@@ -102,7 +103,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 # No observation - reset weights to uniform distribution
                 for p in particles:
                     p.setWeight(1.0/num_particles)
-        
+            print('hej1.3')
             est_pose = particle.estimate_pose(particles)
             print(est_pose)
 
