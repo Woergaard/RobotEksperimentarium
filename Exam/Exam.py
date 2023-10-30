@@ -456,14 +456,14 @@ landmark_colors = [CRED, CGREEN,  CCYAN, CYELLOW] # Colors used when drawing the
 
 landmarkIDs = [3, 4]
 landmarks_dict = {
-    1: (1500.0, 2000.0),
-    2: (0.0, 2000.0)
+    3: (1500.0, 2000.0),
+    4: (0.0, 2000.0)
 }
 landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
 
 num_steps = 3
 
-stepLength =500.0 # milimeter
+stepLength = 500.0 # milimeter
 
 def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, show):
     globalMap = _utils.Map(3000, 4000) # kortets størrelse
