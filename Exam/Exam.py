@@ -254,7 +254,7 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
         print(len(G.nodes))
         positions_list = []
         for i in range(len(G.nodes)):
-            positions_list.append(G.nodes[i].x, G.nodes[i].z)
+            positions_list.append((G.nodes[i].x, G.nodes[i].z))
         print(positions_list)
         path.append(goalNode.parent)
         #print(path)
