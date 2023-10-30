@@ -309,8 +309,8 @@ class Map:
         plt.plot(arlo_position.x,arlo_position.z, 'bo')
         plt.annotate('ArloCinque', xy=(arlo_position.x, arlo_position.z))
         
-        plt.ylim(0, self.zlim)
-        plt.xlim(-self.xlim, self.xlim)
+        plt.ylim(-500, self.zlim)
+        plt.xlim(-500, self.xlim)
         plt.xlabel('x')
         plt.ylabel('z')
         plt.show()
