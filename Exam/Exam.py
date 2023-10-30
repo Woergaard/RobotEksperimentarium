@@ -224,11 +224,11 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
 
     seen_landmarks = _utils.landmark_detection(img, arucoDict)
     for seen_landmark in seen_landmarks:
-        print('Landmarks, der kan ses: ' + str(seen_landmark.id) + ' på position ' + str(seen_landmark.x) + ', ' + str(seen_landmark.z))
+        print('Landmarks, der kan ses: ' + str(seen_landmark.id) + ' på position ' + str(math.floor(seen_landmark.x)) + ', ' + str(math.floor(seen_landmark.z)))
 
     for landmark in rally_landmarks:
         seen_landmarks.append(landmark)
-        print('Landmarks, vi ved er der: ' + str(landmark.id) + ' på position ' + str(landmark.x) + ', ' + str(landmark.z))
+        print('Landmarks, vi ved er der: ' + str(landmark.id) + ' på position ' + str(math.floor(landmark.x)) + ', ' + str(math.floor(landmark.z)))
 
     rootNode = arlo_position # Arlos position
     maxiter = 1500
@@ -257,27 +257,30 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
             positions_list.append((G.nodes[i].x, G.nodes[i].z))
         print(positions_list)
         path.append(goalNode.parent)
+        print(type(path[-1]))
         #print(path)
         #localMap.draw_path(path)
         print('Driving towards', goalNode.x, goalNode.z)
 
         notRoot = True
 
-        while notRoot:
-            #print(type(path[-1]))
-            if path[-1].parent != None:
-                path.append(path[-1].parent)
-            else:
-                notRoot = False
+        if not goalNode.x == rootNode.x and goalNode.z == rootNode.z:
+            while notRoot:
+                if path[-1].parent != None:
+                    path.append(path[-1].parent)
+                else:
+                    notRoot = False
 
-        path.pop()
-        path.reverse()
-        print("PATH: ", path)
+            path.pop()
+            path.reverse()
+            print("PATH: ", path)
 
-        localMap.draw_path(path)
-        localMap.show_map(arlo_position)
+            localMap.draw_path(path)
+            localMap.show_map(arlo_position)
     
-    return path
+        return path
+    
+
 
 def wait_and_sense(seconds):
     '''
@@ -354,7 +357,7 @@ def drive_free_carefully(seconds):
     '''
     start = time.perf_counter()
     isDriving = True
-    pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+    #pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
 
     while isDriving:
         drive_one_move()
@@ -467,12 +470,12 @@ landmarkIDs = [1, 2, 3, 4]
 landmarks_dict = {
     1: (0.0, 0.0),
     2: (0.0, 3000.0),
-    3: (3000.0, 0.0),
-    4: (4000.0, 4000.0)
+    3: (4000.0, 0.0),
+    4: (4000.0, 3000.0)
 }
 landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW] # Colors used when drawing the landmarks
 
-num_steps = 3
+num_steps = 2
 
 stepLength = 500.0 # milimeter
 
@@ -521,9 +524,11 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, show):
             if not landmarkfound:
                 print('Påbegynder RRT-sti.')
                 path = use_camera(cam, arucoDict, 'RRT', [200, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, temp_goal_Node, rally_landmarks], show) #laver en path med RRT, skal også have arlo position
-                print('Kører ' + str(num_steps) + ' trin af vores RRT sti.')
-                landmarkfound = drive_path_and_sense(path, temp_goal_Node, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
-    
+                if len(path)>1:
+                    print('Kører ' + str(num_steps) + ' trin af vores RRT sti.')
+                    landmarkfound = drive_path_and_sense(path, temp_goal_Node, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
+                else:
+                    print('RRT-træ betod kun af Arlos position, æv :(')
         if landmarkfound:
             print('Landmark ' + str(temp_goal.id) + ' er fundet! Tillykke!')
 
