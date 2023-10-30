@@ -192,14 +192,14 @@ def RRT(goal, mapsizex, mapsizez, maxiter, seen_landmarks, rootNode, stepLength,
         new_node = _utils.steer(nearest_node, steering_node, stepLength)
         halfway_node = _utils.steer(nearest_node, steering_node, stepLength/2)
 
-        print(new_node.x)
-        print(new_node.z)
+        #print(new_node.x)
+        #print(new_node.z)
         #print(iters) 
         if _utils.is_spot_free(new_node, seen_landmarks, box_radius) and _utils.is_spot_free(halfway_node, seen_landmarks, box_radius):
             #print("new node:", new_node.x, new_node.z, "steering node:", steering_node.x, steering_node.z)
             G.nodes.append(new_node)
             G.edges.append((nearest_node, new_node))
-            print('node tilføjes til træ')
+            print('Node med position' + str(new_node.x) + ', ' + str(new_node.z) + ' tilføjes til RRT')
 
             goal_radius = 200.0
             if not _utils.is_spot_free(new_node, [goal], goal_radius):
@@ -462,12 +462,14 @@ landmarks = {
 landmark_colors = [CRED, CGREEN,  CCYAN, CYELLOW] # Colors used when drawing the landmarks
 '''
 
-landmarkIDs = [3, 4]
+landmarkIDs = [1, 2, 3, 4]
 landmarks_dict = {
-    3: (1500.0, 2000.0),
-    4: (0.0, 2000.0)
+    1: (0.0, 0.0),
+    2: (0.0, 3000.0),
+    3: (3000.0, 0.0),
+    4: (4000.0, 4000.0)
 }
-landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
+landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW] # Colors used when drawing the landmarks
 
 num_steps = 3
 
