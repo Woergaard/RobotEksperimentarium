@@ -43,9 +43,9 @@ rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
 standardSpeed = 50.0
 
-def selflocalize(cam, showGUI, maxiters):
-    return (750.0,0.0)
-    '''
+def selflocalize(cam, showGUI, maxiters, rally_landmarks):
+    #return (750.0,0.0)
+    
     try:
         # Initialize particles
         num_particles = 1000
@@ -53,10 +53,10 @@ def selflocalize(cam, showGUI, maxiters):
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
 
         # Allocate space for world map
-        world = np.zeros((500,500,3), dtype=np.uint8)
+        world = np.zeros((1000,1000,3), dtype=np.uint8)
 
         # Draw map
-        _utils.draw_world(est_pose, particles, world, landmarks, landmarkIDs, landmark_colors)
+        _utils.draw_world(est_pose, particles, world, rally_landmarks, landmarkIDs, landmark_colors)
 
         Xlst = []
         iters = 0
@@ -67,17 +67,16 @@ def selflocalize(cam, showGUI, maxiters):
             # Detect objects
             objectIDs, dists, angles = cam.detect_aruco_objects(colour)
             
-            
             Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
             
-            sigma_theta = 0.2 #0.57
-            sigma_d = 2.0 #5.0
+            sigma_theta = 0.57
+            sigma_d = 5.0
             particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
             if not isinstance(objectIDs, type(None)):
-                landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks)
+                landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, rally_landmarks)
                 
-                _utils.update_weights(sigma_d, sigma_theta, landmarks_lst, particles)
+                _utils.update_weights(sigma_d, sigma_theta, landmarks_lst, particles)    
                     
                 _utils.normalize_weights(particles)
 
@@ -92,15 +91,15 @@ def selflocalize(cam, showGUI, maxiters):
                 for p in particles:
                     p.setWeight(1.0/num_particles)
         
-            est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
+            est_pose = particle.estimate_pose(particles)
 
             if showGUI:
                 # Draw map
-                _utils.draw_world(est_pose, particles, world, landmarks, landmarkIDs, landmark_colors)
+                _utils.draw_world(est_pose, particles, world, rally_landmarks, landmarkIDs, landmark_colors)
             
             iters += 1
 
-    finally: 
+    finally:
         # Make sure to clean up even if an exception occurred
         
         # Close all windows
@@ -110,7 +109,6 @@ def selflocalize(cam, showGUI, maxiters):
         cam.terminateCaptureThread()
 
         return est_pose, landmarks_lst
-    '''
 
 def turn_and_watch(direction, img, landmarkIDs):
     '''
@@ -433,14 +431,14 @@ def use_camera(cam, arucoDict, command, params, show):
             cv2.imshow(WIN_RF, image)
 
         if command == 'selflocalize':
-            arlo_position = selflocalize(cam, show, params[0])
+            arlo_position = selflocalize(cam, show, params[0], params[1])
             return arlo_position
 
         elif command == 'turn_and_watch':
             return turn_and_watch('left', image, params[0])
 
         elif command == 'RRT':
-            arlo_position = selflocalize(cam, show, params[0])
+            arlo_position = selflocalize(cam, show, params[0], params[2])
             path = make_RRT_path(image, arucoDict, True, arlo_position, params[1], params[2])
             return path 
 
@@ -501,7 +499,7 @@ def robo_rally(landmarkIDs, show):
             
             arlo.stop()
             print('Begynder selflokalisering.')
-            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200], show)
+            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200, rally_landmarks], show)
             arlo_node = _utils.Node(arlo_position[0], arlo_position[1], None)
             landmarkfound = landmark_reached(arlo_node, temp_goal_Node)
 
