@@ -175,6 +175,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, seen_landmarks, rootNode, stepLength,
         stepLength:   distancen mellem den returnerede node og nearest_node
         bias:   en værdi mellem 0 og 100, der jo højere den er, angiver, at vi vurderer, at banen er meget simpel.
     '''
+    print('Udregner RRT med goal på position ' + str(goal.x) + ', ' + str(goal.z))
     G = _utils.Graf([rootNode], [])
     iters = 0
     #print('hej4')
