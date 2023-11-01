@@ -120,7 +120,7 @@ def detect_landmarks(img, arucoDict):
 
     seenLandmarks = []
     # Udregner vinkel og retning til landmarket
-    if ids.size > 0: 
+    if ids == []: 
         print("No marker detected")
         return seenLandmarks, [], []
     elif ids is not None:
