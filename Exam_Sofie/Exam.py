@@ -140,10 +140,6 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
 
                 time.sleep(10)
 
-
-        est_pose = _utils.Node(est_pose.x * 10.0, est_pose.y * 10.0, None) # VI GLEMMER AT EKSPORTERE VINKLEN!!!
-        est_pose.setTheta(est_pose.theta)
-    
     finally:
         print('hejhej')
     
@@ -155,6 +151,9 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         # Clean-up capture thread
         cv2.destroyAllWindows()
         cam.terminateCaptureThread()
+
+        est_pose = _utils.Node(est_pose.x * 10.0, est_pose.y * 10.0, None) # VI GLEMMER AT EKSPORTERE VINKLEN!!!
+        est_pose.setTheta(est_pose.theta)
 
         return est_pose, particles
     
@@ -600,7 +599,8 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
                 else:
                     print('Påbegynder frikørsel for at få øje på et landmark')
                     drive_free_carefully(2.0, frontLimit, sideLimit)
-                    iterations = 0 
+                    iterations = 0
+                    particles = []
             
             arlo.stop()
             print('Begynder selflokalisering.')
