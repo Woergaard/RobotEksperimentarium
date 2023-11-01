@@ -109,6 +109,13 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             if not isinstance(objectIDs, type(None)):
                 landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
                 
+                # omregner til milimeter
+                for landmark in landmarks_lst:
+                    landmark.x /= 10
+                    landmark.z /= 10
+                    landmark.tvec[0] /= 10
+                    landmark.tvec[1] /= 10
+
                 _utils.update_weights(sigma_d, sigma_theta, landmarks_lst, particles)    
                     
                 _utils.normalize_weights(particles)
