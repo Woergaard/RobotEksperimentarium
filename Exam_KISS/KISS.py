@@ -66,7 +66,7 @@ def camera_setup():
 
     return cam, arucoDict
 
-def use_camera(cam, arucoDict, command, showcamera, show):
+def use_camera(cam, arucoDict, command, landmarkIDs, show):
     # Open a window'''
     if show:
         print('Kameraet vises.')
@@ -282,11 +282,11 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
             while not landmarkSeen:
                 if iters < 10:
                     print('Drejer og leder efter landmark ' + str(goalID))
-                    landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [goalID], arucoDict, show)
+                    landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [goalID], show)
                     iters += 1
                 else:
                     print('Søger efter et landmark i midten med id > 4.')
-                    landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [], arucoDict, show)
+                    landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [], show)
 
                     # finder landmark i liste
                     landmarkIndex = 0
