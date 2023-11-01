@@ -122,7 +122,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 time.sleep(10)
 
 
-        est_pose = _utils.Node(est_pose.x, est_pose.y, None)
+        est_pose = _utils.Node(est_pose.x, est_pose.y, None) # VI GLEMMER AT EKSPORTERE VINKLEN!!!
     
     finally:
         print('hejhej')
@@ -546,6 +546,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
             arlo.stop()
             print('Begynder selflokalisering.')
             arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200, landmarkIDs, landmarks_dict, landmark_colors, arlo_position], showcamera, show)
+            print(arlo_position.x, arlo_position.z)
             #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
 
