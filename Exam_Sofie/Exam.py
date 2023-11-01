@@ -72,8 +72,8 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         prevnode = est_pose
         for node in path:
             direction, degrees = _utils.find_turn_angle(prevnode, node)
-            delta_x = abs(prevnode.x - node.x)
-            delta_z = abs(prevnode.z - node.z)
+            delta_x = abs(prevnode.x - node.x/10)
+            delta_z = abs(prevnode.z - node.z/10)
             for p in particles:
                 print('Partiklerne flyttes ', delta_x, delta_z, degrees)
                 particle.move_particle(p, delta_x, delta_z, degrees)
