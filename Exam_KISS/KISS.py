@@ -122,7 +122,7 @@ def detect_landmarks(img, arucoDict):
     # Udregner vinkel og retning til landmarket
     if ids.size > 0: 
         print("No marker detected")
-        return seenLandmarks
+        return seenLandmarks, [], []
     elif ids is not None:
         for i in range(len(ids)):
             world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
