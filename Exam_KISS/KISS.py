@@ -140,22 +140,6 @@ def turn_and_watch(direction, img, landmarkIDs, arucoDict):
 
         return False, seenLandmarks 
 
-def drive_around_landmark(arlo, seconds):
-    # This function makes the robot drive around the landmark.
-    # You might need to adjust the parameters depending on the size of the landmark and the desired path around it.
-    arlo.go_diff(standardSpeed, standardSpeed, 0, 1)  # Turn left in place
-    time.sleep(1)  # Adjust as necessary
-    arlo.stop()
-    arlo.go_diff(standardSpeed, standardSpeed, 1, 1)  # Go forward
-    time.sleep(seconds)  # Drive for 'seconds' seconds
-    arlo.stop()
-    arlo.go_diff(standardSpeed, standardSpeed, 1, 0)  # Turn right in place
-    time.sleep(1)  # Adjust as necessary
-    arlo.stop()
-    arlo.go_diff(standardSpeed, standardSpeed, 1, 1)  # Go forward
-    time.sleep(seconds)  # Drive for 'seconds' seconds
-    arlo.stop()
-
 
 def wait_and_sense(seconds):
     '''
