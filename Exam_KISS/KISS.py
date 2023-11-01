@@ -323,6 +323,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
     arlo.stop()
     print('Rute færdiggjort!')
 
+main(landmarkIDs, frontLimit, sideLimit, False)
 
 
 
