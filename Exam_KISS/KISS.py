@@ -175,7 +175,7 @@ def drive_carefully(direction, meters):
 
 def approach(goalLandmark):
     maxdist = goalLandmark.distance
-    
+
     print('Nærmer sig landmarket.')
 
     arlo.go_diff(leftWheelFactor*standardSpeed*0.3, rightWheelFactor*standardSpeed*0.3, 1, 1)
@@ -273,6 +273,8 @@ def use_camera(cam, arucoDict, command, params, show):
             return
 
 def find_landmark(cam, arucoDict, goalID, show):
+    landmarkSeen = False
+    
     while not landmarkSeen:
         if iters < 10:
             print('Drejer og leder efter landmark ' + str(goalID))
