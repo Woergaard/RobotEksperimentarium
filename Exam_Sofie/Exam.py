@@ -289,8 +289,8 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
         print('Landmarks, vi ved er der: ' + str(landmark.id) + ' på position ' + str(math.floor(landmark.x)) + ', ' + str(math.floor(landmark.z)))
 
     rootNode = arlo_position # Arlos position
-    maxiter = 1500
-    bias = 20
+    maxiter = 200
+    bias = 50
 
     localMap = _utils.Map(4500.0, 3500.0)
 
@@ -572,7 +572,7 @@ landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW] # Colors used when drawing the 
 
 num_steps = 3
 
-stepLength = 500.0 # milimeter
+stepLength = 1000.0 # milimeter
 
 def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, frontLimit, sideLimit):
     globalMap = _utils.Map(3000, 4000) # kortets størrelse
