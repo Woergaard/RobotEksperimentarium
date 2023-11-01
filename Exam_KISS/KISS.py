@@ -186,8 +186,8 @@ def approach(maxdist):
     while isDriving and (pingFront > 300 and pingLeft > 250 and pingRight > 250):
         pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
         sleep(0.041)
-        if (time.perf_counter() - start > seconds):
-            isDriving = False
+        #if (time.perf_counter() - start > seconds):
+        #    isDriving = False
 
     arlo.stop()
 
@@ -326,8 +326,8 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
 
         if landmarkFound:
             print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
-            _utils.sharp_turn('right', 180.0)
-            drive_carefully('forwards', 0.7)
+            #_utils.sharp_turn('right', 180.0)
+            #drive_carefully('forwards', 0.7)
                     
     arlo.stop()
     print('Rute færdiggjort!')
