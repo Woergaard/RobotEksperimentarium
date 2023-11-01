@@ -140,6 +140,23 @@ def turn_and_watch(direction, img, landmarkIDs, arucoDict):
 
         return False, seenLandmarks 
 
+def drive_around_landmark(arlo, seconds):
+    # This function makes the robot drive around the landmark.
+    # You might need to adjust the parameters depending on the size of the landmark and the desired path around it.
+    arlo.go_diff(standardSpeed, standardSpeed, 0, 1)  # Turn left in place
+    time.sleep(1)  # Adjust as necessary
+    arlo.stop()
+    arlo.go_diff(standardSpeed, standardSpeed, 1, 1)  # Go forward
+    time.sleep(seconds)  # Drive for 'seconds' seconds
+    arlo.stop()
+    arlo.go_diff(standardSpeed, standardSpeed, 1, 0)  # Turn right in place
+    time.sleep(1)  # Adjust as necessary
+    arlo.stop()
+    arlo.go_diff(standardSpeed, standardSpeed, 1, 1)  # Go forward
+    time.sleep(seconds)  # Drive for 'seconds' seconds
+    arlo.stop()
+
+
 def wait_and_sense(seconds):
     '''
     Funktionen venter i den tid, som robotten skal udføre en bestemt action.
@@ -176,11 +193,11 @@ def drive_carefully(direction, meters):
 def approach(maxdist):
     print('Nærmer sig landmarket.')
 
-    arlo.go_diff(leftWheelFactor*standardSpeed*0.3, rightWheelFactor*standardSpeed*0.3, 1, 1)
+    arlo.go_diff(leftWheelFactor*standardSpeed*0.6, rightWheelFactor*standardSpeed*0.6, 1, 1)
     pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
     isDriving = True
     start = time.perf_counter()
-    seconds = _utils.metersToSeconds(maxdist/1000) * 0.3
+    seconds = _utils.metersToSeconds(maxdist/1000) * 0.6
 
     while isDriving and (pingFront > 350 and pingLeft > 350 and pingRight > 350):
         pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
