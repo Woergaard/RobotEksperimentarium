@@ -135,7 +135,7 @@ def detect_landmarks(img, arucoDict):
     else:
         print("No marker detected")
     
-    
+
     return seenLandmarks, ids, aruco_corners
     
 def turn_and_watch(direction, img, landmarkIDs, arucoDict):
@@ -170,13 +170,11 @@ def turn_and_watch(direction, img, landmarkIDs, arucoDict):
                 if id in ids:
                     landmark_spotted = True
         
-    
-
     # If at least one marker is detected
     if len(aruco_corners) > 0 and landmark_spotted:
         for i in range(len(ids)):
             print('Landmark ' + str(ids[i]) + ' detekteret via turn_and_watch.')
-        return True
+        return True, seenLandmarks
     else: 
         arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
         turnSeconds = _utils.degreeToSeconds(20)
