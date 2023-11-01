@@ -380,7 +380,7 @@ def drive_one_move(frontLimit, sideLimit):
     elif (pingRight < sideLimit):
         _utils.turn_and_sense('left')
         
-def drive_free_carefully(seconds, frontLimit, Si):
+def drive_free_carefully(seconds, frontLimit, sideLimit):
     '''
     Funktionen kører robotten frem, indtil der er en forhindring. Så drejer den, indtil at der er frit.
     '''
@@ -389,7 +389,7 @@ def drive_free_carefully(seconds, frontLimit, Si):
     #pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
 
     while isDriving:
-        drive_one_move()
+        drive_one_move(frontLimit, sideLimit)
         if (time.perf_counter() - start > seconds):
             isDriving = False
 
@@ -540,7 +540,7 @@ num_steps = 4
 
 stepLength = 500.0 # milimeter
 
-def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
+def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, frontLimit, sideLimit):
     globalMap = _utils.Map(3000, 4000) # kortets størrelse
     for landmarkID in landmarkIDs:
         globalMap.landmarks.append(_utils.Landmark(None, None, None, landmarkID, landmarks_dict[landmarkID])) # liste af alle spottede landmarks
@@ -571,7 +571,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
                     iterations += 1
                 else:
                     print('Påbegynder frikørsel for at få øje på et landmark')
-                    drive_free_carefully(2.0)
+                    drive_free_carefully(2.0, frontLimit, sideLimit)
                     iterations = 0 
             
             arlo.stop()
@@ -599,5 +599,8 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
 
     arlo.stop()
     print('Rute færdiggjort!')
+    
+frontLimit = 500.0
+sideLimit = 400.0
 
-robo_rally(landmarkIDs, landmarks_dict, landmark_colors, False, False)
+robo_rally(landmarkIDs, landmarks_dict, landmark_colors, False, False, frontLimit, sideLimit)
