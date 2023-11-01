@@ -120,10 +120,7 @@ def detect_landmarks(img, arucoDict):
 
     seenLandmarks = []
     # Udregner vinkel og retning til landmarket
-    if ids == []: 
-        print("No marker detected")
-        return seenLandmarks, [], []
-    elif ids is not None:
+    if ids is not None:
         for i in range(len(ids)):
             world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
             if np.dot(tvecs[i], np.array([1, 0, 0])) < 0:
@@ -135,7 +132,10 @@ def detect_landmarks(img, arucoDict):
             #print('dist: ' + str(linalg.norm(tvecs[i])) + ', vinkel: ' + str(world_angle) + direction + ', id: ' + str(ids[i][0]) + ', tvec: ' + str(tvecs[i][0]))
         
         seenLandmarks.sort(key=lambda x: x.distance, reverse=False) # sorterer listen, så det nærmeste landmark er først.
-
+    else:
+        print("No marker detected")
+    
+    
     return seenLandmarks, ids, aruco_corners
     
 def turn_and_watch(direction, img, landmarkIDs, arucoDict):
