@@ -243,6 +243,10 @@ class Node:
         self.z = z
         self.path = []
         self.parent = parent
+        self.theta = 0
+
+    def setTheta(self, theta):
+        self.theta = theta
 
 class Graf:
     '''
