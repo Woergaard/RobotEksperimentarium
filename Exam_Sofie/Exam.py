@@ -46,7 +46,8 @@ standardSpeed = 50.0
 
 def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position, particles, path, stepLength):
     #return (750.0,0.0)
-    est_pose = prior_position
+    est_pose = _utils.Node(prior_position.x/10, prior_position.z/10, None)
+    est_pose.setTheta(prior_position.theta)
     
     try:
         if showGUI:
