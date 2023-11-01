@@ -181,7 +181,7 @@ def approach():
     pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
     isDriving = True
 
-    while isDriving and (pingFront > 350 and pingLeft > 250 and pingRight > 250):
+    while isDriving and (pingFront > 300 and pingLeft > 250 and pingRight > 250):
         pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
         sleep(0.041)
 
@@ -297,7 +297,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                             landmarkIndex = i
                             
                     print('Kører mod ' + str(seenLandmarks[landmarkIndex].id))
-                    landmarkFound = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
+                    _ = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
 
                     print('Kører langs kysten og leder efter ' + str(goalID))
                     use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimit, sideLimit], show)
