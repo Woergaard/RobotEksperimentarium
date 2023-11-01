@@ -40,50 +40,6 @@ lostLimit = 1000.0
 # DONE 6. (approach) Robotten når det rigtige landmark og stopper.
 # DONE 7. Tilbage til 1. 
 
-def camera_setup():
-    '''
-    Funktionen åbner kameraet og udfører en kommando.
-    Argumenter:
-        command:  kommando
-        show:   bool, der angiver, om kameraets output skal vises
-    '''
-    # Open a camera device for capturing
-    imageSize = (1280, 720)
-    FPS = 60
-    cam = picamera2.Picamera2()
-    frame_duration_limit = int(1/FPS * 1000000) # Microseconds
-    # Change configuration to set resolution, framerate
-    picam2_config = cam.create_video_configuration({"size": imageSize, "format": 'RGB888'}, controls={"FrameDurationLimits": (frame_duration_limit, frame_duration_limit)}, queue=False)
-    cam.configure(picam2_config) # Not really necessary
-    cam.start(show_preview=False)
-
-    #print('hej2')
-    #print(cam.camera_configuration()) # Print the camera configuration in use
-
-    time.sleep(1)  # _utils.wait for camera to setup
-
-    arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
-
-    return cam, arucoDict
-
-def use_camera(cam, arucoDict, command, landmarkIDs, show):
-    # Open a window'''
-    if show:
-        print('Kameraet vises.')
-        WIN_RF = "Example 1"
-        cv2.namedWindow(WIN_RF)
-        cv2.moveWindow(WIN_RF, 100, 100)
-    
-    while cv2.waitKey(4) == -1: # _utils.wait for a key pressed event
-        image = cam.capture_array("main")
-        
-        # Show frames
-        if show:
-            cv2.imshow(WIN_RF, image)
-
-        elif command == 'turn_and_watch':
-            return turn_and_watch('left', image, landmarkIDs, arucoDict)
-
 
 def costaldrive(goalID, image, arucoDict, frontLimit, sideLimit):
     '''
@@ -263,6 +219,55 @@ def drive_carefully_to_landmark(landmark, frontLimit, sideLimit): #Robotten kør
 
     return True
 
+def camera_setup():
+    '''
+    Funktionen åbner kameraet og udfører en kommando.
+    Argumenter:
+        command:  kommando
+        show:   bool, der angiver, om kameraets output skal vises
+    '''
+    # Open a camera device for capturing
+    imageSize = (1280, 720)
+    FPS = 60
+    cam = picamera2.Picamera2()
+    frame_duration_limit = int(1/FPS * 1000000) # Microseconds
+    # Change configuration to set resolution, framerate
+    picam2_config = cam.create_video_configuration({"size": imageSize, "format": 'RGB888'}, controls={"FrameDurationLimits": (frame_duration_limit, frame_duration_limit)}, queue=False)
+    cam.configure(picam2_config) # Not really necessary
+    cam.start(show_preview=False)
+
+    #print('hej2')
+    #print(cam.camera_configuration()) # Print the camera configuration in use
+
+    time.sleep(1)  # _utils.wait for camera to setup
+
+    arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
+
+    return cam, arucoDict
+
+def use_camera(cam, arucoDict, command, params, show):
+    # Open a window'''
+    if show:
+        print('Kameraet vises.')
+        WIN_RF = "Example 1"
+        cv2.namedWindow(WIN_RF)
+        cv2.moveWindow(WIN_RF, 100, 100)
+    
+    while cv2.waitKey(4) == -1: # _utils.wait for a key pressed event
+        image = cam.capture_array("main")
+        
+        # Show frames
+        if show:
+            cv2.imshow(WIN_RF, image)
+
+        elif command == 'turn_and_watch':
+            return turn_and_watch('left', image, params[0], arucoDict)
+        elif command == 'costaldrive':
+            costaldrive(params[0], image, arucoDict, params[1], params[2])
+            return
+
+
+
 # Her kommer main programmet
 def main(landmarkIDs, frontLimit, sideLimit, show):
 
@@ -281,11 +286,11 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
             while not landmarkSeen:
                 if iters < 10:
                     print('Drejer og leder efter landmark ' + str(goalID))
-                    landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [goalID], show)
+                    landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[goalID]], show)
                     iters += 1
                 else:
                     print('Søger efter et landmark i midten med id > 4.')
-                    landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [], show)
+                    landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[]], show)
 
                     # finder landmark i liste
                     landmarkIndex = 0
@@ -297,7 +302,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                     landmarkFound = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
 
                     print('Kører langs kysten og leder efter ' + str(goalID))
-                    costaldrive(goalID, frontLimit, sideLimit)
+                    use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimit, sideLimit], show)
 
                     #drive_free_carefully(2.0, frontLimit, sideLimit)
                     #(lost) Hvis den ikke finder det rigtige landmark kør mod et landmark med id > 4
