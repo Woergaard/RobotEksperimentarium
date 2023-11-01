@@ -178,11 +178,11 @@ def approach(goalLandmark):
 
     print('Nærmer sig landmarket.')
 
-    arlo.go_diff(leftWheelFactor*standardSpeed*0.3, rightWheelFactor*standardSpeed*0.3, 1, 1)
+    arlo.go_diff(leftWheelFactor*standardSpeed*0.5, rightWheelFactor*standardSpeed*0.5, 1, 1)
     pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
     isDriving = True
     start = time.perf_counter()
-    seconds = _utils.metersToSeconds(maxdist/1000) * 0.3
+    seconds = _utils.metersToSeconds(maxdist/1000) * 0.5
 
     while isDriving and (pingFront > 350 and pingLeft > 350 and pingRight > 350):
         pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
@@ -211,7 +211,7 @@ def drive_carefully_to_landmark(landmark, frontLimit, sideLimit): #Robotten kør
     if landmark.id:
         safetyDist = distance - 1000.0
     else:
-        safetyDist = distance - 700.0
+        safetyDist = distance - 1000.0
 
     dist = min([distance*(3.0/4.0), safetyDist])
     
@@ -308,7 +308,13 @@ def find_landmark(cam, arucoDict, goalID, show):
         if seenLandmarks[i].id == goalID:
             landmarkIndex = i
     
-    return seenLandmarks[landmarkIndex]
+    goalLandmark = seenLandmarks[landmarkIndex]
+
+    if goalLandmark.distance < 1000.0:
+        landmarkClose = True
+    else:
+        landmarkClose = False
+    return goalLandmark, landmarkClose
 
 # Her kommer main programmet
 def main(landmarkIDs, frontLimit, sideLimit, show):
@@ -323,16 +329,17 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
         while not landmarkFound:
 
             # vi drejer og kører, indtil vi har fundet det landmark, vi søger efter
-            goalLandmark = find_landmark(cam, arucoDict, goalID, show)
+            goalLandmark, landmarkClose = find_landmark(cam, arucoDict, goalID, show)
 
             # Robotten kører og apporacher landmarket
             landmarkFound, maxdist = drive_carefully_to_landmark(goalLandmark, frontLimit, sideLimit)
             
             print('Sikrer os, at vi er nær landmarket.')
             
-            goalLandmark = find_landmark(cam, arucoDict, goalID, show)
+            goalLandmark, landmarkClose = find_landmark(cam, arucoDict, goalID, show)
 
-            approach(goalLandmark)
+            if landmarkClose:
+                approach(goalLandmark)
 
         if landmarkFound:
             print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
