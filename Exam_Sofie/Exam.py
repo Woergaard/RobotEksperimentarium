@@ -561,7 +561,7 @@ landmarks_dict = {
 }
 landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW] # Colors used when drawing the landmarks
 
-num_steps = 4
+num_steps = 3
 
 stepLength = 500.0 # milimeter
 
@@ -621,8 +621,10 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
                     path = path[num_steps]
                 else:
                     print('RRT-træ betod kun af Arlos position, æv :(')
+
+            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
+            landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
                     
-            
         if landmarkfound:
             print('Landmark ' + str(temp_goal.id) + ' er fundet! Tillykke!')
 
