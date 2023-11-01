@@ -170,7 +170,7 @@ def drive_carefully(direction, meters):
     elif direction == 'backwards':
         arlo.go_diff(leftWheelFactor*standardSpeed * 0.6, rightWheelFactor*standardSpeed * 0.6, 0, 0)
 
-    driveSeconds = _utils.metersToSeconds(meters) * 0.6
+    driveSeconds = _utils.metersToSeconds(meters) / 0.6
     wait_and_sense(driveSeconds)
 
 def approach(goalLandmark):
@@ -271,6 +271,8 @@ def use_camera(cam, arucoDict, command, params, show):
         elif command == 'costaldrive':
             costaldrive(params[0], image, arucoDict, params[1], params[2])
             return
+        elif command == 'detect_landmarks':
+            return detect_landmarks(image, arucoDict)
 
 def find_landmark(cam, arucoDict, goalID, show):
     iters = 0
@@ -343,10 +345,21 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
             #if landmarkClose:
             #    approach(goalLandmark)
 
-        if landmarkFound:
-            print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
-            _utils.sharp_turn('right', 180.0)
-            drive_carefully('forwards', 0.7)
+            if landmarkFound:
+                correctLandmarkFound = False
+                print('Undersøger om det rigtige landmark er fundet.')
+                _utils.sharp_turn('right', 180.0)
+                drive_carefully('forwards', 1.1)
+                _utils.sharp_turn('right', 180.0)
+                seenLandmarks, ids, _ = use_camera(cam, arucoDict, 'detect_landmarks', [], show)
+
+                for i in range(len(seenLandmarks)):
+                    if seenLandmarks[i].id == goalID:
+                        correctLandmarkFound = True
+                        print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
+                        
+                landmarkFound = correctLandmarkFound
+                    
             arlo.stop()
                     
     arlo.stop()
@@ -354,6 +367,9 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
 
 main(landmarkIDs, frontLimit, sideLimit, False)
 
+# Problemer:
+### Den stopper, når den kommer for tæt på de forkerte bokse og tror, at den har detekteret landmarket.
+### Den støder ind i kasser, når den rammer dem skævt, left og right ping skal op
 
 
 
