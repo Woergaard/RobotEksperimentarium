@@ -334,12 +334,14 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
             # Robotten kører og apporacher landmarket
             landmarkFound, maxdist = drive_carefully_to_landmark(goalLandmark, frontLimit, sideLimit)
             
-            print('Sikrer os, at vi er nær landmarket.')
+            approach(goalLandmark)
             
-            goalLandmark, landmarkClose = find_landmark(cam, arucoDict, goalID, show)
+            #print('Sikrer os, at vi er nær landmarket.')
+            
+            #goalLandmark, landmarkClose = find_landmark(cam, arucoDict, goalID, show)
 
-            if landmarkClose:
-                approach(goalLandmark)
+            #if landmarkClose:
+            #    approach(goalLandmark)
 
         if landmarkFound:
             print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
