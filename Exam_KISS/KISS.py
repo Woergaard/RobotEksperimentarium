@@ -273,8 +273,8 @@ def use_camera(cam, arucoDict, command, params, show):
             return
 
 def find_landmark(cam, arucoDict, goalID, show):
+    iters = 0
     landmarkSeen = False
-    
     while not landmarkSeen:
         if iters < 10:
             print('Drejer og leder efter landmark ' + str(goalID))
@@ -319,13 +319,10 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
     for goalID in landmarkIDs:
         print('Søger efter landmark ' + str(goalID))
         landmarkFound = False
-        iters = 0
 
         while not landmarkFound:
-            landmarkSeen = False
 
             # vi drejer og kører, indtil vi har fundet det landmark, vi søger efter
-            
             goalLandmark = find_landmark(cam, arucoDict, goalID, show)
 
             # Robotten kører og apporacher landmarket
