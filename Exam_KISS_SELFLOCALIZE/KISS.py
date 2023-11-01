@@ -10,6 +10,7 @@ from numpy import linalg
 import particle
 import sys
 import camera
+import math
 
 
 try:
@@ -57,11 +58,11 @@ onRobot = True
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
-      You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
+       You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
     """
     return onRobot
 
-def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position, particles, path, stepLength):
+def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position, particles, distance, angle):
     #return (750.0,0.0)
     est_pose = _utils.Node(prior_position.x/10, prior_position.z/10, None)
     est_pose.setTheta(prior_position.theta)
@@ -84,18 +85,17 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         
         if not particles:
             particles = _utils.initialize_particles(num_particles)
-
-
+        else:
+            est_pose
+            for p in particles:
+                print('Partiklerne flyttes ')
+                p.setX(distance + math.sin(angle) + particle.getX())
+                p.setY(distance + math.sin(angle) + particle.getY())
+                p.setTheta(particle.getTheta() + angle)
         # flytter partikler efter movement
         
-        prevnode = est_pose
-        for node in path:
-            direction, degrees = _utils.find_turn_angle(prevnode, node)
-            delta_x = abs(prevnode.x - node.x/10)
-            delta_z = abs(prevnode.z - node.z/10)
-            for p in particles:
-                print('Partiklerne flyttes ', delta_x, delta_z, degrees)
-                particle.move_particle(p, delta_x, delta_z, degrees)
+        
+        
             # drej alle noder den retning
             # flyt alle noder med steplength i den retning
         
@@ -370,8 +370,8 @@ def drive_carefully_to_landmark(landmark, frontLimit, sideLimit): #Robotten kør
     if (pingFront < frontLimit and pingLeft < sideLimit and pingRight < sideLimit):
         return False, 0
 
-    maxdist = distance*(1.0/4.0)
-    return True, maxdist
+    #maxdist = distance*(1.0/4.0)
+    return True, distance, degrees
 
 def camera_setup():
     '''
@@ -478,10 +478,12 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                             landmarkIndex = i
                             
                     print('Kører mod ' + str(seenLandmarks[landmarkIndex].id))
-                    _, _ = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
+                    _, _, _ = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
 
                     print('Kører langs kysten og leder efter ' + str(goalID))
                     use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimit, sideLimit], show)
+                    particles = []
+                    distance = 0
 
                     #drive_free_carefully(2.0, frontLimit, sideLimit)
                     #(lost) Hvis den ikke finder det rigtige landmark kør mod et landmark med id > 4
@@ -496,15 +498,15 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                     landmarkIndex = i
         
             # Robotten kører og apporacher landmarket
-            landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
+            landmarkFound, distance, angle = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
             
             
-            approach(maxdist)
+            approach(distance)
 
             
             print('Sikrer os, at vi er nær landmarket ved selflocalization.')
             print('Begynder selflokalisering.')
-            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
+            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, distance, angle], show)
             #print(math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
             #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
             goalLandmark = _utils.Landmark(None, None, None, goalID, landmarks_dict[goalID])
