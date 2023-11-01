@@ -107,7 +107,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                     p.setWeight(1.0/num_particles)
             #print('hej1.3')
             est_pose = particle.estimate_pose(particles)
-            print(est_pose)
+            #print(est_pose)
 
             if showGUI:
                 #print('hej2')
@@ -123,7 +123,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 time.sleep(10)
 
 
-        est_pose = _utils.Node(est_pose.x, est_pose.y, None) # VI GLEMMER AT EKSPORTERE VINKLEN!!!
+        est_pose = _utils.Node(est_pose.x * 10.0, est_pose.y * 10.0, None) # VI GLEMMER AT EKSPORTERE VINKLEN!!!
     
     finally:
         print('hejhej')
@@ -185,7 +185,7 @@ def turn_and_watch(direction, img, landmarkIDs):
         _utils.wait(turnSeconds)
         arlo.stop()
         _utils.wait(2.0)
-        print('No landmark detected')
+        print('Intet landmark fundet.')
 
         return False
     
