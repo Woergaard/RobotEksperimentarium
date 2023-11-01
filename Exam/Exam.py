@@ -77,10 +77,10 @@ def selflocalize(cam_selflocalize, showGUI, maxiters, landmarkIDs, landmarks_dic
             print(iters)
             image = cam_selflocalize.capture_array("main")
             # Fetch next frame
-            #colour = cam.get_next_frame()
+            colour = cam_selflocalize.get_next_frame()
             print('hej1.1')
             # Detect objects
-            objectIDs, dists, angles = cam_selflocalize.detect_aruco_objects(image)
+            objectIDs, dists, angles = cam_selflocalize.detect_aruco_objects(colour)
             print('hej1.2')
             Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
             
