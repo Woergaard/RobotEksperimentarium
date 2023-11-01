@@ -329,7 +329,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
         landmarkFound = False
 
         while not landmarkFound:
-
+            print('Nyt loop starter.')
             # vi drejer og kører, indtil vi har fundet det landmark, vi søger efter
             goalLandmark, landmarkClose = find_landmark(cam, arucoDict, goalID, show)
 
@@ -349,7 +349,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                 correctLandmarkFound = False
                 print('Undersøger om det rigtige landmark er fundet.')
                 _utils.sharp_turn('right', 180.0)
-                drive_carefully('forwards', 1.1)
+                drive_carefully('forwards', 1.5)
                 _utils.sharp_turn('right', 180.0)
                 seenLandmarks, ids, _ = use_camera(cam, arucoDict, 'detect_landmarks', [], show)
 
@@ -357,7 +357,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                     if seenLandmarks[i].id == goalID:
                         correctLandmarkFound = True
                         print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
-                        
+
                 landmarkFound = correctLandmarkFound
                     
             arlo.stop()
