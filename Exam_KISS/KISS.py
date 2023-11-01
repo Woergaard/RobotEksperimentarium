@@ -166,11 +166,11 @@ def drive_carefully(direction, meters):
         meters:   meter, der skal køres
     '''
     if direction == 'forwards':
-        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+        arlo.go_diff(leftWheelFactor*standardSpeed * 0.6, rightWheelFactor*standardSpeed * 0.6, 1, 1)
     elif direction == 'backwards':
-        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 0)
+        arlo.go_diff(leftWheelFactor*standardSpeed * 0.6, rightWheelFactor*standardSpeed * 0.6, 0, 0)
 
-    driveSeconds = _utils.metersToSeconds(meters)
+    driveSeconds = _utils.metersToSeconds(meters) * 0.6
     wait_and_sense(driveSeconds)
 
 def approach(goalLandmark):
