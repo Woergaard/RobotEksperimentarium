@@ -77,7 +77,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             image = cam.capture_array("main")
             # Fetch next frame
             #colour = cam.get_next_frame()
-            #print('hej1.1')
+            print('hej1.1')
             # Detect objects
             objectIDs, dists, angles = cam.detect_aruco_objects(image)
             print('hej1.2')
