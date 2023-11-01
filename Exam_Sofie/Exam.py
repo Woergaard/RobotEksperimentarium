@@ -48,6 +48,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
     #return (750.0,0.0)
     est_pose = _utils.Node(prior_position.x/10, prior_position.z/10, None)
     est_pose.setTheta(prior_position.theta)
+    print('self_localize søger efter landmarks.')
     
     try:
         if showGUI:
@@ -108,6 +109,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
             if not isinstance(objectIDs, type(None)):
+                print('selflocalize opdager landmarks: ' +  objectIDs)
                 landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
                 
                 # omregner til milimeter
