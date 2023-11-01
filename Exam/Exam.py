@@ -44,7 +44,7 @@ rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
 standardSpeed = 50.0
 
-def selflocalize(cam_selflocalize, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position):
+def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position):
     #return (750.0,0.0)
     est_pose = prior_position
     
@@ -75,12 +75,12 @@ def selflocalize(cam_selflocalize, showGUI, maxiters, landmarkIDs, landmarks_dic
 
         for iters in range(maxiters):
             print(iters)
-            image = cam_selflocalize.capture_array("main")
+            #image = cam.capture_array("main")
             # Fetch next frame
-            colour = cam_selflocalize.get_next_frame()
+            img = cam.get_next_frame()
             print('hej1.1')
             # Detect objects
-            objectIDs, dists, angles = cam_selflocalize.detect_aruco_objects(colour)
+            objectIDs, dists, angles = cam.detect_aruco_objects(img)
             print('hej1.2')
             Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
             
@@ -100,7 +100,7 @@ def selflocalize(cam_selflocalize, showGUI, maxiters, landmarkIDs, landmarks_dic
                 particles = _utils.generate_new_particles(num_particles, particles, intervals)
 
                 # Draw detected objects
-                cam_selflocalize.draw_aruco_objects(image)
+                cam.draw_aruco_objects(img)
             else:
                 # No observation - reset weights to uniform distribution
                 for p in particles:
@@ -115,7 +115,7 @@ def selflocalize(cam_selflocalize, showGUI, maxiters, landmarkIDs, landmarks_dic
                 _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
                 
                 # Show frame
-                cv2.imshow(WIN_RF1, image)
+                cv2.imshow(WIN_RF1, img)
 
                 # Show world
                 cv2.imshow(WIN_World, world)
@@ -135,7 +135,7 @@ def selflocalize(cam_selflocalize, showGUI, maxiters, landmarkIDs, landmarks_dic
 
         # Clean-up capture thread
         cv2.destroyAllWindows()
-        cam_selflocalize.terminateCaptureThread()
+        cam.terminateCaptureThread()
 
         return est_pose
     
@@ -447,6 +447,8 @@ def camera_setup():
         command:  kommando
         show:   bool, der angiver, om kameraets output skal vises
     '''
+
+    '''
     # Open a camera device for capturing
     imageSize = (1280, 720)
     FPS = 60
@@ -459,7 +461,7 @@ def camera_setup():
 
     #print('hej2')
     #print(cam.camera_configuration()) # Print the camera configuration in use
-
+    '''
     time.sleep(1)  # _utils.wait for camera to setup
 
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
@@ -478,12 +480,12 @@ def camera_setup():
     
     print("Opening and initializing camera")
     if camera.isRunningOnArlo():
-        cam_selflocalize = camera.Camera(0, 'arlo', useCaptureThread = True)
+        cam = camera.Camera(0, 'arlo', useCaptureThread = True)
     else:
-        cam_selflocalize = camera.Camera(0, 'macbookpro', useCaptureThread = True)
+        cam = camera.Camera(0, 'macbookpro', useCaptureThread = True)
 
 
-    return cam, arucoDict, cam_selflocalize
+    return cam, arucoDict
 
 def use_camera(cam, arucoDict, command, params, showcamera, show):
     # Open a window'''
@@ -494,7 +496,8 @@ def use_camera(cam, arucoDict, command, params, showcamera, show):
         cv2.moveWindow(WIN_RF, 100, 100)
     
     while cv2.waitKey(4) == -1: # _utils.wait for a key pressed event
-        image = cam.capture_array("main")
+        #image = cam.capture_array("main")
+        image = cam.get_next_frame()
         
         # Show frames
         if showcamera:
@@ -543,7 +546,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
         globalMap.landmarks.append(_utils.Landmark(None, None, None, landmarkID, landmarks_dict[landmarkID])) # liste af alle spottede landmarks
     rally_landmarks = globalMap.landmarks # liste af landmarks i rækkefølgen efter rallyet
 
-    cam, arucoDict, cam_selflocalize = camera_setup()
+    cam, arucoDict = camera_setup()
 
     arlo_position = _utils.Node(500.0, 0.0, None)
 
@@ -573,7 +576,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
             
             arlo.stop()
             print('Begynder selflokalisering.')
-            arlo_position = use_camera(cam_selflocalize, arucoDict, 'selflocalize', [200, landmarkIDs, landmarks_dict, landmark_colors, arlo_position], showcamera, show)
+            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200, landmarkIDs, landmarks_dict, landmark_colors, arlo_position], showcamera, show)
             print(arlo_position.x, arlo_position.z)
             #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
