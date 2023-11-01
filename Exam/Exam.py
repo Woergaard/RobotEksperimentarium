@@ -431,6 +431,15 @@ def drive_path_and_sense(path, temp_goal, num_steps, stepLength):
         prevnode = node
     return False
 
+onRobot = True
+
+def isRunningOnArlo():
+    """Return True if we are running on Arlo, otherwise False.
+      You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
+    """
+    return onRobot
+
+
 def camera_setup():
     '''
     Funktionen åbner kameraet og udfører en kommando.
@@ -456,7 +465,23 @@ def camera_setup():
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 
     print("Opening and initializing camera for self_localization")
-    cam_selflocalize = camera.Camera(0, 'arlo', useCaptureThread = True)
+    if isRunningOnArlo():
+        # XXX: You need to change this path to point to where your robot.py file is located
+        sys.path.append("../")
+
+    try:
+        #import Ex5.src.handout.python.robot as robot
+        onRobot = True
+    except ImportError:
+        print("selflocalize.py: robot module not present - forcing not running on Arlo!")
+        onRobot = False
+    
+    print("Opening and initializing camera")
+    if camera.isRunningOnArlo():
+        cam_selflocalize = camera.Camera(0, 'arlo', useCaptureThread = True)
+    else:
+        cam_selflocalize = camera.Camera(0, 'macbookpro', useCaptureThread = True)
+
 
     return cam, arucoDict, cam_selflocalize
 
