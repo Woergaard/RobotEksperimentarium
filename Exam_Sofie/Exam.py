@@ -44,7 +44,7 @@ rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
 standardSpeed = 50.0
 
-def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position):
+def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position, particles):
     #return (750.0,0.0)
     est_pose = prior_position
     
@@ -62,7 +62,10 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         #print('hej1')
         # Initialize particles
         num_particles = 1000
-        particles = _utils.initialize_particles(num_particles)
+        
+        if not particles:
+            particles = _utils.initialize_particles(num_particles)
+        
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
 
         # Allocate space for world map
@@ -137,9 +140,8 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         cv2.destroyAllWindows()
         cam.terminateCaptureThread()
 
-        return est_pose
+        return est_pose, particles
     
-
 def turn_and_watch(direction, img, landmarkIDs):
     '''
     Robotten drejer om egen akse, indtil den har fundet et landmark, OG der er frit.
@@ -511,8 +513,8 @@ def use_camera(cam, arucoDict, command, params, showcamera, show):
             cv2.imshow(WIN_RF, image)
 
         if command == 'selflocalize':
-            arlo_position = selflocalize(cam, show, params[0], params[1], params[2], params[3], params[4])
-            return arlo_position
+            arlo_position, particles = selflocalize(cam, show, params[0], params[1], params[2], params[3], params[4], param[5])
+            return arlo_position, particles
 
         elif command == 'turn_and_watch':
             return turn_and_watch('left', image, params[0])
@@ -557,6 +559,9 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
 
     arlo_position = _utils.Node(500.0, 0.0, None)
 
+    particles = []
+    path = []
+
     for temp_goal in rally_landmarks:
         print('Søger efter landmark ' + str(temp_goal.id))
         landmarkfound = False
@@ -583,7 +588,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
             
             arlo.stop()
             print('Begynder selflokalisering.')
-            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position], showcamera, show)
+            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles], showcamera, show)
             print(math.floor(arlo_position.x), math.floor(arlo_position.z))
             #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
@@ -594,9 +599,10 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
             if not landmarkfound:
                 print('Påbegynder RRT-sti.')
                 path = use_camera(cam, arucoDict, 'RRT', [arlo_position, temp_goal_Node, rally_landmarks], showcamera, show) #laver en path med RRT, skal også have arlo position
-                if len(path)>1:
+                if len(path) > 1:
                     print('Kører ' + str(num_steps) + ' trin af vores RRT sti.')
                     landmarkfound = drive_path_and_sense(path, temp_goal_Node, num_steps, stepLength) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
+                    path = path[num_steps]
                 else:
                     print('RRT-træ betod kun af Arlos position, æv :(')
                     
