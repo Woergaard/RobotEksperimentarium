@@ -59,7 +59,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             cv2.namedWindow(WIN_World)
             cv2.moveWindow(WIN_World, 500, 50)
         
-        print('hej1')
+        #print('hej1')
         # Initialize particles
         num_particles = 1000
         particles = _utils.initialize_particles(num_particles)
@@ -78,10 +78,10 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             #image = cam.capture_array("main")
             # Fetch next frame
             img = cam.get_next_frame()
-            print('hej1.1')
+            #print('hej1.1')
             # Detect objects
             objectIDs, dists, angles = cam.detect_aruco_objects(img)
-            print('hej1.2')
+            #print('hej1.2')
             Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
             
             sigma_theta = 0.57
@@ -105,12 +105,12 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 # No observation - reset weights to uniform distribution
                 for p in particles:
                     p.setWeight(1.0/num_particles)
-            print('hej1.3')
+            #print('hej1.3')
             est_pose = particle.estimate_pose(particles)
             print(est_pose)
 
             if showGUI:
-                print('hej2')
+                #print('hej2')
                 # Draw map
                 _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
                 
@@ -344,7 +344,7 @@ def drive_carefully(direction, meters):
     driveSeconds = _utils.metersToSeconds(meters)
     wait_and_sense(driveSeconds)
 
-def drive_one_move():
+def drive_one_move(frontLimit, sideLimit):
     pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
 
     if pingFront < 100:
@@ -354,33 +354,33 @@ def drive_one_move():
     
     dirLst = ['right', 'left']
 
-    while (pingFront > 350 and pingLeft > 250 and pingRight > 250):
+    while (pingFront > frontLimit and pingLeft > sideLimit and pingRight > sideLimit):
         pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
         #print(pingFront, pingLeft, pingRight, pingBack)
         sleep(0.041)
     
     # three sensors detected
-    if (pingFront < 350 and pingLeft < 250 and pingRight < 250):
+    if (pingFront < frontLimit and pingLeft < sideLimit and pingRight < sideLimit):
         _utils.turn_and_sense('left')  
 
     # two sensors detected
-    elif (pingFront < 350 and pingLeft < 250):
+    elif (pingFront < frontLimit and pingLeft < sideLimit):
         _utils.turn_and_sense('right')
-    elif (pingFront < 350 and pingRight < 250):
+    elif (pingFront < frontLimit and pingRight < sideLimit):
         _utils.turn_and_sense('left')
-    elif (pingLeft < 250 and pingRight < 250):
+    elif (pingLeft < sideLimit and pingRight < sideLimit):
         _utils.turn_and_sense('left')
 
     # one sensors deteced
-    elif(pingFront <= 350):
+    elif(pingFront <= frontLimit):
         randomDirection = random.choice(dirLst)
         _utils.turn_and_sense(randomDirection)
-    elif (pingLeft < 250): 
+    elif (pingLeft < sideLimit): 
         _utils.turn_and_sense('right')
-    elif (pingRight < 250):
+    elif (pingRight < sideLimit):
         _utils.turn_and_sense('left')
         
-def drive_free_carefully(seconds):
+def drive_free_carefully(seconds, frontLimit, Si):
     '''
     Funktionen kører robotten frem, indtil der er en forhindring. Så drejer den, indtil at der er frit.
     '''
@@ -419,7 +419,7 @@ def drive_path_and_sense(path, temp_goal, num_steps, stepLength):
 
         # Tjekker, om der er blevet afbrudt grundet spærret vej
         pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-        if (pingFront < 350 and pingLeft < 250 and pingRight < 250):
+        if (pingFront < 350 and pingLeft < sideLimit and pingRight < sideLimit):
             return False
 
         # Robotten drejer tilbage
@@ -576,7 +576,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
             
             arlo.stop()
             print('Begynder selflokalisering.')
-            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [200, landmarkIDs, landmarks_dict, landmark_colors, arlo_position], showcamera, show)
+            arlo_position = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position], showcamera, show)
             print(arlo_position.x, arlo_position.z)
             #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
