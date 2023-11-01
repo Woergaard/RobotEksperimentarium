@@ -361,23 +361,30 @@ def drive_one_move(frontLimit, sideLimit):
     
     # three sensors detected
     if (pingFront < frontLimit and pingLeft < sideLimit and pingRight < sideLimit):
+        print('Front, left og right sensor blokeret.')
         _utils.turn_and_sense('left')  
 
     # two sensors detected
     elif (pingFront < frontLimit and pingLeft < sideLimit):
+        print('Front og left sensor blokeret.')
         _utils.turn_and_sense('right')
     elif (pingFront < frontLimit and pingRight < sideLimit):
+        print('Front og right sensor blokeret.')
         _utils.turn_and_sense('left')
     elif (pingLeft < sideLimit and pingRight < sideLimit):
+        print('Left og right sensor blokeret.')
         _utils.turn_and_sense('left')
 
     # one sensors deteced
     elif(pingFront <= frontLimit):
+        print('Front sensor blokeret.')
         randomDirection = random.choice(dirLst)
         _utils.turn_and_sense(randomDirection)
     elif (pingLeft < sideLimit): 
+        print('Left sensor blokeret.')
         _utils.turn_and_sense('right')
     elif (pingRight < sideLimit):
+        print('Right sensor blokeret.')
         _utils.turn_and_sense('left')
         
 def drive_free_carefully(seconds, frontLimit, sideLimit):
@@ -583,7 +590,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
 
             print('Arlo befinder sig på position ', arlo_position.x, arlo_position.z)
 
-            '''
+            
             if not landmarkfound:
                 print('Påbegynder RRT-sti.')
                 path = use_camera(cam, arucoDict, 'RRT', [arlo_position, temp_goal_Node, rally_landmarks], showcamera, show) #laver en path med RRT, skal også have arlo position
@@ -593,7 +600,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
                 else:
                     print('RRT-træ betod kun af Arlos position, æv :(')
                     
-            '''
+            
         if landmarkfound:
             print('Landmark ' + str(temp_goal.id) + ' er fundet! Tillykke!')
 
