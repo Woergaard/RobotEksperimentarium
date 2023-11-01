@@ -210,7 +210,7 @@ def drive_carefully_to_landmark(landmark, frontLimit, sideLimit): #Robotten kør
 
     dist = min([distance*(3.0/4.0), safetyDist])
     
-    drive_carefully('forwards', dist)
+    drive_carefully('forwards', dist/1000)
 
     # Tjekker, om der er blevet afbrudt grundet spærret vej
     pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
@@ -265,8 +265,6 @@ def use_camera(cam, arucoDict, command, params, show):
         elif command == 'costaldrive':
             costaldrive(params[0], image, arucoDict, params[1], params[2])
             return
-
-
 
 # Her kommer main programmet
 def main(landmarkIDs, frontLimit, sideLimit, show):
