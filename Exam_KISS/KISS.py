@@ -288,7 +288,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
 
                 # vi drejer og kører, indtil vi har fundet det landmark, vi søger efter
                 while not landmarkSeen:
-                    if iters < 10:
+                    if iters < 15:
                         print('Drejer og leder efter landmark ' + str(goalID))
                         landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[goalID]], show)
                         iters += 1
