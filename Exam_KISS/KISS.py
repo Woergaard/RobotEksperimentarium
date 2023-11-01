@@ -178,11 +178,11 @@ def approach(goalLandmark):
 
     print('Nærmer sig landmarket.')
 
-    arlo.go_diff(leftWheelFactor*standardSpeed*0.5, rightWheelFactor*standardSpeed*0.5, 1, 1)
+    arlo.go_diff(leftWheelFactor*standardSpeed*0.6, rightWheelFactor*standardSpeed*0.6, 1, 1)
     pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
     isDriving = True
     start = time.perf_counter()
-    seconds = _utils.metersToSeconds(maxdist/1000) * 0.5
+    seconds = _utils.metersToSeconds(maxdist/1000) * 0.6
 
     while isDriving and (pingFront > 350 and pingLeft > 350 and pingRight > 350):
         pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
@@ -335,7 +335,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
             landmarkFound, maxdist = drive_carefully_to_landmark(goalLandmark, frontLimit, sideLimit)
             
             approach(goalLandmark)
-            
+
             #print('Sikrer os, at vi er nær landmarket.')
             
             #goalLandmark, landmarkClose = find_landmark(cam, arucoDict, goalID, show)
