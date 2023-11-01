@@ -496,11 +496,11 @@ landmarks = {
 landmark_colors = [CRED, CGREEN,  CCYAN, CYELLOW] # Colors used when drawing the landmarks
 '''
 
-landmarkIDs = [1, 2, 3, 4]
+landmarkIDs = [1, 2, 4]
 landmarks_dict = {
     1: (0.0, 0.0),
     2: (0.0, 3000.0),
-    3: (4000.0, 0.0),
+    #3: (4000.0, 0.0),
     4: (4000.0, 3000.0)
 }
 landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW] # Colors used when drawing the landmarks
