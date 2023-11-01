@@ -584,7 +584,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
             arlo.stop()
             print('Begynder selflokalisering.')
             arlo_position = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position], showcamera, show)
-            print(math.floor(arlo_position.x), math.arlo(arlo_position.z))
+            print(math.floor(arlo_position.x), math.floor(arlo_position.z))
             #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
 
