@@ -120,7 +120,7 @@ def detect_landmarks(img, arucoDict):
 
     seenLandmarks = []
     # Udregner vinkel og retning til landmarket
-    if ids == []: 
+    if ids.size > 0: 
         print("No marker detected")
         return seenLandmarks
     elif ids is not None:
@@ -156,14 +156,17 @@ def turn_and_watch(direction, img, landmarkIDs, arucoDict):
 
     seenLandmarks, ids, aruco_corners = detect_landmarks(img, arucoDict)
     
+    print('hej1')
     landmark_spotted = False
     if ids is not None:
         if not landmarkIDs:
             for id in ids:
+                print('hej obstacle')
                 if id > 4:
                     landmark_spotted = True
         else: 
             for id in landmarkIDs:
+                print('hej landmark')
                 if id in ids:
                     landmark_spotted = True
         
@@ -172,7 +175,7 @@ def turn_and_watch(direction, img, landmarkIDs, arucoDict):
     # If at least one marker is detected
     if len(aruco_corners) > 0 and landmark_spotted:
         for i in range(len(ids)):
-            print('Landmark ' + str(ids[i]) + 'detekteret via turn_and_watch.')
+            print('Landmark ' + str(ids[i]) + ' detekteret via turn_and_watch.')
         return True
     else: 
         arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
@@ -230,7 +233,6 @@ def approach():
 
     arlo.stop()
 
-
 def drive_carefully_to_landmark(landmark, frontLimit, sideLimit): #Robotten kører ca. 3/4 dele af afstanden til landmark og slår over til sensor måling men køre ligefrem.
     direction = landmark.retning
     degrees = landmark.vinkel
@@ -262,7 +264,6 @@ def drive_carefully_to_landmark(landmark, frontLimit, sideLimit): #Robotten kør
         return False
 
     return True
-
 
 # Her kommer main programmet
 def main(landmarkIDs, frontLimit, sideLimit, show):
