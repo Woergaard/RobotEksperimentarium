@@ -252,7 +252,7 @@ def drive_carefully_to_landmark(landmark, frontLimit, sideLimit): #Robotten kør
     else:
         safetyDist = 700.0
 
-    dist = min[distance*(3.0/4.0), safetyDist]
+    dist = min([distance*(3.0/4.0), safetyDist])
     
     drive_carefully('forwards', dist)
 
