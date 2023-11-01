@@ -569,4 +569,4 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show):
     arlo.stop()
     print('Rute færdiggjort!')
 
-robo_rally(landmarkIDs, landmarks_dict, landmark_colors, False, True)
+robo_rally(landmarkIDs, landmarks_dict, landmark_colors, False, False)
