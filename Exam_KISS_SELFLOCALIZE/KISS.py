@@ -7,6 +7,9 @@ import random
 import cv2
 from time import sleep
 from numpy import linalg
+import particle
+import sys
+import camera
 
 
 try:
@@ -31,6 +34,15 @@ sideLimit = 400.0
 landmarkIDs = [1, 2, 3, 4, 1]
 lostLimit = 1000.0
 
+landmarks_dict = {
+    1: (0.0, 0.0),
+    2: (0.0, 3000.0),
+    3: (4000.0, 0.0),
+    4: (4000.0, 3000.0)
+}
+CRED, CGREEN, CBLUE, CCYAN, CYELLOW, CMAGENTA, CWHITE, CBLACK = _utils.bgr_colors()
+landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW]
+
 # Her kommer funktioner
 # DONE 1. (turn_and_watch) Robotten roterer til den finder det rigtige landmark 
 # 2. (lost) Hvis den ikke finder det rigtige landmark kør mod et landmark med id > 4
@@ -40,6 +52,143 @@ lostLimit = 1000.0
 # DONE 6. (approach) Robotten når det rigtige landmark og stopper.
 # DONE 7. Tilbage til 1. 
 
+
+onRobot = True
+
+def isRunningOnArlo():
+    """Return True if we are running on Arlo, otherwise False.
+      You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
+    """
+    return onRobot
+
+def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position, particles, path, stepLength):
+    #return (750.0,0.0)
+    est_pose = _utils.Node(prior_position.x/10, prior_position.z/10, None)
+    est_pose.setTheta(prior_position.theta)
+    print('self_localize søger efter landmarks.')
+    
+    try:
+        if showGUI:
+            # Open windows
+            WIN_RF1 = "Robot view"
+            cv2.namedWindow(WIN_RF1)
+            cv2.moveWindow(WIN_RF1, 50, 50)
+
+            WIN_World = "World view"
+            cv2.namedWindow(WIN_World)
+            cv2.moveWindow(WIN_World, 500, 50)
+        
+        #print('hej1')
+        # Initialize particles
+        num_particles = 1000
+        
+        if not particles:
+            particles = _utils.initialize_particles(num_particles)
+
+
+        # flytter partikler efter movement
+        
+        prevnode = est_pose
+        for node in path:
+            direction, degrees = _utils.find_turn_angle(prevnode, node)
+            delta_x = abs(prevnode.x - node.x/10)
+            delta_z = abs(prevnode.z - node.z/10)
+            for p in particles:
+                print('Partiklerne flyttes ', delta_x, delta_z, degrees)
+                particle.move_particle(p, delta_x, delta_z, degrees)
+            # drej alle noder den retning
+            # flyt alle noder med steplength i den retning
+        
+        
+        est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
+
+        # Allocate space for world map
+        world = np.zeros((1000,1000,3), dtype=np.uint8)
+
+        # Draw map
+        _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
+
+        Xlst = []
+
+        for iters in range(maxiters):
+            print(iters)
+            #image = cam.capture_array("main")
+            # Fetch next frame
+            img = cam.get_next_frame()
+            #print('hej1.1')
+            # Detect objects
+            objectIDs, dists, angles = cam.detect_aruco_objects(img)
+            #print('hej1.2')
+            Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
+            
+            sigma_theta = 0.57
+            sigma_d = 5.0
+            particle.add_uncertainty(particles, sigma_d, sigma_theta)
+
+            if not isinstance(objectIDs, type(None)):
+                print('selflocalize opdager landmarks: ' +  objectIDs)
+                landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
+                
+                # omregner til milimeter
+                for landmark in landmarks_lst:
+                    landmark.x /= 10
+                    landmark.z /= 10
+                    landmark.tvec[0] /= 10
+                    landmark.tvec[1] /= 10
+
+                _utils.update_weights(sigma_d, sigma_theta, landmarks_lst, particles)    
+                    
+                _utils.normalize_weights(particles)
+
+                intervals = _utils.make_intervals(particles)
+
+                particles = _utils.generate_new_particles(num_particles, particles, intervals)
+
+                # Draw detected objects
+                cam.draw_aruco_objects(img)
+            else:
+                # No observation - reset weights to uniform distribution
+                for p in particles:
+                    p.setWeight(1.0/num_particles)
+            #print('hej1.3')
+            est_pose = particle.estimate_pose(particles)
+            #print(est_pose)
+
+            if showGUI:
+                #print('hej2')
+                # Draw map
+                _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
+                
+                # Show frame
+                cv2.imshow(WIN_RF1, img)
+
+                # Show world
+                cv2.imshow(WIN_World, world)
+
+                time.sleep(10)
+
+    finally:
+        print('hejhej')
+    
+        # Make sure to clean up even if an exception occurred
+        
+        # Close all windows
+        #cv2.destroyAllWindows()
+
+        # Clean-up capture thread
+        cv2.destroyAllWindows()
+        cam.terminateCaptureThread()
+
+        est_pose = _utils.Node(est_pose.x * 10.0, est_pose.y * 10.0, None) # VI GLEMMER AT EKSPORTERE VINKLEN!!!
+        est_pose.setTheta(est_pose.theta)
+
+        return est_pose, particles
+
+def landmark_reached(reached_node, temp_goal):
+    if _utils.dist(reached_node, temp_goal) < 350.0:
+        return True
+    else:
+        return False
 
 def costaldrive(goalID, image, arucoDict, frontLimit, sideLimit):
     '''
@@ -273,7 +422,7 @@ def camera_setup():
 
 def use_camera(cam, arucoDict, command, params, show):
     # Open a window'''
-    if showcamera:
+    if show:
         print('Kameraet vises.')
         WIN_RF = "Example 1"
         cv2.namedWindow(WIN_RF)
@@ -292,6 +441,7 @@ def use_camera(cam, arucoDict, command, params, show):
             return arlo_position, particles
 
         elif command == 'turn_and_watch':
+
             return turn_and_watch('left', image, params[0], arucoDict)
         elif command == 'costaldrive':
             costaldrive(params[0], image, arucoDict, params[1], params[2])
@@ -353,6 +503,14 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
 
             
             print('Sikrer os, at vi er nær landmarket ved selflocalization.')
+            print('Begynder selflokalisering.')
+            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
+            #print(math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
+            #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
+            goalLandmark = _utils.Landmark(None, None, None, goalID, landmarks_dict[goalID])
+            goalNode = _utils.Node(goalLandmark.x, goalLandmark.z, None)
+            landmarkFound = landmark_reached(arlo_position, goalNode)
+
             # drejer rundt
             # ser efter andre landmarks
             # selflocalizer
