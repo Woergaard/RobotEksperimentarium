@@ -312,7 +312,7 @@ def use_camera(cam, arucoDict, command, params, show):
             return turn_and_watch('left', image, params[0], arucoDict)
         elif command == 'costaldrive':
             costaldrive(params[0], image, arucoDict, params[1], params[2])
-            return
+
 
 # Her kommer main programmet
 def main(landmarkIDs, frontLimit, sideLimit, show):
