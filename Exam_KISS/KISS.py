@@ -105,9 +105,9 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
 
 
     # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
-    #landmarkFound = False
-    #while not landmarkFound:
-    #    landmarkFound = turn_and_watch('left', image, [goalID], arucoDict)
+    landmarkFound = False
+    while not landmarkFound:
+        landmarkFound = turn_and_watch('left', image, [goalID], arucoDict)
     
 def detect_landmarks(img, arucoDict):
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
