@@ -803,19 +803,19 @@ def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):
             d_M = landmark.distance # den målte distance til landmarket
             phi_M = landmark.vinkel 
             d_j = distance_for_particle(p, landmark)
-            print('d_j: ', d_j)
-            print('d_M: ', d_M)
-            print('sigma_d: ', sigma_d)
+            #print('d_j: ', d_j)
+            #print('d_M: ', d_M)
+            #print('sigma_d: ', sigma_d)
             dist_weight_j = distance_weights(d_M, d_j, sigma_d)
 
             orientation_weight_j = orientation_distribution(phi_M, sigma_theta, p, landmark)
 
-            print('Dist vægt: ', dist_weight_j)
-            print('Orienterings vægt: ' , orientation_weight_j)
+            #print('Dist vægt: ', dist_weight_j)
+            #print('Orienterings vægt: ' , orientation_weight_j)
             
             landmark_weight = landmark_weight * dist_weight_j * orientation_weight_j
 
-        print('Partikel vægt:', landmark_weight)
+       # print('Partikel vægt:', landmark_weight)
         p.setWeight(landmark_weight)
 
 def make_intervals(particles):
