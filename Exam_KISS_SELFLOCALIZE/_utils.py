@@ -761,6 +761,7 @@ def distance_weights(d_M, d_i, sigma_d):
 
 
     #return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
+    print('returnerer:', (1 / nævner1) * decimal.Decimal(-(tæller2 / nævner2)).exp())
     return (1 / nævner1) * decimal.Decimal(-(tæller2 / nævner2)).exp()
 
 def orientation_distribution(phi_M, sigma_theta, particle, landmark):
