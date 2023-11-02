@@ -108,11 +108,14 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
         if not particles:
             particles = _utils.initialize_particles(num_particles)
         else:
+            print('Partiklerne flyttes')
             for p in particles:
-                print('Partiklerne flyttes ')
                 p.setX(distance + math.sin(angle) + particle.getX())
+                print('x opdateret')
                 p.setY(distance + math.sin(angle) + particle.getY())
+                print('y opdateret')
                 p.setTheta(particle.getTheta() + angle)
+                print('theta opdateret')
         
         print('Estimerer position')
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose

@@ -393,6 +393,8 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                         print('Kører mod ' + str(seenLandmarks[landmarkIndex].id))
                         _, _ = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
 
+                        approach(maxdist)
+
                         print('Kører langs kysten og leder efter ' + str(goalID))
                         use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimit, sideLimit], show)
 
