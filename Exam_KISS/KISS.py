@@ -130,7 +130,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
 
         approach(maxdist)
 
-    return None
+        return None
     
 def detect_landmarks(img, arucoDict):
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
