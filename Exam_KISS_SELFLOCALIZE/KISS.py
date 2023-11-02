@@ -59,6 +59,30 @@ landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW]
 
 onRobot = True
 
+def watch_for_selflocalize(img, arucoDict, landmarkIDs):
+    seenLandmarks, ids, aruco_corners = detect_landmarks(img, arucoDict)
+    
+    landmark_spotted = False
+    if ids is not None:
+        if not landmarkIDs:
+            for id in ids:
+                #print('hej obstacle')
+                if id > 4:
+                    landmark_spotted = True
+        else: 
+            for id in landmarkIDs:
+                #print('hej landmark')
+                if id in ids:
+                    landmark_spotted = True
+        
+    # If at least one marker is detected
+    if len(aruco_corners) > 0 and landmark_spotted:
+        for i in range(len(ids)):
+            print('Landmark ' + str(ids[i]) + ' detekteret via turn_and_watch.')
+        return True, seenLandmarks
+    else:
+        return False, []
+
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
        You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
@@ -136,21 +160,24 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
             img = cam.capture_array("main")
 
             # Detect landmarks
-            seenLandmarks, ids, aruco_corners = detect_landmarks(img, arucoDict)
+            #seenLandmarks, ids, aruco_corners = detect_landmarks(img, arucoDict)
+            _, seenLandmarks = watch_for_selflocalize(img, arucoDict, landmarkIDs)
+            
+            if len(seenLandmarks) != 0:
+                dists = []
+                objectIDs = []
+                angles = []
 
-            dists = []
-            objectIDs = []
-            angles = []
-            for landmark in seenLandmarks:
-                dists.append(landmark.distance)
-                objectIDs.append(landmark.id)
-                angles.append(landmark.vinkel)
-  
-            sigma_theta = 0.57
-            sigma_d = 5.0
-            particle.add_uncertainty(particles, sigma_d, sigma_theta)
+                for landmark in seenLandmarks:
+                    dists.append(landmark.distance)
+                    objectIDs.append(landmark.id)
+                    angles.append(landmark.vinkel)
+    
+                sigma_theta = 0.57
+                sigma_d = 5.0
+                particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
-            if len(objectIDs) != 0:
+                
                 print('selflocalize opdager landmarks: ' +  objectIDs)
                 landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
                 
