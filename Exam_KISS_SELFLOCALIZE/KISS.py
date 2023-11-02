@@ -535,13 +535,10 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                     landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[]], show)
 
                     # finder landmark i liste
-                    landmarkIndex = 0
-                    for i in range(len(seenLandmarks)):
-                        if seenLandmarks[i].id > 4:
-                            landmarkIndex = i
+                    obstacleLandmark = find_goal_in_seenLandmarks(seenLandmarks, goalID, 'obstacle')
                             
-                    print('Kører mod ' + str(seenLandmarks[landmarkIndex].id))
-                    _, _, _ = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
+                    print('Kører mod ' + str(obstacleLandmark.id))
+                    _, _, _ = drive_carefully_to_landmark(obstacleLandmark, frontLimit, sideLimit)
 
                     print('Kører langs kysten og leder efter ' + str(goalID))
                     use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimitCoastal, sideLimitCoastal], show)
@@ -555,7 +552,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
 
             arlo.stop()
             
-            goalLandmark = find_goal_in_seenLandmarks(seenLandmarks, goalID)
+            goalLandmark = find_goal_in_seenLandmarks(seenLandmarks, goalID, 'landmark')
         
             # Robotten kører hen mod landmarket
             landmarkFound, distance, angle = drive_carefully_to_landmark(goalLandmark, frontLimit, sideLimit)
@@ -578,21 +575,6 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
 main(landmarkIDs, frontLimit, sideLimit, False)
 
 
-# Selflocalize skal tjekke om robotten er i nærheden af et landmark og hvis afstanden er større end 1000 mm er det ikke et af de rigtige landmarks.
-#
-#
-#
-#
-#
-#
-
-'''
-* led efter vores midlertidige mål via turn_and_watch
-* kør derhen
-* approach
-* drej 360 grader og selflocalizer ved hvert fundet landmark.
-* tjekker ved arlo_position, om vi er nået ved landmark.
-'''
 
 
 
