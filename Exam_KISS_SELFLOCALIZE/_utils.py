@@ -771,14 +771,14 @@ def distance_weights(d_M, d_i, sigma_d):
     førsteled = 1 / nævner1
     andetled = decimal.Decimal(-(tæller2 / nævner2)).exp()
 
-    decimal = decimal.Decimal(førsteled * andetled)
+    voresdecimal = decimal.Decimal(førsteled * andetled)
     print('Return: ', decimal.Decimal(førsteled) * andetled)
 
     
     #return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
     #print('returnerer:', (1 / nævner1) * np.exp(-(tæller2 / nævner2)))
     #return (1 / nævner1) * np.exp(-(tæller2 / nævner2))
-    return decimal
+    return voresdecimal
 
 def orientation_distribution(phi_M, sigma_theta, particle, landmark):
     theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.z, particle.x, particle.y
