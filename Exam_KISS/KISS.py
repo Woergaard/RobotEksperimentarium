@@ -64,16 +64,16 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
                 print(itersCoastal)
                 itersCoastal += 1
         
-        if landmarkFoundCoastal:
-            while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal-650 and pingRight > sideLimitCoastal:
-                pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+        #if landmarkFoundCoastal:
+        #    while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal-650 and pingRight > sideLimitCoastal:
+        #        pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+        #        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
             
-            _utils.sharp_turn('left', 90)
+        #    _utils.sharp_turn('left', 90)
 
-            while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal-650 and pingRight > sideLimitCoastal:
-                pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+        #    while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal-650 and pingRight > sideLimitCoastal:
+        #        pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+        #        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
             
     itersCoastal = 0
     if goalID == 1:
@@ -351,7 +351,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                         iters += 1
                     elif iters < 36:
                         print('Søger efter et landmark i midten med id > 4.')
-                        landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[]], show)
+                        landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[], frontLimitCoastal, sideLimitCoastal], show)
 
                         if landmarkSeen:
                             # finder landmark i liste
