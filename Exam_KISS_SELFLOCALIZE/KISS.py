@@ -108,7 +108,6 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
         if not particles:
             particles = _utils.initialize_particles(num_particles)
         else:
-            est_pose
             for p in particles:
                 print('Partiklerne flyttes ')
                 p.setX(distance + math.sin(angle) + particle.getX())
