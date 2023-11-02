@@ -765,21 +765,21 @@ def orientation_distribution(phi_M, sigma_theta, particle, landmark):
     return p
 
 def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):     
-    for i in range(len(particles)):
+    for p in particles:
         landmark_weight = 1.0
         
         for j in range(len(landmarks_lst)):
             landmark = landmarks_lst[j]
             d_M = landmark.distance # den målte distance til landmarket
             phi_M = landmark.vinkel 
-            d_j = distance_for_particle(particles[i], landmark)
+            d_j = distance_for_particle(p, landmark)
             dist_weight_j = distance_weights(d_M, d_j, sigma_d)
 
-            orientation_weight_j = orientation_distribution(phi_M, sigma_theta, particles[i], landmark)
+            orientation_weight_j = orientation_distribution(phi_M, sigma_theta, p, landmark)
 
             landmark_weight = landmark_weight * dist_weight_j * orientation_weight_j
 
-        particles[i].setWeight(landmark_weight)
+        p.setWeight(landmark_weight)
 
 def make_intervals(particles):
     intervals = []
@@ -797,6 +797,7 @@ def normalize_weights(particles):
     for par in particles:
         weight =  par.getWeight()
         sum_weights += weight
+        print('Partikel vægt:', weight)
     
     weights_after = 0.0
     for par in particles:
