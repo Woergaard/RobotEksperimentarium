@@ -69,6 +69,8 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
             # Robotten kører og apporacher landmarket
             landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimitCoastal-600)
         
+            approach(maxdist)
+
             pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
             print('når hertil')
             _utils.sharp_turn('left', 90)
@@ -98,7 +100,8 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
         
             # Robotten kører og apporacher landmarket
             landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, 0)
-        
+
+            approach(maxdist)
             #pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
             #print('når hertil')
             #_utils.sharp_turn('left', 90)
@@ -119,12 +122,13 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
     if landmarkSeen:
         landmarkIndex = 0
         for i in range(len(seenLandmarks)):
-            if seenLandmarks[i].id == 3:
+            if seenLandmarks[i].id == goalID:
                 landmarkIndex = i
     
         # Robotten kører og apporacher landmarket
         landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal)
 
+        approach(maxdist)
     
 def detect_landmarks(img, arucoDict):
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
