@@ -57,7 +57,6 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
         while not landmarkSeen:
             if itersCoastal < 20:
                 landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[3]], show)
-                
                 itersCoastal += 1
         
 
@@ -68,13 +67,13 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
                     landmarkIndex = i
         
             # Robotten kører og apporacher landmarket
-            landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal-600)
+            landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimitCoastal-600)
         
             pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
             print('når hertil')
             _utils.sharp_turn('left', 90)
 
-            while pingFront > frontLimitCoastal and pingLeft > sideLimit and pingRight > sideLimit:
+            while pingFront > frontLimit and pingLeft > sideLimit and pingRight > sideLimit:
                 pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
                 arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
 
@@ -98,13 +97,13 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
                     landmarkIndex = i
         
             # Robotten kører og apporacher landmarket
-            landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal-600)
+            landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimitCoastal-600)
         
             pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
             print('når hertil')
             _utils.sharp_turn('left', 90)
 
-            while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal and pingRight > sideLimitCoastal:
+            while pingFront > frontLimit and pingLeft > sideLimit and pingRight > sideLimit:
                 pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
                 arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
   
