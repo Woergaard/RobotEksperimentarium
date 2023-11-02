@@ -59,17 +59,18 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
         landmarkFound = False
         while not landmarkFound:
             landmarkFound = turn_and_watch('left', image, [1], arucoDict)
-
-        while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal-650 and pingRight > sideLimitCoastal:
-            pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-            arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
-
-        _utils.sharp_turn('left', 90)
+            
+#            if landmarkFound:
+#                while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal-650 and pingRight > sideLimitCoastal:
+#                    pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+#                    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+        if landmarkFound:
+            _utils.sharp_turn('right', 90)
 
         # tag højde for at der er tomt
-        while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal and pingRight > sideLimitCoastal-650:
-            pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-            arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+            while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal and pingRight > sideLimitCoastal-650:
+                pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
             
 
     if goalID == 1:
