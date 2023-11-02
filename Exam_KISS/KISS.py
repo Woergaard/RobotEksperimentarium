@@ -52,37 +52,9 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
     '''
     landmarkFoundCoastal = False
     if goalID == 1:
-        print(goalID)
-        itersCoastal = 0
-
-        # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
-        while not landmarkFoundCoastal:
-            if itersCoastal < 20:
-                landmarkFoundCoastal, _ = use_camera(cam, arucoDict, 'turn_and_watch', [[1]], show)
-                print("Er landmark 1 fundet? : ", landmarkFoundCoastal)
-                itersCoastal += 1
         
-        if landmarkFoundCoastal:
-            print('når hertil')
-            # Robotten kører og holder øje med, om den støder ind i noget
-            pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-            while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal-650 and pingRight > sideLimitCoastal:
-                pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
-            
-            _utils.sharp_turn('left', 90)
-
-            while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal and pingRight > sideLimitCoastal:
-                pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
-            
-    landmarkFoundCoastal = False
-    if goalID == 3:
-        itersCoastal = 0
-
         # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
-        #landmarkFoundCoastal = False
-        while not landmarkFoundCoastal:
+        while not landmarkSeen:
             if itersCoastal < 20:
                 landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[1]], show)
                 
@@ -98,15 +70,36 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
             # Robotten kører og apporacher landmarket
             landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal)
         
-
-        #if landmarkFoundCoastal:
             print('når hertil')
-            # Robotten kører og holder øje med, om den støder ind i noget
-            #pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-            #while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal and pingRight > sideLimitCoastal-650:
-            #    pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-            #    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+            _utils.sharp_turn('left', 90)
+
+            while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal and pingRight > sideLimitCoastal:
+                pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+
             
+    landmarkFoundCoastal = False
+    if goalID == 3:
+        itersCoastal = 0
+
+        # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
+        while not landmarkSeen:
+            if itersCoastal < 20:
+                landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[1]], show)
+                
+                itersCoastal += 1
+        
+
+        if landmarkSeen:
+            landmarkIndex = 0
+            for i in range(len(seenLandmarks)):
+                if seenLandmarks[i].id == 1:
+                    landmarkIndex = i
+        
+            # Robotten kører og apporacher landmarket
+            landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal)
+        
+            print('når hertil')
             _utils.sharp_turn('left', 90)
 
             while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal and pingRight > sideLimitCoastal:

@@ -781,8 +781,8 @@ def distance_weights(d_M, d_i, sigma_d):
     #print('returnerer:', (1 / nævner1) * np.exp(-(tæller2 / nævner2)))
     d_M = d_M / 100
     d_i = d_i / 100
-    print('distance: ', -((d_M-d_i)**2)/(2*sigma_d**2))
-    print('exp: ', np.exp(-((d_M-d_i)**2)/(2*sigma_d**2)))
+    #print('distance: ', -((d_M-d_i)**2)/(2*sigma_d**2))
+    #print('exp: ', np.exp(-((d_M-d_i)**2)/(2*sigma_d**2)))
     return (1/np.sqrt(2*np.pi*sigma_d**2)) * np.exp(-((d_M-d_i)**2)/(2*sigma_d**2))
     #(1 / nævner1) * np.exp(-(tæller2 / nævner2))
     #return førsteled * andetled
@@ -794,8 +794,8 @@ def orientation_distribution(phi_M, sigma_theta, particle, landmark):
     e_theta = np.array([np.cos(theta_i), np.sin(theta_i)]).T
     hat_e_theta = np.array([-np.sin(theta_i), np.cos(theta_i)]).T 
     phi_i = np.sign(np.dot(e_l,hat_e_theta))*np.arccos(np.dot(e_l, e_theta))
-    print('phi_i', phi_i)
-    print('phi_M', phi_M)
+    #print('phi_i', phi_i)
+    #print('phi_M', phi_M)
 
     p = (1/np.sqrt(2*np.pi*sigma_theta**2)) * np.exp(-((phi_M-phi_i)**2)/(2*sigma_theta**2))
 
@@ -813,15 +813,15 @@ def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):
             d_M = landmark.distance # den målte distance til landmarket
             phi_M = landmark.vinkel 
             d_j = distance_for_particle(p, landmark)
-            print('d_j: ', d_j)
-            print('d_M: ', d_M)
-            print('sigma_d: ', sigma_d)
+            #print('d_j: ', d_j)
+            #print('d_M: ', d_M)
+            #print('sigma_d: ', sigma_d)
             dist_weight_j = distance_weights(d_M, d_j, sigma_d)
 
             orientation_weight_j = orientation_distribution(phi_M, sigma_theta, p, landmark)
 
-            print('Dist vægt: ', dist_weight_j)
-            print('Orienterings vægt: ' , orientation_weight_j)
+            #print('Dist vægt: ', dist_weight_j)
+            #print('Orienterings vægt: ' , orientation_weight_j)
 
             dist_w.append(dist_weight_j)
             ori_w.append(orientation_weight_j)
