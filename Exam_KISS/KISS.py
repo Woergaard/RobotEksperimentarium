@@ -99,13 +99,13 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
             # Robotten kører og apporacher landmarket
             landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimitCoastal-600)
         
-            pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-            print('når hertil')
-            _utils.sharp_turn('left', 90)
+            #pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+            #print('når hertil')
+            #_utils.sharp_turn('left', 90)
 
-            while pingFront > frontLimit and pingLeft > sideLimit and pingRight > sideLimit:
-                pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+            #while pingFront > frontLimit and pingLeft > sideLimit and pingRight > sideLimit:
+            #    pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+            #    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
   
     landmarkSeen = False
     # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
