@@ -50,12 +50,11 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
     Robotten holder sikkerhedsafstand baseret på ping væk fra landmarks med 
     id > 4. 
     '''
-    
+    landmarkFoundCoastal = False
     if goalID == 3:
         itersCoastal = 0
 
         # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
-        landmarkFoundCoastal = False
         while not landmarkFoundCoastal:
             if itersCoastal < 20:
                 landmarkFoundCoastal, _ = turn_and_watch('left', image, [1], arucoDict)
@@ -76,12 +75,12 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
                 pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
                 arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
             
-    
+    landmarkFoundCoastal = False
     if goalID == 1:
         itersCoastal = 0
 
         # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
-        landmarkFoundCoastal = False
+        #landmarkFoundCoastal = False
         while not landmarkFoundCoastal:
             if itersCoastal < 20:
                 landmarkFoundCoastal, _ = turn_and_watch('left', image, [[3]], arucoDict)
