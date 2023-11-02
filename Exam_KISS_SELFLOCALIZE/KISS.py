@@ -32,6 +32,9 @@ standardSpeed = 50.0
 frontLimit = 400.0
 sideLimit = 400.0
 
+frontLimitCoastal = 1000.0
+sideLimitCoastal = 1000.0
+
 landmarkIDs = [1, 2, 3, 4, 1]
 lostLimit = 1000.0
 
@@ -184,33 +187,74 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
 
         return est_pose, particles
 
+def selflocalize_360_degrees(cam, show, params):  
+    arlo_position, particles = selflocalize(cam, show, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7])
+    # drejer 360 grader om sig selv og selflocalizer
+    for _ in range(18):
+        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
+        turnSeconds = _utils.degreeToSeconds(20)
+        _utils.wait(turnSeconds)
+        arlo.stop()
+        _utils.wait(2.0)
+        arlo_position, particles = selflocalize(cam, show, params[0], params[1], params[2], params[3], arlo_position, particles, 0.0, 20.0)
+    return arlo_position, particles
+        
 def landmark_reached(reached_node, temp_goal):
     if _utils.dist(reached_node, temp_goal) < 350.0:
         return True
     else:
         return False
 
-def costaldrive(goalID, image, arucoDict, frontLimit, sideLimit):
+def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
     '''
     Robotten kører langs kysten og leder efter et landmark med et bestemt id.
     Robotten holder sikkerhedsafstand baseret på ping væk fra landmarks med 
     id > 4. 
     '''
-    # Robotten drejer 90 grader til højre 
-    _utils.sharp_turn('right', 90)
 
-    # Robotten kører og holder øje med, om den støder ind i noget
-    pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-
-    while pingFront > frontLimit and pingLeft > sideLimit and pingRight > sideLimit:
+    if goalID == 3:
+        # Robotten kører og holder øje med, om den støder ind i noget
         pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-        arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+
+        # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
+        landmarkFound = False
+        while not landmarkFound:
+            landmarkFound = turn_and_watch('left', image, [1], arucoDict)
+
+        while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal and pingRight > sideLimitCoastal:
+            pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+            arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+
+        _utils.sharp_turn('left', 90)
+
+        # tag højde for at der er tomt
+        while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal and pingRight > sideLimitCoastal:
+            pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+            arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+            
+
+    if goalID == 1:
+        # Robotten kører og holder øje med, om den støder ind i noget
+        pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+
+        # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
+        landmarkFound = False
+        while not landmarkFound:
+            landmarkFound = turn_and_watch('left', image, [3], arucoDict)
+
+        while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal and pingRight > sideLimitCoastal:
+            pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+            arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+
+        _utils.sharp_turn('right', 90)
+
+        while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal and pingRight > sideLimitCoastal:
+            pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+            arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+            
 
 
-    # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
-    landmarkFound = False
-    while not landmarkFound:
-        landmarkFound = turn_and_watch('left', image, [goalID], arucoDict)
+
     
 def detect_landmarks(img, arucoDict):
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
@@ -324,8 +368,6 @@ def drive_carefully(direction, meters):
     wait_and_sense(driveSeconds)
 
 def approach(maxdist):
-    print('Nærmer sig landmarket.')
-
     arlo.go_diff(leftWheelFactor*standardSpeed*0.6, rightWheelFactor*standardSpeed*0.6, 1, 1)
     pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
     isDriving = True
@@ -363,6 +405,7 @@ def drive_carefully_to_landmark(landmark, frontLimit, sideLimit): #Robotten kør
 
     dist = min([distance*(3.0/4.0), safetyDist])
     
+    print('Rotten kører ' +  str(dist/1000) + ' meter mod landmark ' + str(landmark.id))
     drive_carefully('forwards', dist/1000)
 
     # Tjekker, om der er blevet afbrudt grundet spærret vej
@@ -439,6 +482,10 @@ def use_camera(cam, arucoDict, command, params, show):
         if command == 'selflocalize':
             arlo_position, particles = selflocalize(cam, show, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7])
             return arlo_position, particles
+        
+        if command == 'selflocalize_360':
+            arlo_position, particles = selflocalize_360_degrees(cam, show, params)
+            return arlo_position, particles
 
         elif command == 'turn_and_watch':
 
@@ -447,26 +494,42 @@ def use_camera(cam, arucoDict, command, params, show):
             costaldrive(params[0], image, arucoDict, params[1], params[2])
             return
 
+def find_goal_in_seenLandmarks(seenLandmarks, goalID, type):
+    landmarkIndex = 0
+    for i in range(len(seenLandmarks)):
+        if type == 'landmark' and seenLandmarks[i].id == goalID:
+            landmarkIndex = i
+        elif type == 'obstacle' and seenLandmarks[i].id > 4:
+                landmarkIndex = i
+    return seenLandmarks[landmarkIndex]
+
 # Her kommer main programmet
 def main(landmarkIDs, frontLimit, sideLimit, show):
 
     # vi åbner kameraet
     cam, arucoDict = camera_setup()
 
+    # itererer efter landmarks i rækkefølge
     for goalID in landmarkIDs:
         print('Søger efter landmark ' + str(goalID))
         landmarkFound = False
         iters = 0
+        particles = []
+        arlo_position = _utils.Node(-500, -500, None)
+        arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize_360', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, 0.0, 0.0], show)
 
+        # søger efter landmarket, indtil det er fundet og berørt
         while not landmarkFound:
             landmarkSeen = False
 
             # vi drejer og kører, indtil vi har fundet det landmark, vi søger efter
             while not landmarkSeen:
-                if iters < 10:
+                # vi leder efter et landmark 10 gange
+                if iters < 18:
                     print('Drejer og leder efter landmark ' + str(goalID))
                     landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[goalID]], show)
                     iters += 1
+                # hvis vi ikke kan finde et landmark, håndter vi det således: 
                 else:
                     print('Søger efter et landmark i midten med id > 4.')
                     landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[]], show)
@@ -481,7 +544,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                     _, _, _ = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
 
                     print('Kører langs kysten og leder efter ' + str(goalID))
-                    use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimit, sideLimit], show)
+                    use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimitCoastal, sideLimitCoastal], show)
                     particles = []
                     distance = 0
 
@@ -492,30 +555,22 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
 
             arlo.stop()
             
-            landmarkIndex = 0
-            for i in range(len(seenLandmarks)):
-                if seenLandmarks[i].id == goalID:
-                    landmarkIndex = i
+            goalLandmark = find_goal_in_seenLandmarks(seenLandmarks, goalID)
         
-            # Robotten kører og apporacher landmarket
-            landmarkFound, distance, angle = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
+            # Robotten kører hen mod landmarket
+            landmarkFound, distance, angle = drive_carefully_to_landmark(goalLandmark, frontLimit, sideLimit)
             
-            
+            # Robotten approacher landmarket
+            print('Approacher landmark.')
             approach(distance)
 
             
             print('Sikrer os, at vi er nær landmarket ved selflocalization.')
             print('Begynder selflokalisering.')
-            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, distance, angle], show)
-            #print(math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
-            #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
-            goalLandmark = _utils.Landmark(None, None, None, goalID, landmarks_dict[goalID])
+            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize_360', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, distance, angle], show)
+            print('Arlo befinder sig på position: ', math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
             goalNode = _utils.Node(goalLandmark.x, goalLandmark.z, None)
             landmarkFound = landmark_reached(arlo_position, goalNode)
-
-            # drejer rundt
-            # ser efter andre landmarks
-            # selflocalizer
                         
     arlo.stop()
     print('Rute færdiggjort!')
@@ -532,14 +587,11 @@ main(landmarkIDs, frontLimit, sideLimit, False)
 #
 
 '''
-1. led efter vores midlertidige mål
-2. brug selflocalize
-3. kør derhen
-4. approach
-5. drej rundt, se efter andre landmarks, der kan bruges til selflocalize
-
-
-
+* led efter vores midlertidige mål via turn_and_watch
+* kør derhen
+* approach
+* drej 360 grader og selflocalizer ved hvert fundet landmark.
+* tjekker ved arlo_position, om vi er nået ved landmark.
 '''
 
 
