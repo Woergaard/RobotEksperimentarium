@@ -380,6 +380,24 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                         print('Drejer og leder efter landmark ' + str(goalID))
                         landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[goalID]], show)
                         iters += 1
+
+                        landmarkIndex = 0
+                        for i in range(len(seenLandmarks)):
+                            if seenLandmarks[i].id == goalID:
+                                landmarkIndex = i
+                    
+                        # Robotten kører og apporacher landmarket
+                        landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal)
+                        
+                        print('Sikrer os, at vi er nær landmarket.')
+                        
+                        
+                        approach(maxdist)
+
+                        if landmarkFound:
+                            print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
+                            arlo.stop()
+
                     elif iters < 36:
                         print('Søger efter et landmark i midten med id > 4.')
                         landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[]], show)
@@ -405,24 +423,10 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                     else:    
                         iters = 0
 
-                arlo.stop()
-                
-                landmarkIndex = 0
-                for i in range(len(seenLandmarks)):
-                    if seenLandmarks[i].id == goalID:
-                        landmarkIndex = i
-            
-                # Robotten kører og apporacher landmarket
-                landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal)
-                
-                print('Sikrer os, at vi er nær landmarket.')
-                
-                
-                approach(maxdist)
 
-            if landmarkFound:
-                print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
+                
                 arlo.stop()
+                
                         
     arlo.stop()
     print('Rute færdiggjort!')

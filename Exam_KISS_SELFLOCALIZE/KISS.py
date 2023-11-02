@@ -109,10 +109,10 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
             particles = _utils.initialize_particles(num_particles)
         else:
             print('Partiklerne flyttes')
-            i = 0
+            #i = 0
             for p in particles:
-                print(i)
-                i += 1
+                #print(i)
+                #i += 1
                 delta_x = distance + math.sin(angle)
                 delta_y = distance + math.sin(angle)
                 delta_theta = angle
@@ -150,7 +150,7 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
             sigma_d = 5.0
             particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
-            if not isinstance(objectIDs, type(None)):
+            if len(objectIDs) != 0:
                 print('selflocalize opdager landmarks: ' +  objectIDs)
                 landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
                 
@@ -296,12 +296,12 @@ def turn_and_watch(direction, img, landmarkIDs, arucoDict):
     if ids is not None:
         if not landmarkIDs:
             for id in ids:
-                print('hej obstacle')
+                #print('hej obstacle')
                 if id > 4:
                     landmark_spotted = True
         else: 
             for id in landmarkIDs:
-                print('hej landmark')
+                #print('hej landmark')
                 if id in ids:
                     landmark_spotted = True
         
