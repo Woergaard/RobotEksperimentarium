@@ -117,9 +117,8 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
         
         print('Estimerer position')
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
-
         print('Position er estimeret')
-        
+
         for iters in range(maxiters):
             print(iters)
             # get the image
