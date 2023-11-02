@@ -195,8 +195,8 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
 
         return est_pose, particles
 
-def selflocalize_360_degrees(cam, show, params):  
-    arlo_position, particles = selflocalize(cam, show, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7])
+def selflocalize_360_degrees(cam, show, arucoDict, params):  
+    arlo_position, particles = selflocalize(cam, show, arucoDict, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7])
     # drejer 360 grader om sig selv og selflocalizer
     for _ in range(18):
         arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
@@ -204,7 +204,7 @@ def selflocalize_360_degrees(cam, show, params):
         _utils.wait(turnSeconds)
         arlo.stop()
         _utils.wait(2.0)
-        arlo_position, particles = selflocalize(cam, show, params[0], params[1], params[2], params[3], arlo_position, particles, 0.0, 20.0)
+        arlo_position, particles = selflocalize(cam, show, arucoDict, params[0], params[1], params[2], params[3], arlo_position, particles, 0.0, 20.0)
     return arlo_position, particles
         
 def landmark_reached(reached_node, temp_goal):
@@ -436,7 +436,7 @@ def use_camera(cam, arucoDict, command, params, show):
             return arlo_position, particles
         
         if command == 'selflocalize_360':
-            arlo_position, particles = selflocalize_360_degrees(cam, show, params)
+            arlo_position, particles = selflocalize_360_degrees(cam, show, arucoDict, params)
             return arlo_position, particles
 
         elif command == 'turn_and_watch':
