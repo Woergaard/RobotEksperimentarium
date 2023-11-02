@@ -742,7 +742,7 @@ def distance_for_particle(particle_i, landmark):
     d_i = dist(particle_i, landmark)
     return d_i
 
-#import decimal
+import decimal
 
 def distance_weights(d_M, d_i, sigma_d):
     '''
@@ -754,14 +754,21 @@ def distance_weights(d_M, d_i, sigma_d):
 
     print('Første led: ', (1 / nævner1))
     #print('Andet led: ', math.exp(-(tæller2 / nævner2)))
-    print('Andet led: ', np.exp(-(tæller2 / nævner2)))
+    #print('Andet led: ', np.exp(-(tæller2 / nævner2)))
+    print('Andet led: ', decimal.Decimal(-(tæller2 / nævner2)).exp())
     print('tæller2: ', tæller2)
     print('nævner2: ', nævner2)
     print('Indmad: ', -(tæller2 / nævner2))
 
+    førsteled = 1 / nævner1
+    andetled = decimal.Decimal(-(tæller2 / nævner2)).exp() * 1000
 
+    returner = (førsteled * andetled)/1000
+    print('returnerer:', returner)
+
+    
     #return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
-    print('returnerer:', (1 / nævner1) * np.exp(-(tæller2 / nævner2)))
+    #print('returnerer:', (1 / nævner1) * np.exp(-(tæller2 / nævner2)))
     return (1 / nævner1) * np.exp(-(tæller2 / nævner2))
 
 def orientation_distribution(phi_M, sigma_theta, particle, landmark):
