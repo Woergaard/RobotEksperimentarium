@@ -64,25 +64,44 @@ def isRunningOnArlo():
        You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
     """
     return onRobot
+def detect_landmarks(img, arucoDict):
+    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
+    w, h = 1280, 720
+    focal_length = 1744.36 
+    camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
+    arucoMarkerLength = 145.0
+    distortion = 0
+    
+    # Giver distancen til boxen
+    _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
 
-def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position, particles, distance, angle):
+    seenLandmarks = []
+    # Udregner vinkel og retning til landmarket
+    if ids is not None:
+        for i in range(len(ids)):
+            world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
+            if np.dot(tvecs[i], np.array([1, 0, 0])) < 0:
+                direction = 'left'
+            else:
+                direction = 'right'
+
+            seenLandmarks.append(_utils.Landmark(linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i][0]))
+            #print('dist: ' + str(linalg.norm(tvecs[i])) + ', vinkel: ' + str(world_angle) + direction + ', id: ' + str(ids[i][0]) + ', tvec: ' + str(tvecs[i][0]))
+        
+        seenLandmarks.sort(key=lambda x: x.distance, reverse=False) # sorterer listen, så det nærmeste landmark er først.
+    else:
+        print("No marker detected")
+    
+
+    return seenLandmarks, ids, aruco_corners
+  
+def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position, particles, distance, angle):
     #return (750.0,0.0)
     est_pose = _utils.Node(prior_position.x/10, prior_position.z/10, None)
     est_pose.setTheta(prior_position.theta)
     print('self_localize søger efter landmarks.')
     
     try:
-        if showGUI:
-            # Open windows
-            WIN_RF1 = "Robot view"
-            cv2.namedWindow(WIN_RF1)
-            cv2.moveWindow(WIN_RF1, 50, 50)
-
-            WIN_World = "World view"
-            cv2.namedWindow(WIN_World)
-            cv2.moveWindow(WIN_World, 500, 50)
-        
-        #print('hej1')
         # Initialize particles
         num_particles = 1000
         
@@ -98,26 +117,22 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
 
-        #print(est_pose)
-        # Allocate space for world map
-        #world = np.zeros((1000,1000,3), dtype=np.uint8)
-
-        # Draw map
-        #_utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
-
-        #Xlst = []
-
         for iters in range(maxiters):
             print(iters)
-            #image = cam.capture_array("main")
-            # Fetch next frame
-            img = cam.get_next_frame()
-            #print('hej1.1')
-            # Detect objects
-            objectIDs, dists, angles = cam.detect_aruco_objects(img)
-            #print('hej1.2')
-            #Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
-            
+            # get the image
+            img = cam.capture_array("main")
+
+            # Detect landmarks
+            seenLandmarks, ids, aruco_corners = detect_landmarks(img, arucoDict)
+
+            dists = []
+            objectIDs = []
+            angles = []
+            for landmark in seenLandmarks:
+                dists.append(landmark.distance)
+                objectIDs.append(landmark.id)
+                angles.append(landmark.vinkel)
+  
             sigma_theta = 0.57
             sigma_d = 5.0
             particle.add_uncertainty(particles, sigma_d, sigma_theta)
@@ -151,18 +166,18 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             est_pose = particle.estimate_pose(particles)
             #print(est_pose)
 
-            if showGUI:
+            #if showGUI:
                 #print('hej2')
                 # Draw map
                 #_utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
                 
                 # Show frame
-                cv2.imshow(WIN_RF1, img)
+                #cv2.imshow(WIN_RF1, img)
 
                 # Show world
                 #cv2.imshow(WIN_World, world)
 
-                time.sleep(10)
+                #time.sleep(10)
 
     finally:
     
@@ -245,37 +260,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
             pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
             arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
     
-def detect_landmarks(img, arucoDict):
-    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
-    w, h = 1280, 720
-    focal_length = 1744.36 
-    camera_matrix = np.array([[focal_length, 0, w/2], [0, focal_length, h/2], [0, 0, 1]])
-    arucoMarkerLength = 145.0
-    distortion = 0
-    
-    # Giver distancen til boxen
-    _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, camera_matrix, distortion)
-
-    seenLandmarks = []
-    # Udregner vinkel og retning til landmarket
-    if ids is not None:
-        for i in range(len(ids)):
-            world_angle = np.arccos(np.dot(tvecs[i]/np.linalg.norm(tvecs[i]), np.array([0, 0, 1])))
-            if np.dot(tvecs[i], np.array([1, 0, 0])) < 0:
-                direction = 'left'
-            else:
-                direction = 'right'
-
-            seenLandmarks.append(_utils.Landmark(linalg.norm(tvecs[i]), world_angle, direction, ids[i][0], tvecs[i][0]))
-            #print('dist: ' + str(linalg.norm(tvecs[i])) + ', vinkel: ' + str(world_angle) + direction + ', id: ' + str(ids[i][0]) + ', tvec: ' + str(tvecs[i][0]))
-        
-        seenLandmarks.sort(key=lambda x: x.distance, reverse=False) # sorterer listen, så det nærmeste landmark er først.
-    else:
-        print("No marker detected")
-    
-
-    return seenLandmarks, ids, aruco_corners
-    
+  
 def turn_and_watch(direction, img, landmarkIDs, arucoDict):
     '''
     Robotten drejer om egen akse, indtil den har fundet et landmark, OG der er frit.
@@ -412,8 +397,6 @@ def camera_setup():
         command:  kommando
         show:   bool, der angiver, om kameraets output skal vises
     '''
-
-    '''
     # Open a camera device for capturing
     imageSize = (1280, 720)
     FPS = 60
@@ -426,29 +409,10 @@ def camera_setup():
 
     #print('hej2')
     #print(cam.camera_configuration()) # Print the camera configuration in use
-    '''
+
     time.sleep(1)  # _utils.wait for camera to setup
 
     arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
-
-    print("Opening and initializing camera for self_localization")
-    if isRunningOnArlo():
-        # XXX: You need to change this path to point to where your robot.py file is located
-        sys.path.append("../")
-
-    try:
-        #import Ex5.src.handout.python.robot as robot
-        onRobot = True
-    except ImportError:
-        print("selflocalize.py: robot module not present - forcing not running on Arlo!")
-        onRobot = False
-    
-    #print("Opening and initializing camera")
-    if camera.isRunningOnArlo():
-        cam = camera.Camera(0, 'arlo', useCaptureThread = True)
-    else:
-        cam = camera.Camera(0, 'macbookpro', useCaptureThread = True)
-
 
     return cam, arucoDict
 
@@ -461,15 +425,14 @@ def use_camera(cam, arucoDict, command, params, show):
         cv2.moveWindow(WIN_RF, 100, 100)
     
     while cv2.waitKey(4) == -1: # _utils.wait for a key pressed event
-        #image = cam.capture_array("main")
-        image = cam.get_next_frame()
+        image = cam.capture_array("main")
         
         # Show frames
         if show:
             cv2.imshow(WIN_RF, image)
-
+        
         if command == 'selflocalize':
-            arlo_position, particles = selflocalize(cam, show, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7])
+            arlo_position, particles = selflocalize(cam, show, arucoDict, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7])
             return arlo_position, particles
         
         if command == 'selflocalize_360':
