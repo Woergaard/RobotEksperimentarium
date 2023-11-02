@@ -779,6 +779,8 @@ def distance_weights(d_M, d_i, sigma_d):
     
     #return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
     #print('returnerer:', (1 / nævner1) * np.exp(-(tæller2 / nævner2)))
+    d_M = d_M / 100
+    d_i = d_i / 100
     return (1/np.sqrt(2*np.pi*sigma_d**2)) * np.exp(-((d_M-d_i)**2)/(2*sigma_d**2))
     #(1 / nævner1) * np.exp(-(tæller2 / nævner2))
     #return førsteled * andetled
@@ -790,6 +792,8 @@ def orientation_distribution(phi_M, sigma_theta, particle, landmark):
     e_theta = np.array([np.cos(theta_i), np.sin(theta_i)]).T
     hat_e_theta = np.array([-np.sin(theta_i), np.cos(theta_i)]).T 
     phi_i = np.sign(np.dot(e_l,hat_e_theta))*np.arccos(np.dot(e_l, e_theta))
+    print('phi_i', phi_i)
+    print('phi_M', phi_M)
 
     p = (1/np.sqrt(2*np.pi*sigma_theta**2)) * np.exp(-((phi_M-phi_i)**2)/(2*sigma_theta**2))
 
@@ -801,7 +805,6 @@ def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):
 
     for p in particles:
         landmark_weight = 1.0
-        
         
         for landmark in landmarks_lst:
             #print(landmark.id)
