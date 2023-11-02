@@ -109,7 +109,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         world = np.zeros((1000,1000,3), dtype=np.uint8)
 
         # Draw map
-        _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
+        #_utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
 
         Xlst = []
 
@@ -171,7 +171,6 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 time.sleep(10)
 
     finally:
-        print('hejhej')
     
         # Make sure to clean up even if an exception occurred
         
