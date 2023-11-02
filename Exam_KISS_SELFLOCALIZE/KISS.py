@@ -564,7 +564,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
             
             print('Sikrer os, at vi er nær landmarket ved selflocalization.')
             print('Begynder selflokalisering.')
-            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize_360', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, distance, angle], show)
+            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize_360', [2, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, distance, angle], show)
             print('Arlo befinder sig på position: ', math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
             goalNode = _utils.Node(goalLandmark.x, goalLandmark.z, None)
             landmarkFound = landmark_reached(arlo_position, goalNode)
