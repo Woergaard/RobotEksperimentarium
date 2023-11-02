@@ -380,7 +380,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                     if iters < 18:
                         print('Drejer og leder efter landmark ' + str(goalID))
                         landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[goalID]], show)
-                        iters += 1
+                        
 
                         landmarkIndex = 0
                         for i in range(len(seenLandmarks)):
@@ -398,6 +398,8 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                         if landmarkFound:
                             print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
                             arlo.stop()
+                        
+                        iters += 1
 
                     elif iters < 36:
                         print('Søger efter et landmark i midten med id > 4.')

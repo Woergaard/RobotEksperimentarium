@@ -78,7 +78,7 @@ def watch_for_selflocalize(img, arucoDict, landmarkIDs):
     # If at least one marker is detected
     if len(aruco_corners) > 0 and landmark_spotted:
         for i in range(len(ids)):
-            print('Landmark ' + str(ids[i]) + ' detekteret via turn_and_watch.')
+            print('Landmark ' + str(ids[i]) + ' detekteret via watch_for_selflocalization.')
         return True, seenLandmarks
     else:
         return False, []
@@ -164,6 +164,7 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
             _, seenLandmarks = watch_for_selflocalize(img, arucoDict, landmarkIDs)
             
             if len(seenLandmarks) != 0:
+                print('Håndterer observationer i selflocalize')
                 dists = []
                 objectIDs = []
                 angles = []
@@ -172,13 +173,14 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
                     dists.append(landmark.distance)
                     objectIDs.append(landmark.id)
                     angles.append(landmark.vinkel)
+
+                print('self1')
     
                 sigma_theta = 0.57
                 sigma_d = 5.0
                 particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
-                
-                print('selflocalize opdager landmarks: ' +  objectIDs)
+                print('selflocalize opdager landmarks: ', objectIDs)
                 landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
                 
                 # omregner til milimeter
@@ -188,12 +190,15 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
                     landmark.tvec[0] /= 10
                     landmark.tvec[1] /= 10
 
+                print('Opdaterer vægte')
                 _utils.update_weights(sigma_d, sigma_theta, landmarks_lst, particles)    
                     
+                print('Normaliserer vægte')
                 _utils.normalize_weights(particles)
 
                 intervals = _utils.make_intervals(particles)
 
+                print('Genererer nye partikler')
                 particles = _utils.generate_new_particles(num_particles, particles, intervals)
 
                 # Draw detected objects
@@ -248,7 +253,7 @@ def selflocalize_360_degrees(cam, show, arucoDict, params):
     return arlo_position, particles
         
 def landmark_reached(reached_node, temp_goal):
-    if _utils.dist(reached_node, temp_goal) < 350.0:
+    if _utils.dist(reached_node, temp_goal) < 400.0:
         return True
     else:
         return False
