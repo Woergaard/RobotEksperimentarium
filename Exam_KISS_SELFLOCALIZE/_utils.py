@@ -828,7 +828,7 @@ def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):
             
             landmark_weight = landmark_weight * dist_weight_j * orientation_weight_j
 
-        print('Partikel vægt:', landmark_weight)
+        #print('Partikel vægt:', landmark_weight)
         p.setWeight(landmark_weight)
 
 def make_intervals(particles):
