@@ -28,6 +28,9 @@ standardSpeed = 50.0
 frontLimit = 400.0
 sideLimit = 400.0
 
+frontLimitCoastal = 700.0
+sideLimitCoastal = 700.0
+
 landmarkIDs = [1, 2, 3, 4, 1]
 lostLimit = 1000.0
 
@@ -417,8 +420,6 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
 
             if landmarkFound:
                 print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
-                _utils.sharp_turn('right', 180.0)
-                drive_carefully('forwards', 0.7)
                 arlo.stop()
                         
     arlo.stop()

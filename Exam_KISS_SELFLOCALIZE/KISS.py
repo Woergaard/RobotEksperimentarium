@@ -95,23 +95,16 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 p.setX(distance + math.sin(angle) + particle.getX())
                 p.setY(distance + math.sin(angle) + particle.getY())
                 p.setTheta(particle.getTheta() + angle)
-        # flytter partikler efter movement
-        
-        
-        
-            # drej alle noder den retning
-            # flyt alle noder med steplength i den retning
-        
         
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
 
         # Allocate space for world map
-        world = np.zeros((1000,1000,3), dtype=np.uint8)
+        #world = np.zeros((1000,1000,3), dtype=np.uint8)
 
         # Draw map
         #_utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
 
-        Xlst = []
+        #Xlst = []
 
         for iters in range(maxiters):
             print(iters)
@@ -122,7 +115,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             # Detect objects
             objectIDs, dists, angles = cam.detect_aruco_objects(img)
             #print('hej1.2')
-            Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
+            #Xlst.append(particles) # således at Xlst[iter] er lig de nuværende particles
             
             sigma_theta = 0.57
             sigma_d = 5.0
@@ -160,13 +153,13 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             if showGUI:
                 #print('hej2')
                 # Draw map
-                _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
+                #_utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
                 
                 # Show frame
                 cv2.imshow(WIN_RF1, img)
 
                 # Show world
-                cv2.imshow(WIN_World, world)
+                #cv2.imshow(WIN_World, world)
 
                 time.sleep(10)
 
@@ -449,7 +442,7 @@ def camera_setup():
         print("selflocalize.py: robot module not present - forcing not running on Arlo!")
         onRobot = False
     
-    print("Opening and initializing camera")
+    #print("Opening and initializing camera")
     if camera.isRunningOnArlo():
         cam = camera.Camera(0, 'arlo', useCaptureThread = True)
     else:
@@ -483,8 +476,8 @@ def use_camera(cam, arucoDict, command, params, show):
             return arlo_position, particles
 
         elif command == 'turn_and_watch':
-
             return turn_and_watch('left', image, params[0], arucoDict)
+        
         elif command == 'costaldrive':
             costaldrive(params[0], image, arucoDict, params[1], params[2])
             return
