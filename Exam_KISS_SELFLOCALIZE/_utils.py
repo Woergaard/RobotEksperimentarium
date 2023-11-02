@@ -772,7 +772,7 @@ def distance_weights(d_M, d_i, sigma_d):
     andetled = decimal.Decimal(-(tæller2 / nævner2)).exp()
 
     decimal = decimal.Decimal(førsteled * andetled)
-    print('Return: ', decimal.Decimal(førsteled * andetled))
+    print('Return: ', decimal.Decimal(førsteled) * andetled)
 
     
     #return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
