@@ -51,7 +51,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
     id > 4. 
     '''
     landmarkFoundCoastal = False
-    if goalID == 3:
+    if goalID == 1:
         print(goalID)
         itersCoastal = 0
 
@@ -77,22 +77,22 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
                 arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
             
     landmarkFoundCoastal = False
-    if goalID == 1:
+    if goalID == 3:
         itersCoastal = 0
 
         # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
         #landmarkFoundCoastal = False
         while not landmarkFoundCoastal:
             if itersCoastal < 20:
-                landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[goalID]], show)
-                             
+                landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[1]], show)
+                
                 itersCoastal += 1
         
 
         if landmarkSeen:
             landmarkIndex = 0
             for i in range(len(seenLandmarks)):
-                if seenLandmarks[i].id == goalID:
+                if seenLandmarks[i].id == 1:
                     landmarkIndex = i
         
             # Robotten kører og apporacher landmarket
