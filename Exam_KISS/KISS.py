@@ -100,6 +100,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
             # Robotten kører og apporacher landmarket
             landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal-600)
         
+            pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
             print('når hertil')
             _utils.sharp_turn('left', 90)
 
