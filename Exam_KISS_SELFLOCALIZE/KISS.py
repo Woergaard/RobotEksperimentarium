@@ -183,7 +183,7 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
                 print('selflocalize opdager landmarks: ', objectIDs)
                 landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
                 
-                # omregner til milimeter
+                # omregner fra milimeter til centimeter
                 for landmark in landmarks_lst:
                     landmark.x /= 10
                     print(landmark.x)
@@ -191,6 +191,7 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
                     print(landmark.z)
                     landmark.tvec[0] /= 10
                     landmark.tvec[1] /= 10
+                    print(landmark.tvec)
 
                 print('Opdaterer vægte')
                 _utils.update_weights(sigma_d, sigma_theta, landmarks_lst, particles)    
