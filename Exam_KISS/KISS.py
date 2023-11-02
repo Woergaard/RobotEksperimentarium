@@ -356,7 +356,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                             approach(maxdist)
 
                             print('Kører langs kysten og leder efter ' + str(goalID))
-                            use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimitCoastal, sideLimitCoastal], show)
+                            use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimitCoastal, sideLimitCoastal-650], show)
 
                         iters += 1
 
