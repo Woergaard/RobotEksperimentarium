@@ -752,14 +752,14 @@ def distance_weights(d_M, d_i, sigma_d):
     tæller2 = (d_M - d_i)**2
     nævner2 = 2 * (sigma_d**2)
 
-    print('Første led: ', (1 / nævner1))
+    #print('Første led: ', (1 / nævner1))
     #print('Andet led: ', math.exp(-(tæller2 / nævner2)))
     #print('Andet led: ', np.exp(-(tæller2 / nævner2)))
-    print('Andet led: ', decimal.Decimal(-(tæller2 / nævner2)).exp())
-    print('tæller2: ', tæller2)
-    print('nævner2: ', nævner2)
-    print('Indmad: ', -(tæller2 / nævner2))
-    print('hej')
+    #print('Andet led: ', decimal.Decimal(-(tæller2 / nævner2)).exp())
+    #print('tæller2: ', tæller2)
+    #print('nævner2: ', nævner2)
+    #print('Indmad: ', -(tæller2 / nævner2))
+    #print('hej')
 
     #førsteled = 1 / nævner1
     #andetled = decimal.Decimal(-(tæller2 / nævner2)).exp() * 10000000000000
@@ -768,10 +768,10 @@ def distance_weights(d_M, d_i, sigma_d):
     #returner = (førsteled * andetled)/10000000000000
     #print('returnerer:', returner)
 
-    førsteled = 1 / nævner1
-    andetled = decimal.Decimal(-(tæller2 / nævner2)).exp()*decimal.Decimal(10**1000).exp()
-    andetled = float(andetled)
-    print('første og andet led:', (førsteled * andetled))
+    #førsteled = 1 / nævner1
+    #andetled = decimal.Decimal(-(tæller2 / nævner2)).exp()*decimal.Decimal(10**1000).exp()
+    #andetled = float(andetled)
+    #print('første og andet led:', (førsteled * andetled))
 
     #voresdecimal = decimal.Decimal(førsteled * andetled)
     #print('Return: ', decimal.Decimal(førsteled) * andetled)
@@ -779,8 +779,8 @@ def distance_weights(d_M, d_i, sigma_d):
     
     #return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
     #print('returnerer:', (1 / nævner1) * np.exp(-(tæller2 / nævner2)))
-    #return (1 / nævner1) * np.exp(-(tæller2 / nævner2))
-    return førsteled * andetled
+    return (1 / nævner1) * np.exp(-(tæller2 / nævner2))
+    #return førsteled * andetled
 
 def orientation_distribution(phi_M, sigma_theta, particle, landmark):
     theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.z, particle.x, particle.y

@@ -177,7 +177,7 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
                 print('self1')
     
                 sigma_theta = 0.57
-                sigma_d = 5.0
+                sigma_d = 100.0
                 particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
                 print('selflocalize opdager landmarks: ', objectIDs)
