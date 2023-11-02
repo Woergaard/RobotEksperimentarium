@@ -380,7 +380,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                         print('Drejer og leder efter landmark ' + str(goalID))
                         landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[goalID]], show)
                         iters += 1
-                    else:
+                    elif iters < 36:
                         print('Søger efter et landmark i midten med id > 4.')
                         landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[5, 6, 7, 8, 9, 10, 11, 12]], show)
 
@@ -396,9 +396,11 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                         print('Kører langs kysten og leder efter ' + str(goalID))
                         use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimit, sideLimit], show)
 
+                        iters += 1
                         #drive_free_carefully(2.0, frontLimit, sideLimit)
                         #(lost) Hvis den ikke finder det rigtige landmark kør mod et landmark med id > 4
                         #(drive_when_lost) Når den er på midten kør med sensor måling så afstanden altid er > 1000 mm
+                    else:    
                         iters = 0
 
                 arlo.stop()
