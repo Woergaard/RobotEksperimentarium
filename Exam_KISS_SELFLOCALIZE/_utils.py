@@ -781,6 +781,8 @@ def distance_weights(d_M, d_i, sigma_d):
     #print('returnerer:', (1 / nævner1) * np.exp(-(tæller2 / nævner2)))
     d_M = d_M / 100
     d_i = d_i / 100
+    print('distance: ', -((d_M-d_i)**2)/(2*sigma_d**2))
+    print('exp: ', np.exp(-((d_M-d_i)**2)/(2*sigma_d**2)))
     return (1/np.sqrt(2*np.pi*sigma_d**2)) * np.exp(-((d_M-d_i)**2)/(2*sigma_d**2))
     #(1 / nævner1) * np.exp(-(tæller2 / nævner2))
     #return førsteled * andetled

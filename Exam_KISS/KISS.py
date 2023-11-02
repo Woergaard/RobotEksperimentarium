@@ -96,7 +96,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
                     landmarkIndex = i
         
             # Robotten kører og apporacher landmarket
-            landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
+            landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal)
         
 
         #if landmarkFoundCoastal:
