@@ -98,7 +98,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
                     landmarkIndex = i
         
             # Robotten kører og apporacher landmarket
-            landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal)
+            landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal-600)
         
             print('når hertil')
             _utils.sharp_turn('left', 90)
