@@ -52,19 +52,21 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
     '''
     itersCoastal = 0
     if goalID == 3:
-        # Robotten kører og holder øje med, om den støder ind i noget
-        pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+
 
         # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
         landmarkFoundCoastal = False
         while not landmarkFoundCoastal:
             if itersCoastal < 18:
-                landmarkFoundCoastal = turn_and_watch('left', image, [[1]], arucoDict)
+                landmarkFoundCoastal, _ = turn_and_watch('left', image, [[1]], arucoDict)
                 print(landmarkFoundCoastal)
                 print(itersCoastal)
                 itersCoastal += 1
         
         if landmarkFoundCoastal:
+            print('når hertil')
+            # Robotten kører og holder øje med, om den støder ind i noget
+            pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
             while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal-650 and pingRight > sideLimitCoastal:
                 pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
                 arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
