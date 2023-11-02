@@ -44,7 +44,7 @@ lostLimit = 1000.0
 # DONE 7. Tilbage til 1. 
 
 
-def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
+def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, cam, show):
     '''
     Robotten kører langs kysten og leder efter et landmark med et bestemt id.
     Robotten holder sikkerhedsafstand baseret på ping væk fra landmarks med 
@@ -58,7 +58,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
         # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
         while not landmarkFoundCoastal:
             if itersCoastal < 20:
-                landmarkFoundCoastal, _ = turn_and_watch('left', image, [1], arucoDict)
+                landmarkFoundCoastal, _ = use_camera(cam, arucoDict, 'turn_and_watch', [[1]], show)
                 print("Er landmark 1 fundet? : ", landmarkFoundCoastal)
                 itersCoastal += 1
         
@@ -84,7 +84,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
         #landmarkFoundCoastal = False
         while not landmarkFoundCoastal:
             if itersCoastal < 20:
-                landmarkFoundCoastal, _ = turn_and_watch('left', image, [3], arucoDict)
+                landmarkFoundCoastal, _ = use_camera(cam, arucoDict, 'turn_and_watch', [[3]], show)
                 print("Er landmark 3 fundet? : ", landmarkFoundCoastal)
                 itersCoastal += 1
         
@@ -312,7 +312,7 @@ def use_camera(cam, arucoDict, command, params, show):
         elif command == 'turn_and_watch':
             return turn_and_watch('left', image, params[0], arucoDict)
         elif command == 'costaldrive':
-            costaldrive(params[0], image, arucoDict, params[1], params[2])
+            costaldrive(params[0], image, arucoDict, params[1], params[2], cam, show)
 
 
 # Her kommer main programmet

@@ -748,9 +748,9 @@ def distance_weights(d_M, d_i, sigma_d):
     '''
     Funktionen returnerer sandsynligheden for at obserrvere d_M givet d_i.
     '''
-    nævner1 = 2 * np.pi * sigma_d**2
-    tæller2 = (d_M - d_i)**2
-    nævner2 = 2 * (sigma_d**2)
+    #nævner1 = np.sqrt(2 * np.pi * sigma_d**2)
+    #tæller2 = (d_M - d_i)**2
+    #nævner2 = 2 * (sigma_d**2)
 
     #print('Første led: ', (1 / nævner1))
     #print('Andet led: ', math.exp(-(tæller2 / nævner2)))
@@ -779,7 +779,8 @@ def distance_weights(d_M, d_i, sigma_d):
     
     #return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
     #print('returnerer:', (1 / nævner1) * np.exp(-(tæller2 / nævner2)))
-    return (1 / nævner1) * np.exp(-(tæller2 / nævner2))
+    return (1/np.sqrt(2*np.pi*sigma_d**2)) * np.exp(-((d_M-d_i)**2)/(2*sigma_d**2))
+    #(1 / nævner1) * np.exp(-(tæller2 / nævner2))
     #return førsteled * andetled
 
 def orientation_distribution(phi_M, sigma_theta, particle, landmark):
@@ -795,8 +796,12 @@ def orientation_distribution(phi_M, sigma_theta, particle, landmark):
     return p
 
 def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):     
+    dist_w = []
+    ori_w = []
+
     for p in particles:
         landmark_weight = 1.0
+        
         
         for landmark in landmarks_lst:
             #print(landmark.id)
@@ -812,6 +817,9 @@ def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):
 
             #print('Dist vægt: ', dist_weight_j)
             #print('Orienterings vægt: ' , orientation_weight_j)
+
+            dist_w.append(dist_weight_j)
+            ori_w.append(orientation_weight_j)
             
             landmark_weight = landmark_weight * dist_weight_j * orientation_weight_j
 
@@ -876,8 +884,8 @@ def make_list_of_landmarks(objectIDs, dists, angles, landmarks):
             closest_index = i
 
         if objectIDs[i] != 404:
-            print('ID:')
-            print(closest_index)
+            #print('ID:')
+            #print(closest_index)
             tvectuple = landmarks[objectIDs[closest_index]]
             new_landmark = Landmark(dists[closest_index], angles[closest_index], None, objectIDs[closest_index], (0,0,0))
             new_landmark.x = tvectuple[0]
