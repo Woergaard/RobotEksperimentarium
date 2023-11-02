@@ -752,6 +752,10 @@ def distance_weights(d_M, d_i, sigma_d):
 
     print('Første led: ', (1 / nævner1))
     print('Andet led: ', math.exp(-(tæller2 / nævner2)))
+    print('tæller2: ', tæller2)
+    print('nævner2: ', nævner2)
+    print('Indmad: ', -(tæller2 / nævner2))
+
 
     return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
 
@@ -778,6 +782,7 @@ def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):
             d_j = distance_for_particle(p, landmark)
             print('d_j: ', d_j)
             print('d_M: ', d_M)
+            print('sigma_d: ', sigma_d)
             dist_weight_j = distance_weights(d_M, d_j, sigma_d)
 
             orientation_weight_j = orientation_distribution(phi_M, sigma_theta, p, landmark)
