@@ -825,30 +825,28 @@ def make_list_of_landmarks(objectIDs, dists, angles, landmarks):
     landmarks_lst = [] # liste af landmarks
     # List detected objects
     for i in range(len(objectIDs)):
-        if type(objectIDs[i]) == np.int32:
-            print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
-            if objectIDs[i] in objectIDs[i+1:]:
-                same_id_indexes = [index for index, id in enumerate(objectIDs) if id == objectIDs[i]]
-                index_and_dist = [(dists[index], index) for index in same_id_indexes] 
-                index_and_dist.sort(key=lambda x: x[0])
-                closest_index = index_and_dist[0][1]
-                for index in same_id_indexes:
-                    objectIDs[i] = 404
-                    
-            else: 
-                closest_index = i
+        print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
+        if objectIDs[i] in objectIDs[i+1:]:
+            print('Der ses to sider af landmark ', objectIDs[i])
+            same_id_indexes = [index for index, id in enumerate(objectIDs) if id == objectIDs[i]]
+            index_and_dist = [(dists[index], index) for index in same_id_indexes] 
+            index_and_dist.sort(key=lambda x: x[0])
+            closest_index = index_and_dist[0][1]
+            for index in same_id_indexes:
+                objectIDs[i] = 404
+        else: 
+            closest_index = i
 
-            if objectIDs[i] != 404:
-                print('ID:')
-                print(closest_index)
-                tvectuple = landmarks[objectIDs[closest_index]]
-                new_landmark = Landmark(dists[closest_index], angles[closest_index], None, objectIDs[closest_index], (0,0,0))
-                new_landmark.x = tvectuple[0]
-                new_landmark.z = tvectuple[1]
+        if objectIDs[i] != 404:
+            print('ID:')
+            print(closest_index)
+            tvectuple = landmarks[objectIDs[closest_index]]
+            new_landmark = Landmark(dists[closest_index], angles[closest_index], None, objectIDs[closest_index], (0,0,0))
+            new_landmark.x = tvectuple[0]
+            new_landmark.z = tvectuple[1]
 
-                landmarks_lst.append(new_landmark)
-    
-    
+            landmarks_lst.append(new_landmark)
+
         landmarks_lst.sort(key=lambda x: x.distance, reverse=False) # sorterer efter, hvor tætte objekterne er på os
 
     return landmarks_lst
