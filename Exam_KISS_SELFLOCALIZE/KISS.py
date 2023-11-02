@@ -186,13 +186,15 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
                 # omregner til milimeter
                 for landmark in landmarks_lst:
                     landmark.x /= 10
+                    print(landmark.x)
                     landmark.z /= 10
+                    print(landmark.z)
                     landmark.tvec[0] /= 10
                     landmark.tvec[1] /= 10
 
                 print('Opdaterer vægte')
                 _utils.update_weights(sigma_d, sigma_theta, landmarks_lst, particles)    
-                    
+                
                 print('Normaliserer vægte')
                 _utils.normalize_weights(particles)
 
