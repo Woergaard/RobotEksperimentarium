@@ -50,13 +50,13 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
     Robotten holder sikkerhedsafstand baseret på ping væk fra landmarks med 
     id > 4. 
     '''
-    landmarkFoundCoastal = False
+    landmarkSeen = False
     if goalID == 1:
         
         # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
         while not landmarkSeen:
             if itersCoastal < 20:
-                landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[1]], show)
+                landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[3]], show)
                 
                 itersCoastal += 1
         
@@ -64,7 +64,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
         if landmarkSeen:
             landmarkIndex = 0
             for i in range(len(seenLandmarks)):
-                if seenLandmarks[i].id == 1:
+                if seenLandmarks[i].id == 3:
                     landmarkIndex = i
         
             # Robotten kører og apporacher landmarket
@@ -78,7 +78,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
                 arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
 
             
-    landmarkFoundCoastal = False
+    landmarkSeen = False
     if goalID == 3:
         itersCoastal = 0
 
@@ -107,9 +107,22 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
                 arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
   
     # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
-    landmarkFound = False
-    while not landmarkFound:
-        landmarkFound = turn_and_watch('left', image, [goalID], arucoDict)
+    while not landmarkSeen:
+        if itersCoastal < 20:
+            landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[3]], show)
+            
+            itersCoastal += 1
+    
+
+    if landmarkSeen:
+        landmarkIndex = 0
+        for i in range(len(seenLandmarks)):
+            if seenLandmarks[i].id == 3:
+                landmarkIndex = i
+    
+        # Robotten kører og apporacher landmarket
+        landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal)
+
     
 def detect_landmarks(img, arucoDict):
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, arucoDict)
