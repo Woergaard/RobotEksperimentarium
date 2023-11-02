@@ -58,7 +58,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
         # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
         landmarkFound = False
         while not landmarkFound:
-            landmarkFound = turn_and_watch('left', image, [1], arucoDict)
+            landmarkFound = turn_and_watch('left', image, [[1]], arucoDict)
             
 #            if landmarkFound:
 #                while pingFront > frontLimitCoastal and pingLeft > sideLimitCoastal-650 and pingRight > sideLimitCoastal:

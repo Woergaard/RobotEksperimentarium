@@ -59,6 +59,144 @@ landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW]
 
 onRobot = True
 
+def distance_for_particle(particle_i, landmark):
+    d_i = dist(particle_i, landmark)
+    return d_i
+
+def distance_weights(d_M, d_i, sigma_d):
+    '''
+    Funktionen returnerer sandsynligheden for at obserrvere d_M givet d_i.
+    '''
+    nævner1 = 2 * np.pi * sigma_d**2
+    tæller2 = (d_M - d_i)**2
+    nævner2 = 2 * sigma_d**2
+
+    print('Første led: ', (1 / nævner1))
+    print('Andet led: ', math.exp(-(tæller2 / nævner2)))
+    print('tæller2: ', tæller2)
+    print('nævner2: ', nævner2)
+    print('Indmad: ', -(tæller2 / nævner2))
+
+
+    return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
+
+def orientation_distribution(phi_M, sigma_theta, particle, landmark):
+    theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.z, particle.x, particle.y
+    d_i = np.sqrt((lx-x_i)**2+(ly-y_i)**2)
+    e_l = np.array([lx-x_i, ly-y_i]).T/d_i 
+    e_theta = np.array([np.cos(theta_i), np.sin(theta_i)]).T
+    hat_e_theta = np.array([-np.sin(theta_i), np.cos(theta_i)]).T 
+    phi_i = np.sign(np.dot(e_l,hat_e_theta))*np.arccos(np.dot(e_l, e_theta))
+
+    p = (1/np.sqrt(2*np.pi*sigma_theta**2)) * np.exp(-((phi_M-phi_i)**2)/(2*sigma_theta**2))
+
+    return p
+
+def update_weights(sigma_d, sigma_theta, landmarks_lst, particles):     
+    for p in particles:
+        landmark_weight = 1.0
+        
+        for landmark in landmarks_lst:
+            #print(landmark.id)
+            d_M = landmark.distance # den målte distance til landmarket
+            phi_M = landmark.vinkel 
+            d_j = distance_for_particle(p, landmark)
+            print('d_j: ', d_j)
+            print('d_M: ', d_M)
+            print('sigma_d: ', sigma_d)
+            dist_weight_j = distance_weights(d_M, d_j, sigma_d)
+
+            orientation_weight_j = orientation_distribution(phi_M, sigma_theta, p, landmark)
+
+            print('Dist vægt: ', dist_weight_j)
+            print('Orienterings vægt: ' , orientation_weight_j)
+            
+            landmark_weight = landmark_weight * dist_weight_j * orientation_weight_j
+
+        print('Partikel vægt:', landmark_weight)
+        p.setWeight(landmark_weight)
+
+def make_intervals(particles):
+    intervals = []
+    lower = 0.0
+    for par in particles:
+        weight =  par.getWeight()
+        upper = lower + weight
+        intervals.append((lower, upper))
+        lower = upper
+
+    return intervals
+
+def normalize_weights(particles):
+    sum_weights = 0.0
+    for par in particles:
+        weight =  par.getWeight()
+        sum_weights += weight
+        #print('Partikel vægt:', weight)
+    
+    weights_after = 0.0
+    for par in particles:
+        weight =  par.getWeight()
+        par.setWeight((weight / sum_weights))
+        weights_after += weight / sum_weights
+
+def find_interval(værdi, intervals):
+    for i in range(0, len(intervals)):
+        if intervals[i][0] <= værdi < intervals[i][1]:
+            return i
+    return -1
+
+def generate_new_particles(num_particles, particles, intervals):
+    new_particles = []
+    for i in range(num_particles):
+        drawnNumber = random.uniform(0, 1)
+        drawnIndex = find_interval(drawnNumber, intervals)
+        drawnSample = particles[drawnIndex]
+        newParticle = particle.Particle(x = drawnSample.x, y = drawnSample.y, theta = drawnSample.theta, weight = drawnSample.weight)
+        new_particles.append(newParticle)
+    
+    return new_particles
+
+def make_list_of_landmarks(objectIDs, dists, angles, landmarks):
+    landmarks_lst = [] # liste af landmarks
+    # List detected objects
+    for i in range(len(objectIDs)):
+        print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
+        if objectIDs[i] in objectIDs[i+1:]:
+            print('Der ses to sider af landmark ', objectIDs[i])
+            same_id_indexes = [index for index, id in enumerate(objectIDs) if id == objectIDs[i]]
+            index_and_dist = [(dists[index], index) for index in same_id_indexes] 
+            index_and_dist.sort(key=lambda x: x[0])
+            closest_index = index_and_dist[0][1]
+            for index in same_id_indexes:
+                objectIDs[i] = 404
+        else: 
+            closest_index = i
+
+        if objectIDs[i] != 404:
+            print('ID:')
+            print(closest_index)
+            tvectuple = landmarks[objectIDs[closest_index]]
+            new_landmark = Landmark(dists[closest_index], angles[closest_index], None, objectIDs[closest_index], (0,0,0))
+            new_landmark.x = tvectuple[0]
+            new_landmark.z = tvectuple[1]
+
+            landmarks_lst.append(new_landmark)
+
+        landmarks_lst.sort(key=lambda x: x.distance, reverse=False) # sorterer efter, hvor tætte objekterne er på os
+
+    return landmarks_lst
+
+
+
+
+
+
+
+
+
+
+
 def watch_for_selflocalize(img, arucoDict, landmarkIDs):
     seenLandmarks, ids, aruco_corners = detect_landmarks(img, arucoDict)
     
@@ -181,7 +319,7 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
                 particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
                 print('selflocalize opdager landmarks: ', objectIDs)
-                landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
+                landmarks_lst = make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
                 
                 # omregner fra milimeter til centimeter
                 for landmark in landmarks_lst:
@@ -193,15 +331,15 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
                     print(landmark.tvec)
 
                 print('Opdaterer vægte')
-                _utils.update_weights(sigma_d, sigma_theta, landmarks_lst, particles)    
+                update_weights(sigma_d, sigma_theta, landmarks_lst, particles)    
                 
                 print('Normaliserer vægte')
-                _utils.normalize_weights(particles)
+                normalize_weights(particles)
 
-                intervals = _utils.make_intervals(particles)
+                intervals = make_intervals(particles)
 
                 print('Genererer nye partikler')
-                particles = _utils.generate_new_particles(num_particles, particles, intervals)
+                particles = generate_new_particles(num_particles, particles, intervals)
 
                 # Draw detected objects
                 #cam.draw_aruco_objects(img)
