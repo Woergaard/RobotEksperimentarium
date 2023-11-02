@@ -252,6 +252,7 @@ def selflocalize_360_degrees(cam, show, arucoDict, params):
         arlo.stop()
         _utils.wait(2.0)
         arlo_position, particles = selflocalize(cam, show, arucoDict, params[0], params[1], params[2], params[3], arlo_position, particles, 0.0, 20.0)
+        print('Arlo befinder sig på position: ', math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
     return arlo_position, particles
         
 def landmark_reached(reached_node, temp_goal):
