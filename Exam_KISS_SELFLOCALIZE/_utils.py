@@ -759,11 +759,12 @@ def distance_weights(d_M, d_i, sigma_d):
     print('tæller2: ', tæller2)
     print('nævner2: ', nævner2)
     print('Indmad: ', -(tæller2 / nævner2))
+    print('hej')
 
     førsteled = 1 / nævner1
-    andetled = decimal.Decimal(-(tæller2 / nævner2)).exp() * 1000
+    andetled = decimal.Decimal(-(tæller2 / nævner2)).exp() * 10000000000000
 
-    returner = (førsteled * andetled)/1000
+    returner = (førsteled * andetled)/10000000000000
     print('returnerer:', returner)
 
     

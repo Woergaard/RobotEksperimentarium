@@ -84,7 +84,7 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal):
         landmarkFoundCoastal = False
         while not landmarkFoundCoastal:
             if itersCoastal < 18:
-                landmarkFoundCoastal = turn_and_watch('left', image, [[1]], arucoDict)
+                landmarkFoundCoastal = turn_and_watch('left', image, [[3]], arucoDict)
                 print(landmarkFoundCoastal)
                 print(itersCoastal)
                 itersCoastal += 1
