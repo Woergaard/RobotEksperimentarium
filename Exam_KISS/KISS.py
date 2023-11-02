@@ -382,7 +382,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                         iters += 1
                     else:
                         print('Søger efter et landmark i midten med id > 4.')
-                        landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[]], show)
+                        landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[5, 6, 7, 8, 9, 10, 11, 12]], show)
 
                         # finder landmark i liste
                         landmarkIndex = 0
