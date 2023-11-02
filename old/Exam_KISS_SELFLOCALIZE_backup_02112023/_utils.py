@@ -241,13 +241,8 @@ class Node:
     def __init__(self, x, z, parent):
         self.x = x
         self.z = z
-        self.y = z
         self.path = []
         self.parent = parent
-        self.theta = 0
-
-    def setTheta(self, theta):
-        self.theta = theta
 
 class Graf:
     '''
