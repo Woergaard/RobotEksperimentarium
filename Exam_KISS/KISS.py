@@ -364,8 +364,6 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
 
             if landmarkFound:
                 print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
-                _utils.sharp_turn('right', 170.0)
-                drive_carefully('forwards', 2.0)
                 arlo.stop()
                
         else: 
@@ -411,7 +409,7 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                         landmarkIndex = i
             
                 # Robotten kører og apporacher landmarket
-                landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
+                landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal)
                 
                 print('Sikrer os, at vi er nær landmarket.')
                 

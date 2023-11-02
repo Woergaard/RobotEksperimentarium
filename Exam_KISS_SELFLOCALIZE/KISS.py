@@ -98,6 +98,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
 
+        #print(est_pose)
         # Allocate space for world map
         #world = np.zeros((1000,1000,3), dtype=np.uint8)
 
@@ -141,7 +142,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 particles = _utils.generate_new_particles(num_particles, particles, intervals)
 
                 # Draw detected objects
-                cam.draw_aruco_objects(img)
+                #cam.draw_aruco_objects(img)
             else:
                 # No observation - reset weights to uniform distribution
                 for p in particles:
