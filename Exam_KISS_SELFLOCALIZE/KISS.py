@@ -189,8 +189,7 @@ def selflocalize(cam, showGUI, arucoDict, maxiters, landmarkIDs, landmarks_dict,
                     print(landmark.x)
                     landmark.z /= 10
                     print(landmark.z)
-                    landmark.tvec[0] /= 10
-                    landmark.tvec[1] /= 10
+                    landmark.tvec = (landmark.tvec[0]/10, landmark.tvec[1]/10)
                     print(landmark.tvec)
 
                 print('Opdaterer vægte')
