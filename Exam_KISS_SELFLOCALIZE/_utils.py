@@ -742,6 +742,8 @@ def distance_for_particle(particle_i, landmark):
     d_i = dist(particle_i, landmark)
     return d_i
 
+import decimal
+
 def distance_weights(d_M, d_i, sigma_d):
     '''
     Funktionen returnerer sandsynligheden for at obserrvere d_M givet d_i.
@@ -751,13 +753,15 @@ def distance_weights(d_M, d_i, sigma_d):
     nævner2 = 2 * sigma_d**2
 
     print('Første led: ', (1 / nævner1))
-    print('Andet led: ', math.exp(-(tæller2 / nævner2)))
+    #print('Andet led: ', math.exp(-(tæller2 / nævner2)))
+    print('Andet led: ', decimal.Decimal(-(tæller2 / nævner2)).exp())
     print('tæller2: ', tæller2)
     print('nævner2: ', nævner2)
     print('Indmad: ', -(tæller2 / nævner2))
 
 
-    return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
+    #return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
+    return (1 / nævner1) * decimal.Decimal(-(tæller2 / nævner2)).exp()
 
 def orientation_distribution(phi_M, sigma_theta, particle, landmark):
     theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.z, particle.x, particle.y
