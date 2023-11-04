@@ -25,8 +25,8 @@ rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
 standardSpeed = 50.0
 
-frontLimit = 300.0
-sideLimit = 300.0
+frontLimit = 400.0
+sideLimit = 400.0
 
 frontLimitCoastal = 700.0
 sideLimitCoastal = 700.0
@@ -72,12 +72,14 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
             approach(maxdist)
 
             pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+            print('når hertil')
             _utils.sharp_turn('left', 90)
 
             while pingFront > frontLimit and pingLeft > sideLimit and pingRight > sideLimit:
                 pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
                 arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
 
+            
     landmarkSeen = False
     if goalID == 3:
         itersCoastal = 0
@@ -100,14 +102,14 @@ def costaldrive(goalID, image, arucoDict, frontLimitCoastal, sideLimitCoastal, c
             landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, 0)
 
             approach(maxdist)
+            #pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+            #print('når hertil')
+            #_utils.sharp_turn('left', 90)
 
-            pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-            _utils.sharp_turn('left', 90)
-
-            while pingFront > frontLimit and pingLeft > sideLimit and pingRight > sideLimit:
-                pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
-                arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
-
+            #while pingFront > frontLimit and pingLeft > sideLimit and pingRight > sideLimit:
+            #    pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
+            #    arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 1, 1)
+  
     landmarkSeen = False
     # Robotten drejer og kører, indtil den har fundet et landmark, OG der er frit.
     while not landmarkSeen:
@@ -253,6 +255,8 @@ def approach(maxdist):
     while isDriving and (pingFront > 350 and pingLeft > 350 and pingRight > 350):
         pingFront, pingLeft, pingRight, pingBack = _utils.sensor()
         sleep(0.041)
+        #if (time.perf_counter() - start > seconds):
+        #    isDriving = False
 
     arlo.stop()
 
@@ -305,6 +309,9 @@ def camera_setup():
     picam2_config = cam.create_video_configuration({"size": imageSize, "format": 'RGB888'}, controls={"FrameDurationLimits": (frame_duration_limit, frame_duration_limit)}, queue=False)
     cam.configure(picam2_config) # Not really necessary
     cam.start(show_preview=False)
+
+    #print('hej2')
+    #print(cam.camera_configuration()) # Print the camera configuration in use
 
     time.sleep(1)  # _utils.wait for camera to setup
 
@@ -387,10 +394,76 @@ def main(landmarkIDs, frontLimit, sideLimit, show):
                             use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimitCoastal, sideLimitCoastal], show)
 
                         iters += 1
+
+                        #drive_free_carefully(2.0, frontLimit, sideLimit)
+                        #(lost) Hvis den ikke finder det rigtige landmark kør mod et landmark med id > 4
+                        #(drive_when_lost) Når den er på midten kør med sensor måling så afstanden altid er > 1000 mm
                     else: 
                         iters = 0
 
                 arlo.stop()
+                
+
+            #if landmarkFound:
+            #    print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
+            #    arlo.stop()
+               
+#        else: 
+#            print('Søger efter landmark ' + str(goalID))
+#            landmarkFound = False
+#            iters = 0
+
+#            while not landmarkFound:
+#                landmarkSeen = False
+
+                # vi drejer og kører, indtil vi har fundet det landmark, vi søger efter
+#                while not landmarkSeen:
+#                    if iters < 18:
+#                        print('Drejer og leder efter landmark ' + str(goalID))
+#                        landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[goalID]], show)
+#                        iters += 1
+#                    elif iters < 36:
+#                        print('Søger efter et landmark i midten med id > 4.')
+#                        landmarkSeen, seenLandmarks = use_camera(cam, arucoDict, 'turn_and_watch', [[]], show)
+
+                        # finder landmark i liste
+#                        landmarkIndex = 0
+#                        for i in range(len(seenLandmarks)):
+#                            if seenLandmarks[i].id > 4:
+#                                landmarkIndex = i
+                                
+#                        print('Kører mod ' + str(seenLandmarks[landmarkIndex].id))
+#                        _, _ = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimit, sideLimit)
+
+#                        print('Kører langs kysten og leder efter ' + str(goalID))
+#                        use_camera(cam, arucoDict, 'costaldrive', [goalID, frontLimit, sideLimit], show)
+
+#                        iters += 1
+                        #drive_free_carefully(2.0, frontLimit, sideLimit)
+                        #(lost) Hvis den ikke finder det rigtige landmark kør mod et landmark med id > 4
+                        #(drive_when_lost) Når den er på midten kør med sensor måling så afstanden altid er > 1000 mm
+#                    else:    
+#                        iters = 0
+
+#                arlo.stop()
+                
+#                landmarkIndex = 0
+#                for i in range(len(seenLandmarks)):
+#                    if seenLandmarks[i].id == goalID:
+#                        landmarkIndex = i
+            
+                # Robotten kører og apporacher landmarket
+#                landmarkFound, maxdist = drive_carefully_to_landmark(seenLandmarks[landmarkIndex], frontLimitCoastal, sideLimitCoastal)
+                
+#                print('Sikrer os, at vi er nær landmarket.')
+                
+                
+#                approach(maxdist)
+
+#            if landmarkFound:
+#                print('Landmark ' + str(goalID) + ' er fundet! Tillykke!')
+#                arlo.stop()
+                        
     arlo.stop()
     print('Rute færdiggjort!')
 
