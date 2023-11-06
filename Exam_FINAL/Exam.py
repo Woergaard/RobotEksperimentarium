@@ -95,8 +95,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             #print(objectIDs)
             #print(type(dists))
 
-            print('nået hertil')
-            if isinstance(objectIDs, list):
+            if objectIDs == 'intet':
             #if not 'numpy' in str(type(objectIDs)):
                 # No observation - reset weights to uniform distribution
                 print('selflocalization detekterede ikke nogle landmarks.')
