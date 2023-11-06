@@ -157,7 +157,7 @@ def selflocalize(cam, img, arucoDict, showGUI, maxiters, landmarkIDs, landmarks_
                     angles.append(landmark.vinkel)
 
                 sigma_theta = 0.57
-                sigma_d = 5.0
+                sigma_d = 100.0#5.0
                 print('Tilføjer støj.')
                 particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
