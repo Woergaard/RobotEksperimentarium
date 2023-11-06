@@ -95,10 +95,11 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             print(objectIDs)
             #print(type(dists))
 
-            if not isinstance(objectIDs, type(None)):
-                print('selflocalize opdager landmarks: ' +  objectIDs)
-                landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
+            #if not isinstance(objectIDs, type(None)):
+            print('selflocalize opdager landmarks: ' +  objectIDs)
+            landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
                 
+            if landmarks_lst:
                 # omregner fra milimeter til centimeter
                 for landmark in landmarks_lst:
                     landmark.x /= 10
@@ -621,7 +622,8 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
                 if len(path) > 1:
                     print('Kører ' + str(num_steps) + ' trin af vores RRT sti.')
                     landmarkfound = drive_path_and_sense(path, temp_goal_Node, num_steps, stepLength, arlo_position) # kører num_steps antal trin af RRT path, stopper, hvis sensorerne opfanger noget.
-                    path = path[num_steps]
+                    if len(path) >= num_steps:
+                        path = path[num_steps]
                 else:
                     print('RRT-træ betod kun af Arlos position, æv :(')
 
