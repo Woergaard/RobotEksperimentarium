@@ -92,7 +92,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
             #print(type(objectIDs))
-            #print(objectIDs)
+            print(objectIDs)
             #print(type(dists))
 
             if objectIDs == 'intet':
