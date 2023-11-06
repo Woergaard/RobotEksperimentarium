@@ -599,7 +599,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
             iterations = 0
 
             while lost:
-                if iterations < 10:
+                if iterations < 18:
                     found = use_camera(cam, arucoDict, 'turn_and_watch', [landmarkIDs], showcamera, show)
                     if found:
                         lost = False

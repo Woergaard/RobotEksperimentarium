@@ -91,6 +91,9 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             print('Tilføjer støj.')
             particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
+            print(type(objectIDs))
+            print(objectIDs)
+            
             if not isinstance(objectIDs, type(None)):
                 print('selflocalize opdager landmarks: ' +  objectIDs)
                 landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
@@ -125,6 +128,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 for p in particles:
                     p.setWeight(1.0/num_particles)
  
+            print('Reestimerer position')
             est_pose = particle.estimate_pose(particles)
 
     finally:
