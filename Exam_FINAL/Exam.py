@@ -661,7 +661,7 @@ landmarks_dict = {
 }
 landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW] # Colors used when drawing the landmarks
 
-num_steps = 3
+num_steps = 10
 
 stepLength = 1000.0 # milimeter
 
