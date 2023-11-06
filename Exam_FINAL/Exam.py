@@ -58,7 +58,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             print('Initialiserer nye partikler')
             particles = _utils.initialize_particles(num_particles)
 
-        if len(path) != 0:
+        if not path:
             print('Flytter partiklerne.')
             prevnode = est_pose
             for node in path:
@@ -121,30 +121,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
  
             est_pose = particle.estimate_pose(particles)
 
-
-        '''
-            if showGUI:
-                #print('hej2')
-                # Draw map
-                _utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
-                
-                # Show frame
-                cv2.imshow(WIN_RF1, img)
-
-                # Show world
-                cv2.imshow(WIN_World, world)
-
-                time.sleep(10)
-        '''
-
     finally:
-        #print('hejhej')
-    
-        # Make sure to clean up even if an exception occurred
-        
-        # Close all windows
-        #cv2.destroyAllWindows()
-
         # Clean-up capture thread
         cv2.destroyAllWindows()
         cam.terminateCaptureThread()
@@ -603,6 +580,8 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
             lost = True
             iterations = 0
 
+            
+
             while lost:
                 if iterations < 18:
                     found = use_camera(cam, arucoDict, 'turn_and_watch', [landmarkIDs], showcamera, show)
@@ -619,7 +598,8 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
             
             arlo.stop()
             print('Begynder selflokalisering.')
-            arlo_position, particles = use_camera(cam, arucoDict, '360_selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, [[]], stepLength], showcamera, show)
+            arlo_position, particles = use_camera(cam, arucoDict, '360_selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, [], stepLength], showcamera, show)
+            
             #arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
             
             #print(math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
