@@ -157,7 +157,7 @@ def selflocalize(cam, img, arucoDict, showGUI, maxiters, landmarkIDs, landmarks_
                     angles.append(landmark.vinkel)
 
                 sigma_theta = 0.57
-                sigma_d = 100.0#5.0
+                sigma_d = 10.0
                 print('Tilføjer støj.')
                 particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
@@ -223,7 +223,7 @@ def selflocalize_360_degrees(cam, arucoDict, show, showcamera, params):
             particle.move_particle(p, 0.0, 0.0, radianer)
         
         arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [params[0], params[1], params[2], params[3], arlo_position, particles, [], 0.0], showcamera, show)
-        print('Arlo befinder sig på position: ', math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
+        print('Arlo befinder sig på position (x,z, theta): ', math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
     return arlo_position, particles
    
 def turn_and_watch(direction, img, landmarkIDs):

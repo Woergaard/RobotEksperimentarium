@@ -747,8 +747,8 @@ def distance_weights(d_M, d_i, sigma_d):
     Funktionen returnerer sandsynligheden for at obserrvere d_M givet d_i.
     '''
 
-    #d_M = d_M / 100
-    #d_i = d_i / 100
+    d_M = d_M / 100
+    d_i = d_i / 100
     return (1/np.sqrt(2*np.pi*sigma_d**2)) * np.exp(-((d_M-d_i)**2)/(2*sigma_d**2))
 '''
     nævner1 = 2 * np.pi * sigma_d**2
