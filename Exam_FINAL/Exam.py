@@ -210,7 +210,9 @@ def selflocalize(cam, img, arucoDict, showGUI, maxiters, landmarkIDs, landmarks_
 def selflocalize_360_degrees(cam, arucoDict, show, showcamera, params):  
     arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', params, showcamera, show) #lize(cam, show, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7])
     # drejer 360 grader om sig selv og selflocalizer
-    for _ in range(18):
+    #turn_degrees = 40.0
+    for i in range(18):
+        print('Drejer gang nr.: ' + str(i))
         arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
         turnSeconds = _utils.degreeToSeconds(20)
         _utils.wait(turnSeconds)
@@ -488,7 +490,7 @@ def drive_free_carefully(seconds, frontLimit, sideLimit):
             isDriving = False
 
 def landmark_reached(reached_node, temp_goal):
-    if _utils.dist(reached_node, temp_goal) < 350.0:
+    if _utils.dist(reached_node, temp_goal) < 400.0:
         return True
     else:
         return False
@@ -715,7 +717,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
             #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
 
-            print('Arlo befinder sig på position ', math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
+            print('Arlo befinder sig på position ', math.floor(arlo_position.x), math.floor(arlo_position.z), arlo_position.theta)
 
             
             if not landmarkfound:
@@ -729,14 +731,14 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
                 else:
                     print('RRT-træ betod kun af Arlos position, æv :(')
 
-
+            print('Begynder selflokalisering.')
             params = [1, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength]
             arlo_position, particles = selflocalize_360_degrees(cam, arucoDict, show, showcamera, params)
 
             #arlo_position, particles = use_camera(cam, arucoDict, '360_selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
             
             #kun en gang
-            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
+            #arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [1, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
                     
         if landmarkfound:
