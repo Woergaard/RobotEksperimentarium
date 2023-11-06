@@ -94,7 +94,8 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             print(type(objectIDs))
             print(objectIDs)
             
-            if not isinstance(objectIDs, type(None)):
+            if type(objectIDs) == np.ndarray: 
+            #if not isinstance(objectIDs, type(None)):
                 print('selflocalize opdager landmarks: ' +  objectIDs)
                 landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
                 
@@ -218,6 +219,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, seen_landmarks, rootNode, stepLength,
         bias:   en værdi mellem 0 og 100, der jo højere den er, angiver, at vi vurderer, at banen er meget simpel.
     '''
     print('Udregner RRT med goal på position ' + str(goal.x) + ', ' + str(goal.z))
+    maxiter = 20
     G = _utils.Graf([rootNode], [])
     iters = 0
     #print('hej4')
