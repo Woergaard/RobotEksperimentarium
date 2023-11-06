@@ -291,7 +291,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, seen_landmarks, rootNode, stepLength,
         bias:   en værdi mellem 0 og 100, der jo højere den er, angiver, at vi vurderer, at banen er meget simpel.
     '''
     print('Udregner RRT med goal på position ' + str(goal.x) + ', ' + str(goal.z))
-    maxiter = 50
+    maxiter = 100
     G = _utils.Graf([rootNode], [])
     iters = 0
     #print('hej4')
@@ -663,7 +663,7 @@ landmarks_dict = {
 }
 landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW] # Colors used when drawing the landmarks
 
-num_steps = 5
+num_steps = 3
 
 stepLength = 500.0 # milimeter
 
