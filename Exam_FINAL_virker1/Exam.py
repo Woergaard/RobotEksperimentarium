@@ -44,8 +44,7 @@ rightWheelFactor = 1.0
 leftWheelFactor = 1.06225
 standardSpeed = 50.0
 
-
-def selflocalize(cam, img, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position, particles, path, stepLength):
+def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_colors, prior_position, particles, path, stepLength):
     #return (750.0,0.0)
     est_pose = _utils.Node(prior_position.x/10, prior_position.z/10, None)
     est_pose.setTheta(prior_position.theta)
@@ -81,7 +80,7 @@ def selflocalize(cam, img, showGUI, maxiters, landmarkIDs, landmarks_dict, landm
         for iters in range(maxiters):
             print(iters)
             # Fetch next frame
-            #img = cam.get_next_frame()
+            img = cam.get_next_frame()
 
             # Detect objects
             print('Forsøger at detektere via kameraet.')
@@ -529,7 +528,7 @@ def use_camera(cam, arucoDict, command, params, showcamera, show):
             cv2.imshow(WIN_RF, image)
 
         if command == 'selflocalize':
-            arlo_position, particles = selflocalize(cam, image, show, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7])
+            arlo_position, particles = selflocalize(cam, show, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7])
             return arlo_position, particles
 
         elif command == '360_selflocalize':
