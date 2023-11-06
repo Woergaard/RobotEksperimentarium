@@ -73,8 +73,8 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
 
         # flytter partikler efter movement
         
-        print('Flytter partiklerne.')
         if len(path) != 0:
+            print('Flytter partiklerne.')
             prevnode = est_pose
             for node in path:
                 direction, degrees = _utils.find_turn_angle(prevnode, node)
@@ -84,6 +84,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                     print('Partikel flyttes: ', delta_x, delta_z, degrees)
                     particle.move_particle(p, delta_x, delta_z, degrees)
         
+        print('estimerer position')
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
 
         # Allocate space for world map
@@ -92,7 +93,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         # Draw map
         #_utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
 
-        for iters in range(maxiters):
+        for iters in range(3):
             print(iters)
             # Fetch next frame
             img = cam.get_next_frame()
