@@ -218,8 +218,9 @@ def selflocalize_360_degrees(cam, arucoDict, show, showcamera, params):
         _utils.wait(2.0)
 
         print('Drejer alle partikler 20 grader.')
+        radianer = msath.radians(20.0)
         for p in particles:
-            particle.move_particle(p, 0.0, 0.0, 20.0)
+            particle.move_particle(p, 0.0, 0.0, radianer)
         
         arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [params[0], params[1], params[2], params[3], arlo_position, particles, [], 0.0], showcamera, show)
         print('Arlo befinder sig på position: ', math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
