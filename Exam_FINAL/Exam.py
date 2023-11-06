@@ -95,7 +95,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             print(objectIDs)
             print(type(dists))
 
-            if dists:
+            if 'numpy' in str(type(objectIDs)):
             #if isinstance(objectIDs, np.ndarray):
             #if type(objectIDs) == np.ndarray: 
             #if not isinstance(objectIDs, type(None)):
