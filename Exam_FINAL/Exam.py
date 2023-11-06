@@ -94,7 +94,8 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             print(type(objectIDs))
             print(objectIDs)
             
-            if type(objectIDs) == np.ndarray: 
+            if isinstance(objectIDs, np.ndarray):
+            #if type(objectIDs) == np.ndarray: 
             #if not isinstance(objectIDs, type(None)):
                 print('selflocalize opdager landmarks: ' +  objectIDs)
                 landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
