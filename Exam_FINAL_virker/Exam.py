@@ -77,7 +77,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
         print('Estimerer position')
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
 
-        for iters in range(maxiters):
+        for iters in range(3):
             print(iters)
             # Fetch next frame
             img = cam.get_next_frame()
@@ -103,11 +103,11 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 # omregner fra milimeter til centimeter
                 for landmark in landmarks_lst:
                     landmark.x /= 10
-                    #print(landmark.x)
+                    print(landmark.x)
                     landmark.z /= 10
-                    #print(landmark.z)
+                    print(landmark.z)
                     landmark.tvec = (landmark.tvec[0]/10, landmark.tvec[1]/10)
-                    #print(landmark.tvec)
+                    print(landmark.tvec)
 
                 print('Opdaterer vægte')
                 _utils.update_weights(sigma_d, sigma_theta, landmarks_lst, particles)    

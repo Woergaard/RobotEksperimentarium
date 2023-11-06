@@ -746,17 +746,11 @@ def distance_weights(d_M, d_i, sigma_d):
     '''
     Funktionen returnerer sandsynligheden for at obserrvere d_M givet d_i.
     '''
-
-    d_M = d_M / 100
-    d_i = d_i / 100
-    return (1/np.sqrt(2*np.pi*sigma_d**2)) * np.exp(-((d_M-d_i)**2)/(2*sigma_d**2))
-'''
     nævner1 = 2 * np.pi * sigma_d**2
     tæller2 = (d_M - d_i)**2
     nævner2 = 2 * sigma_d**2
 
     return (1 / nævner1) * math.exp(-(tæller2 / nævner2))
-    '''
 
 def orientation_distribution(phi_M, sigma_theta, particle, landmark):
     theta_i, lx, ly, x_i, y_i = particle.theta, landmark.x, landmark.z, particle.x, particle.y
@@ -836,7 +830,6 @@ def make_list_of_landmarks(objectIDs, dists, angles, landmarks):
         elif type(objectIDs[i]) == np.int32:
             print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
             if objectIDs[i] in objectIDs[i+1:]:
-                print('Der ses to sider af landmark ', objectIDs[i])
                 same_id_indexes = [index for index, id in enumerate(objectIDs) if id == objectIDs[i]]
                 index_and_dist = [(dists[index], index) for index in same_id_indexes] 
                 index_and_dist.sort(key=lambda x: x[0])
@@ -848,8 +841,8 @@ def make_list_of_landmarks(objectIDs, dists, angles, landmarks):
                 closest_index = i
 
             if objectIDs[i] != 404:
-                #print('ID:')
-                #print(closest_index)
+                print('ID:')
+                print(closest_index)
                 tvectuple = landmarks[objectIDs[closest_index]]
                 new_landmark = Landmark(dists[closest_index], angles[closest_index], None, objectIDs[closest_index], (0,0,0))
                 new_landmark.x = tvectuple[0]
