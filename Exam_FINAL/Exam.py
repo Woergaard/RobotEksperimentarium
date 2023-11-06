@@ -198,8 +198,8 @@ def selflocalize(cam, img, arucoDict, showGUI, maxiters, landmarkIDs, landmarks_
 
     finally:
         # Clean-up capture thread
-        cv2.destroyAllWindows()
-        cam.terminateCaptureThread()
+        #cv2.destroyAllWindows()
+        #cam.terminateCaptureThread()
 
         est_pose = _utils.Node(est_pose.x * 10.0, est_pose.y * 10.0, None) # VI GLEMMER AT EKSPORTERE VINKLEN!!!
         est_pose.setTheta(est_pose.theta)
