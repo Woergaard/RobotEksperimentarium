@@ -126,7 +126,7 @@ def selflocalize(cam, img, arucoDict, showGUI, maxiters, landmarkIDs, landmarks_
                 print(delta_x)
                 print(delta_z)
                 for p in particles:
-                    print('Partikel flyttes: ', delta_x, delta_z, degrees)
+                    #print('Partikel flyttes: ', delta_x, delta_z, degrees)
                     particle.move_particle(p, delta_x, delta_z, degrees)
         else:
             print('Partikler flyttes ikke, da der ikke er foretaget ændringer i position.')
