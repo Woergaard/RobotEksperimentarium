@@ -211,7 +211,7 @@ def selflocalize_360_degrees(cam, arucoDict, show, showcamera, params):
     arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', params, showcamera, show) #lize(cam, show, params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7])
     # drejer 360 grader om sig selv og selflocalizer
     #turn_degrees = 40.0
-    for i in range(18):
+    for i in range(13):
         print('Drejer gang nr.: ' + str(i))
         arlo.go_diff(leftWheelFactor*standardSpeed, rightWheelFactor*standardSpeed, 0, 1)
         turnSeconds = _utils.degreeToSeconds(20)
@@ -291,7 +291,7 @@ def RRT(goal, mapsizex, mapsizez, maxiter, seen_landmarks, rootNode, stepLength,
         bias:   en værdi mellem 0 og 100, der jo højere den er, angiver, at vi vurderer, at banen er meget simpel.
     '''
     print('Udregner RRT med goal på position ' + str(goal.x) + ', ' + str(goal.z))
-    maxiter = 20
+    maxiter = 50
     G = _utils.Graf([rootNode], [])
     iters = 0
     #print('hej4')
@@ -652,7 +652,7 @@ landmarks = {
 landmark_colors = [CRED, CGREEN,  CCYAN, CYELLOW] # Colors used when drawing the landmarks
 '''
 
-landmarkIDs = [1, 2, 3, 4]
+landmarkIDs = [1, 2, 3, 4, 1]
 landmarks_dict = {
     1: (0.0, 0.0),
     2: (0.0, 3000.0),
@@ -661,9 +661,9 @@ landmarks_dict = {
 }
 landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW] # Colors used when drawing the landmarks
 
-num_steps = 10
+num_steps = 5
 
-stepLength = 1000.0 # milimeter
+stepLength = 500.0 # milimeter
 
 def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, frontLimit, sideLimit):
     globalMap = _utils.Map(3000, 4000) # kortets størrelse
@@ -690,7 +690,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
             iterations = 0
 
             while lost:
-                if iterations < 18:
+                if iterations < 13:
                     found = use_camera(cam, arucoDict, 'turn_and_watch', [landmarkIDs], showcamera, show)
                     if found:
                         lost = False
