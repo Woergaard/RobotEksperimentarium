@@ -218,7 +218,7 @@ def selflocalize_360_degrees(cam, arucoDict, show, showcamera, params):
         _utils.wait(2.0)
 
         print('Drejer alle partikler 20 grader.')
-        radianer = msath.radians(20.0)
+        radianer = math.radians(20.0)
         for p in particles:
             particle.move_particle(p, 0.0, 0.0, radianer)
         
