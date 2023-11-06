@@ -91,11 +91,18 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             print('Tilføjer støj.')
             particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
-            print(type(objectIDs))
-            print(objectIDs)
-            print(type(dists))
+            #print(type(objectIDs))
+            #print(objectIDs)
+            #print(type(dists))
 
-            if 'numpy' in str(type(objectIDs)):
+            if objectIDs is None:
+                # No observation - reset weights to uniform distribution
+                print('selflocalization detekterede ikke nogle landmarks.')
+                for p in particles:
+                    p.setWeight(1.0/num_particles)
+            
+            else:
+            #if 'numpy' in str(type(objectIDs)):
             #if isinstance(objectIDs, np.ndarray):
             #if type(objectIDs) == np.ndarray: 
             #if not isinstance(objectIDs, type(None)):
@@ -122,16 +129,6 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 print('Genererer nye partikler')
                 particles = _utils.generate_new_particles(num_particles, particles, intervals)
 
-                '''
-                # Draw detected objects
-                cam.draw_aruco_objects(img)
-                '''
-            else:
-                # No observation - reset weights to uniform distribution
-                print('selflocalization detekterede ikke nogle landmarks.')
-                for p in particles:
-                    p.setWeight(1.0/num_particles)
- 
             print('Reestimerer position')
             est_pose = particle.estimate_pose(particles)
 
