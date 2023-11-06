@@ -339,7 +339,9 @@ def make_RRT_path(img, arucoDict, draw, arlo_position, goal, rally_landmarks):
         goal: et Landmark, der er vores midlertidige mål
     '''
 
-    seen_landmarks = _utils.landmark_detection(img, arucoDict)
+    #seen_landmarks = _utils.landmark_detection(img, arucoDict)
+
+    seen_landmarks, _, _ = detect_landmarks(img, arucoDict)
     for seen_landmark in seen_landmarks:
         seen_landmark.x = seen_landmark.x + arlo_position.x
         seen_landmark.z = seen_landmark.z + arlo_position.z
