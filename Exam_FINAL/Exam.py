@@ -148,6 +148,7 @@ def selflocalize_360_degrees(cam, arucoDict, show, showcamera, params):
         arlo.stop()
         _utils.wait(2.0)
 
+        print('Drejer alle partikler 20 grader.')
         for p in particles:
             particle.move_particle(p, 0.0, 0.0, 20.0)
         
