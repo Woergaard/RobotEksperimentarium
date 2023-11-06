@@ -328,9 +328,14 @@ class Camera(object):
                 direction = -1*np.sign(tobj_xz[0,0])  # The same as np.sign(np.dot(tobj, xaxis.T))
                 angles[i] = direction * np.arccos(np.dot(tobj_xz, zaxis.T))
         else:
+            dists = []
+            ids = []
+            angles = []
+            '''
             dists = None
             ids = None
             angles = None
+            '''
         return ids, dists, angles
 
 
