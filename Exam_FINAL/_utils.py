@@ -825,7 +825,9 @@ def make_list_of_landmarks(objectIDs, dists, angles, landmarks):
     landmarks_lst = [] # liste af landmarks
     # List detected objects
     for i in range(len(objectIDs)):
-        if type(objectIDs[i]) == np.int32:
+        if objectIDs[i] == 0:
+            return landmarks_lst
+        elif type(objectIDs[i]) == np.int32:
             print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
             if objectIDs[i] in objectIDs[i+1:]:
                 same_id_indexes = [index for index, id in enumerate(objectIDs) if id == objectIDs[i]]
