@@ -95,14 +95,13 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             #print(objectIDs)
             #print(type(dists))
 
-            if objectIDs is None:
+            if not 'numpy' in str(type(objectIDs)):
                 # No observation - reset weights to uniform distribution
                 print('selflocalization detekterede ikke nogle landmarks.')
                 for p in particles:
                     p.setWeight(1.0/num_particles)
-            
             else:
-            #if 'numpy' in str(type(objectIDs)):
+            #if :
             #if isinstance(objectIDs, np.ndarray):
             #if type(objectIDs) == np.ndarray: 
             #if not isinstance(objectIDs, type(None)):
