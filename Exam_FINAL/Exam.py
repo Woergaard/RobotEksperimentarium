@@ -51,18 +51,6 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
     print('self_localize søger efter landmarks.')
     
     try:
-        '''
-        if showGUI:
-            # Open windows
-            WIN_RF1 = "Robot view"
-            cv2.namedWindow(WIN_RF1)
-            cv2.moveWindow(WIN_RF1, 50, 50)
-
-            WIN_World = "World view"
-            cv2.namedWindow(WIN_World)
-            cv2.moveWindow(WIN_World, 500, 50)
-            '''
-        
         # Initialize particles
         num_particles = 1000
         
@@ -70,9 +58,6 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             print('Initialiserer nye partikler')
             particles = _utils.initialize_particles(num_particles)
 
-
-        # flytter partikler efter movement
-        
         if len(path) != 0:
             print('Flytter partiklerne.')
             prevnode = est_pose
@@ -83,15 +68,11 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 for p in particles:
                     print('Partikel flyttes: ', delta_x, delta_z, degrees)
                     particle.move_particle(p, delta_x, delta_z, degrees)
+        else:
+            print('Partikler flyttes ikke, da der ikke er foretaget ændringer i position.')
         
-        print('estimerer position')
+        print('Estimerer position')
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
-
-        # Allocate space for world map
-        #world = np.zeros((1000,1000,3), dtype=np.uint8)
-
-        # Draw map
-        #_utils.draw_world(est_pose, particles, world, landmarks_dict, landmarkIDs, landmark_colors)
 
         for iters in range(3):
             print(iters)
