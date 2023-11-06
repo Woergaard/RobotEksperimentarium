@@ -96,7 +96,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             #print(type(dists))
 
             #if not isinstance(objectIDs, type(None)):
-            print('selflocalize opdager landmarks: ' +  objectIDs)
+            print('selflocalize opdager landmarks: ' +  str(objectIDs))
             landmarks_lst = _utils.make_list_of_landmarks(objectIDs, dists, angles, landmarks_dict)
                 
             if landmarks_lst:
