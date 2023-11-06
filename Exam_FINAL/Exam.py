@@ -658,7 +658,7 @@ landmarks_dict = {
 }
 landmark_colors = [CRED, CGREEN, CBLUE, CYELLOW] # Colors used when drawing the landmarks
 
-num_steps = 5
+num_steps = 3
 
 stepLength = 1000.0 # milimeter
 
@@ -702,7 +702,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
             
             arlo.stop()
             print('Begynder selflokalisering.')
-            params = [2, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, [], stepLength]
+            params = [1, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, [], stepLength]
             arlo_position, particles = selflocalize_360_degrees(cam, arucoDict, show, showcamera, params)
             
             #arlo_position, particles = use_camera(cam, arucoDict, '360_selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, [], stepLength], showcamera, show)
@@ -729,7 +729,7 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
                     print('RRT-træ betod kun af Arlos position, æv :(')
 
 
-            params = [2, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength]
+            params = [1, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength]
             arlo_position, particles = selflocalize_360_degrees(cam, arucoDict, show, showcamera, params)
 
             #arlo_position, particles = use_camera(cam, arucoDict, '360_selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
