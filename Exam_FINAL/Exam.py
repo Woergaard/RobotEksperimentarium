@@ -58,7 +58,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             print('Initialiserer nye partikler')
             particles = _utils.initialize_particles(num_particles)
 
-        if not path:
+        if path:
             print('Flytter partiklerne.')
             prevnode = est_pose
             for node in path:
@@ -83,10 +83,12 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             img = cam.get_next_frame()
 
             # Detect objects
+            print('Forsøger at detektere via kameraet.')
             objectIDs, dists, angles = cam.detect_aruco_objects(img)
 
             sigma_theta = 0.57
             sigma_d = 5.0
+            print('Tilføjer støj.')
             particle.add_uncertainty(particles, sigma_d, sigma_theta)
 
             if not isinstance(objectIDs, type(None)):
