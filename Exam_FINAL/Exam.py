@@ -51,6 +51,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
     print('self_localize søger efter landmarks.')
     
     try:
+        '''
         if showGUI:
             # Open windows
             WIN_RF1 = "Robot view"
@@ -60,24 +61,27 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
             WIN_World = "World view"
             cv2.namedWindow(WIN_World)
             cv2.moveWindow(WIN_World, 500, 50)
+            '''
         
         #print('hej1')
         # Initialize particles
         num_particles = 1000
         
         if not particles:
+            print('Initialiserer nye partikler')
             particles = _utils.initialize_particles(num_particles)
 
 
         # flytter partikler efter movement
         
+        print('Flytter partiklerne.')
         prevnode = est_pose
         for node in path:
             direction, degrees = _utils.find_turn_angle(prevnode, node)
             delta_x = abs(prevnode.x - node.x/10)
             delta_z = abs(prevnode.z - node.z/10)
             for p in particles:
-                print('Partiklerne flyttes ', delta_x, delta_z, degrees)
+                print('Partikel flyttes: ', delta_x, delta_z, degrees)
                 particle.move_particle(p, delta_x, delta_z, degrees)
             # drej alle noder den retning
             # flyt alle noder med steplength i den retning
@@ -119,12 +123,15 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                     landmark.tvec[0] /= 10
                     landmark.tvec[1] /= 10
 
+                print('Opdaterer vægte')
                 _utils.update_weights(sigma_d, sigma_theta, landmarks_lst, particles)    
-                    
+                
+                print('Normaliserer vægte')
                 _utils.normalize_weights(particles)
 
                 intervals = _utils.make_intervals(particles)
 
+                print('Genererer nye partikler')
                 particles = _utils.generate_new_particles(num_particles, particles, intervals)
 
                 # Draw detected objects
@@ -151,7 +158,7 @@ def selflocalize(cam, showGUI, maxiters, landmarkIDs, landmarks_dict, landmark_c
                 time.sleep(10)
 
     finally:
-        print('hejhej')
+        #print('hejhej')
     
         # Make sure to clean up even if an exception occurred
         
@@ -632,9 +639,9 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
             
             arlo.stop()
             print('Begynder selflokalisering.')
-            arlo_position, particles = use_camera(cam, arucoDict, '360_selflocalize', [2, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
+            #arlo_position, particles = use_camera(cam, arucoDict, '360_selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
+            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
             
-            #arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
             #print(math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
             #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
@@ -652,9 +659,8 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
                 else:
                     print('RRT-træ betod kun af Arlos position, æv :(')
 
-
-            #arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
-            arlo_position, particles = use_camera(cam, arucoDict, '360_selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
+            #arlo_position, particles = use_camera(cam, arucoDict, '360_selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
+            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [10, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
                     
         if landmarkfound:
