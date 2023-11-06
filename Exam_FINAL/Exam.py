@@ -147,6 +147,10 @@ def selflocalize_360_degrees(cam, arucoDict, show, showcamera, params):
         _utils.wait(turnSeconds)
         arlo.stop()
         _utils.wait(2.0)
+
+        for p in particles:
+            particle.move_particle(p, 0.0, 0.0, 20.0)
+        
         arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [params[0], params[1], params[2], params[3], arlo_position, particles, [], 0.0], showcamera, show)
         print('Arlo befinder sig på position: ', math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
     return arlo_position, particles
@@ -603,11 +607,13 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
             
             arlo.stop()
             print('Begynder selflokalisering.')
-            #params = [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, [], stepLength]
-            #arlo_position, particles = selflocalize_360_degrees(cam, arucoDict, show, showcamera, params)
+            params = [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, [], stepLength]
+            arlo_position, particles = selflocalize_360_degrees(cam, arucoDict, show, showcamera, params)
+            
             #arlo_position, particles = use_camera(cam, arucoDict, '360_selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, [], stepLength], showcamera, show)
             
-            arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, [], stepLength], showcamera, show)
+            # kun en gang
+            #arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, [], stepLength], showcamera, show)
             
             #print(math.floor(arlo_position.x), math.floor(arlo_position.z), math.floor(arlo_position.theta))
             #arlo_node = _utils.Node(arlo_position.x, arlo_position.z, None)
@@ -628,10 +634,12 @@ def robo_rally(landmarkIDs, landmarks_dict, landmark_colors, showcamera, show, f
                     print('RRT-træ betod kun af Arlos position, æv :(')
 
 
-            #params = [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength]
-            #arlo_position, particles = selflocalize_360_degrees(cam, arucoDict, show, showcamera, params)
+            params = [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength]
+            arlo_position, particles = selflocalize_360_degrees(cam, arucoDict, show, showcamera, params)
 
             #arlo_position, particles = use_camera(cam, arucoDict, '360_selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
+            
+            #kun en gang
             arlo_position, particles = use_camera(cam, arucoDict, 'selflocalize', [3, landmarkIDs, landmarks_dict, landmark_colors, arlo_position, particles, path, stepLength], showcamera, show)
             landmarkfound = landmark_reached(arlo_position, temp_goal_Node)
                     
